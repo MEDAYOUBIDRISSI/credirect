@@ -1,0 +1,18 @@
+<div class="card">
+    <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)" />
+
+    <div class="row">
+        <div class="col-12" *ngIf="activeIndex == 0">
+            A
+        </div>
+        <div class="col-12" *ngIf="activeIndex == 1">
+            B
+        </div>
+        <div class="col-12" *ngIf="activeIndex == 2">
+            C
+        </div>
+        <div class="col-12" *ngIf="activeIndex == 3">
+            D
+        </div>
+    </div>
+</div>

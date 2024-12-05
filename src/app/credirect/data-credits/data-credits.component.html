@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="row">
+        <div class="col-12">
+            <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            </p>
+        </div>
+        <div class="col-12"> 
+            <p-table
+                    #dt1
+                    [value]="customers"
+                    dataKey="id"
+                    [rows]="10"
+                    [rowsPerPageOptions]="[10, 25, 50]"
+                    [loading]="loading"
+                    [paginator]="true"
+                    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+                    >
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+                            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" [(ngModel)]="searchValue" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="min-width:15rem">
+                                <div class="flex align-items-center">
+                                    Nom client
+                                    <p-columnFilter type="text" field="name" display="menu" />
+                                </div>
+                            </th>
+                            <th style="min-width:15rem">
+                                <div class="flex align-items-center">
+                                    Utilisateur
+                                    <p-columnFilter type="text" field="country.name" display="menu" />
+                                </div>
+                            </th>
+                            <th style="min-width:15rem">
+                                Actions
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-customer>
+                        <tr>
+                            <td>
+                                {{ customer.name }}
+                            </td>
+                            <td>
+                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <span class="ml-1 vertical-align-middle">{{ customer.country.name }}</span>
+                            </td>
+                            <td class="text-center">
+                                <p-button class="mx-1" icon="pi pi-eye" [rounded]="true" severity="secondary" pTooltip="Voir" tooltipPosition="top" />
+                                <p-button class="mx-1" icon="pi pi-copy" [rounded]="true" severity="info" pTooltip="copie" tooltipPosition="top" />
+                                <p-button class="mx-1" icon="pi pi-times" [rounded]="true" severity="danger" pTooltip="Supprimer" tooltipPosition="top"/>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="7">No customers found.</td>
+                        </tr>
+                    </ng-template>
+            </p-table>
+        </div>   
+    </div>
+</div>

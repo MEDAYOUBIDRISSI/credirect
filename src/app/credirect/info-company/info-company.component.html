@@ -5,13 +5,6 @@
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
             </p>
         </div>
-        <div class="col-md-12">
-            <div style="display: flex;" class="w-100 d-flex justify-content-end">
-                <p-button 
-                label="Ajouter" 
-                icon="pi pi-plus" [routerLink]="'/customer/add'" pTooltip="Ajouter fiche client" tooltipPosition="top"/>
-            </div>
-        </div>
         <div class="col-12"> 
             <p-table
                     #dt1
@@ -36,53 +29,31 @@
                         <tr>
                             <th style="min-width:15rem">
                                 <div class="flex align-items-center">
-                                    Utilisateur
+                                    Logo pour impressions
                                     <p-columnFilter type="text" field="name" display="menu" />
                                 </div>
                             </th>
                             <th style="min-width:15rem">
                                 <div class="flex align-items-center">
-                                    Numero Fiche
+                                    Raison sociale
                                     <p-columnFilter type="text" field="country.name" display="menu" />
                                 </div>
                             </th>
-                            <th style="min-width:15rem">
-                                <div class="flex align-items-center">
-                                    Civilité
-                                    <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                                        <ng-template pTemplate="header">
-                                            <div class="px-3 pt-3 pb-0">
-                                                <span class="font-bold">Agent Picker</span>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
-                                                <ng-template let-option pTemplate="item">
-                                                    <div class="inline-block vertical-align-middle">
-                                                        <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" width="24" class="vertical-align-middle" />
-                                                        <span class="ml-1 mt-1">{{ option.name }}</span>
-                                                    </div>
-                                                </ng-template>
-                                            </p-multiSelect>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th>
                             <th style="min-width:10rem">
                                 <div class="flex align-items-center">
-                                    Nom
+                                    Description
                                     <p-columnFilter type="date" field="date" display="menu" />
                                 </div>
                             </th>
-                            <th style="min-width:10rem">
+                            <th style="min-width:17rem">
                                 <div class="flex align-items-center">
-                                    Prénom
+                                    Description pied de page
                                     <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" />
                                 </div>
                             </th>
                             <th style="min-width:10rem">
                                 <div class="flex align-items-center">
-                                    N. Cin/Sejour
+                                    Logo de Menu
                                     <p-columnFilter field="status" matchMode="equals" display="menu">
                                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                             <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
@@ -94,9 +65,9 @@
                                     </p-columnFilter>
                                 </div>
                             </th>
-                            <th style="min-width:10rem">
+                            <th style="min-width:15rem">
                                 <div class="flex align-items-center">
-                                    Saisi pour
+                                    mini Logo de Menu
                                     <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                                         <ng-template pTemplate="filter" let-filter="filterCallback">
                                             <p-slider [(ngModel)]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3" />
@@ -108,19 +79,7 @@
                                     </p-columnFilter>
                                 </div>
                             </th>
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    id import
-                                    <p-columnFilter type="boolean" field="verified" display="menu" />
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    ~ banque envoyee
-                                    <p-columnFilter type="boolean" field="verified" display="menu" />
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
+                            <th style="min-width:15rem">
                                 Actions
                             </th>
                         </tr>
@@ -129,10 +88,6 @@
                         <tr>
                             <td>
                                 {{ customer.name }}
-                            </td>
-                            <td>
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                                <span class="ml-1 vertical-align-middle">{{ customer.country.name }}</span>
                             </td>
                             <td>
                                 <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
@@ -151,13 +106,8 @@
                                 <p-progressBar [value]="customer.activity" [showValue]="false" />
                             </td>
                             <td class="text-center">
-                                <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': customer.verified, 'text-red-500 pi-times-circle': !customer.verified }"></i>
-                            </td>
-                            <td class="text-center">
-                                <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': customer.verified, 'text-red-500 pi-times-circle': !customer.verified }"></i>
-                            </td>
-                            <td class="text-center">
-                                <p-button class="mx-1" icon="pi pi-bookmark" [rounded]="true" severity="secondary" pTooltip="Voir" tooltipPosition="top" />
+                                <p-button class="mx-1" icon="pi pi-eye" [rounded]="true" severity="secondary" pTooltip="Voir" tooltipPosition="top" />
+                                <p-button class="mx-1" icon="pi pi-copy" [rounded]="true" severity="info" pTooltip="copie" tooltipPosition="top" />
                                 <p-button class="mx-1" icon="pi pi-times" [rounded]="true" severity="danger" pTooltip="Supprimer" tooltipPosition="top"/>
                             </td>
                         </tr>

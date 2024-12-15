@@ -21,6 +21,10 @@ import { DataCreditsComponent } from './data-credits/data-credits.component';
 import { BankFileComponent } from './bank-file/bank-file.component';
 import { NotifEmailComponent } from './notif-email/notif-email.component';
 import { InfoCompanyComponent } from './info-company/info-company.component';
+import { TabViewModule } from 'primeng/tabview';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -81,6 +85,10 @@ const routes: Routes = [
     SpeedDialModule,
     ToastModule,
     StepsModule,
+    TabViewModule,
+    InputTextareaModule,
+    RadioButtonModule,
+    FormsModule,
     RouterModule.forChild(routes)
   ],
   providers:[

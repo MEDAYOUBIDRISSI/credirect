@@ -1,0 +1,69 @@
+<div class="amortization-calculator">
+    <h1>Amortization Calculator</h1>
+  
+    <div class="inputs">
+      <label>Principal Amount:</label>
+      <input type="number" [(ngModel)]="principal" />
+  
+      <label>Annual Interest Rate:</label>
+      <input type="number" [(ngModel)]="annualRate" step="0.001" />
+  
+      <label>Loan Term (Years):</label>
+      <input type="number" [(ngModel)]="years" />
+  
+      <label>Insurance Rate:</label>
+      <input type="number" [(ngModel)]="insuranceRate" step="0.001" />
+  
+      <label>Monthly Income:</label>
+      <input type="number" [(ngModel)]="income" />
+  
+      <label>Other Monthly Debt:</label>
+      <input type="number" [(ngModel)]="otherDebt" />
+  
+      <label>Start Date:</label>
+      <input type="date" [(ngModel)]="startDate" />
+  
+      <button (click)="calculate()">Calculate</button>
+    </div>
+  
+    <div class="results" *ngIf="schedule.length">
+      <h2>Results</h2>
+      <p><strong>Monthly Payment:</strong> {{ monthlyPayment | currency: 'Dhs'}}</p>
+      <p><strong>Total Interest:</strong> {{ totalInterest | currency: 'Dhs'}}</p>
+      <p><strong>Debt Ratio:</strong> {{ debtRatio | percent }}</p>
+  
+      <h2>Additional Costs</h2>
+      <p><strong>Registration:</strong> {{ additionalCosts.registration | currency: 'Dhs'}}</p>
+      <p><strong>Conservation:</strong> {{ additionalCosts.conservation | currency: 'Dhs'}}</p>
+      <p><strong>Hypothec:</strong> {{ additionalCosts.hypothec | currency: 'Dhs'}}</p>
+      <p><strong>Honoraria:</strong> {{ additionalCosts.honoraria | currency: 'Dhs'}}</p>
+      <p><strong>TVA Honoraria:</strong> {{ additionalCosts.tvaHonoraria | currency: 'Dhs'}}</p>
+      <p><strong>Total:</strong> {{ additionalCosts.total | currency: 'Dhs'}}</p>
+  
+      <h2>Amortization Schedule</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Date</th>
+            <th>Remaining Balance</th>
+            <th>Monthly Payment</th>
+            <th>Principal Payment</th>
+            <th>Interest Payment</th>
+            <th>Insurance Payment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of schedule">
+            <td>{{ entry.month }}</td>
+            <td>{{ entry.date | date }}</td>
+            <td>{{ entry.remainingBalance | currency: 'Dhs'}}</td>
+            <td>{{ entry.monthlyPayment | currency: 'Dhs'}}</td>
+            <td>{{ entry.principalPayment | currency: 'Dhs'}}</td>
+            <td>{{ entry.interestPayment | currency: 'Dhs'}}</td>
+            <td>{{ entry.insurancePayment | currency: 'Dhs'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

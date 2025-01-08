@@ -25,6 +25,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
+import { SimulatorCredirectComponent } from './simulator-credirect/simulator-credirect.component';
+import { SimulatorCredirectV2Component } from './simulator-credirect-v2/simulator-credirect-v2.component';
 
 const routes: Routes = [
   {
@@ -59,6 +61,15 @@ const routes: Routes = [
     path: 'info-company',
     component: InfoCompanyComponent,
   },
+  {
+    path: 'simulator',
+    component: SimulatorCredirectComponent,
+  },
+  ,
+  {
+    path: 'simulator-v2',
+    component: SimulatorCredirectV2Component,
+  },
 ]
 
 @NgModule({
@@ -70,7 +81,9 @@ const routes: Routes = [
     DataCreditsComponent,
     BankFileComponent,
     NotifEmailComponent,
-    InfoCompanyComponent
+    InfoCompanyComponent,
+    SimulatorCredirectComponent,
+    SimulatorCredirectV2Component
   ],
   imports: [
     CommonModule,

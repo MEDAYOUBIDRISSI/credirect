@@ -7,62 +7,65 @@ import { Component } from '@angular/core';
 })
 export class SimulatorCredirectComponent {
 
-  loanAmount = 1500000;
-  interestRate = 4.6; // Annual interest rate in %
-  loanTerm = 25; // Loan term in years
-  paymentsPerYear = 12;
+  // Input fields
+  loanAmount: number = 4260000; // Default loan amount
+  interestRate: number = 3.9; // Annual interest rate (percentage)
+  loanDuration: number = 15; // Loan duration in years
+  monthlyInsuranceRate: number = 0.004564; // Monthly insurance rate
+  earlyRepayment: number = 0; // Early repayment amount
 
+  // Output fields
+  monthlyPayment: number = 0;
+  totalInterest: number = 0;
+  totalCost: number = 0;
+
+  // Amortization schedule
   amortizationSchedule: any[] = [];
-  summary: any = null;
-  notaryFees = [
-    { description: 'Enregistrement', amount: 50640.0 },
-    { description: 'Conservation', amount: 19190.0 },
-    { description: 'Hypothèque', amount: 20100.0 },
-    { description: 'Expédition', amount: 1500.0 },
-    { description: 'Débours', amount: 500.0 },
-    { description: 'Honoraires approx', amount: 7596.0 },
-    { description: 'TVA/Hono', amount: 1519.2 }
-  ];
-  totalNotaryFees = 0;
 
-  calculateAmortization() {
-    const monthlyRate = this.interestRate / 100 / this.paymentsPerYear;
-    const totalPayments = this.loanTerm * this.paymentsPerYear;
-    const monthlyPayment =
-      (this.loanAmount * monthlyRate) /
-      (1 - Math.pow(1 + monthlyRate, -totalPayments));
-
-    // Reset the amortization schedule
-    this.amortizationSchedule = [];
-    let remainingBalance = this.loanAmount;
-    const startDate = new Date();
-
-    let totalInterest = 0;
-
-    for (let i = 0; i < totalPayments; i++) {
-      const interestPaid = remainingBalance * monthlyRate;
-      const principalPaid = monthlyPayment - interestPaid;
-      remainingBalance -= principalPaid;
-
-      totalInterest += interestPaid;
-
-      this.amortizationSchedule.push({
-        date: new Date(startDate.setMonth(startDate.getMonth() + 1)).toLocaleDateString(),
-        monthlyPayment,
-        principalPaid,
-        interestPaid,
-        remainingBalance: remainingBalance > 0 ? remainingBalance : 0
-      });
-    }
-
-    this.summary = {
-      monthlyPayment,
-      totalInterest,
-      totalPayments
-    };
-
-    // Calculate total notary fees
-    this.totalNotaryFees = this.notaryFees.reduce((sum, fee) => sum + fee.amount, 0);
+  constructor() {
+    this.calculateLoan();
   }
 
+  calculateLoan(): void {
+    const monthlyInterestRate = this.interestRate / 100 / 12;
+    const numberOfPayments = this.loanDuration * 12;
+
+    // Calculate monthly payment (using annuity formula)
+    this.monthlyPayment =
+      (this.loanAmount * monthlyInterestRate) /
+      (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
+
+    // Include insurance in the monthly payment
+    const insuranceCost = this.loanAmount * this.monthlyInsuranceRate;
+    this.monthlyPayment += insuranceCost;
+
+    // Total interest calculation
+    this.totalInterest = this.monthlyPayment * numberOfPayments - this.loanAmount;
+
+    // Total cost of the loan
+    this.totalCost = this.loanAmount + this.totalInterest;
+
+    // Generate amortization schedule
+    this.generateAmortizationSchedule(monthlyInterestRate, numberOfPayments);
+  }
+
+  generateAmortizationSchedule(monthlyInterestRate: number, numberOfPayments: number): void {
+    this.amortizationSchedule = [];
+    let remainingBalance = this.loanAmount;
+
+    for (let i = 1; i <= numberOfPayments; i++) {
+      const interestPayment = remainingBalance * monthlyInterestRate;
+      const principalPayment = this.monthlyPayment - interestPayment;
+      remainingBalance -= principalPayment;
+
+      this.amortizationSchedule.push({
+        month: i,
+        interestPayment: interestPayment,
+        principalPayment: principalPayment,
+        remainingBalance: remainingBalance > 0 ? remainingBalance : 0
+      });
+
+      if (remainingBalance <= 0) break;
+    }
+  }
 }

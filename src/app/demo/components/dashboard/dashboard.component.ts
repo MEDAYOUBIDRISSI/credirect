@@ -20,6 +20,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     subscription!: Subscription;
 
+    step = 0;
+
     constructor(private productService: ProductService, public layoutService: LayoutService) {
         this.subscription = this.layoutService.configUpdate$
         .pipe(debounceTime(25))
@@ -100,6 +102,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription.unsubscribe();
+        }
+    }
+
+    prevMethod(){
+        if(this.step > 0) {
+            this.step--;
+        }
+    }
+
+    nextMethod(){
+        if(this.step < 2) {
+            this.step++;
         }
     }
 }

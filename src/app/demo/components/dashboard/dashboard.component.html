@@ -1,5 +1,5 @@
     <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 lg:col-6 xl:col-4">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
@@ -7,14 +7,14 @@
                         <div class="text-900 font-medium text-xl">4</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+                        <i class="pi pi-list text-blue-500 text-xl"></i>
                     </div>
                 </div>
                 <span class="text-green-500 font-medium">2 nouvelles </span>
                 <span class="text-500">taches cette semaine</span>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 lg:col-6 xl:col-4">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
@@ -22,14 +22,14 @@
                         <div class="text-900 font-medium text-xl">3</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
+                        <i class="pi pi-bell text-orange-500 text-xl"></i>
                     </div>
                 </div>
                 <span class="text-green-500 font-medium">%52+ </span>
                 <span class="text-500">depuis la semaine dernière</span>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 lg:col-6 xl:col-4">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
@@ -37,14 +37,14 @@
                         <div class="text-900 font-medium text-xl">40</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-inbox text-cyan-500 text-xl"></i>
+                        <i class="pi pi-folder-open text-cyan-500 text-xl"></i>
                     </div>
                 </div>
                 <span class="text-green-500 font-medium">22 dossiers </span>
                 <span class="text-500">en cours avec leurs statuts </span>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
+        <!-- <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
@@ -58,15 +58,14 @@
                 <span class="text-green-500 font-medium">85 </span>
                 <span class="text-500">responded</span>
             </div>
-        </div>
+        </div> -->
 
         <div class="col-12 xl:col-6">
             <div class="card">
-                <h5>Recent Sales</h5>
+                <h5>L'affichage du CA</h5>
                 <p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Image</th>
                             <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                             <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
                             <th>View</th>
@@ -74,9 +73,6 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-product>
                         <tr>
-                            <td style="width: 15%; min-width: 5rem;">
-                                <img src="assets/demo/images/product/{{product.image}}" class="shadow-4" alt="{{product.name}}" width="50">
-                            </td>
                             <td style="width: 35%; min-width: 7rem;">{{product.name}}</td>
                             <td style="width: 35%; min-width: 8rem;">{{product.price | currency:'USD'}}</td>
                             <td style="width: 15%;">
@@ -88,7 +84,7 @@
             </div>
             <div class="card">
                 <div class="flex justify-content-between align-items-center mb-5">
-                    <h5>Best Selling Products</h5>
+                    <h5>Regroupement des fonctionnalités par type</h5>
                     <div>
                         <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
                         <p-menu #menu [popup]="true" [model]="items"></p-menu>
@@ -173,10 +169,9 @@
 
         <div class="col-12 xl:col-6">
             <div class="card">
-                <h5>Sales Overview</h5>
+                <h5>Catégories des fonctionnalités de l'application</h5>
                 <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
             </div>
-
             <div class="card">
                 <div class="flex align-items-center justify-content-between mb-4">
                     <h5>Notifications</h5>

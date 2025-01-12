@@ -1,3 +1,4 @@
+import { CustomerFolderComponent } from './customer-folder/customer-folder.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListCustomerFileComponent } from './list-customer-file/list-customer-file.component';
@@ -27,6 +28,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { SimulatorCredirectComponent } from './simulator-credirect/simulator-credirect.component';
 import { SimulatorCredirectV2Component } from './simulator-credirect-v2/simulator-credirect-v2.component';
+import { ListboxModule } from 'primeng/listbox';
 
 const routes: Routes = [
   {
@@ -36,6 +38,10 @@ const routes: Routes = [
   {
     path: 'customer/add',
     component: AddCustomerFileComponent,
+  },
+  {
+    path: 'customer/folder/add',
+    component: CustomerFolderComponent,
   },
   {
     path: 'banking-informations',
@@ -83,7 +89,8 @@ const routes: Routes = [
     NotifEmailComponent,
     InfoCompanyComponent,
     SimulatorCredirectComponent,
-    SimulatorCredirectV2Component
+    SimulatorCredirectV2Component,
+    CustomerFolderComponent
   ],
   imports: [
     CommonModule,
@@ -102,6 +109,7 @@ const routes: Routes = [
     InputTextareaModule,
     RadioButtonModule,
     FormsModule,
+    ListboxModule,
     RouterModule.forChild(routes)
   ],
   providers:[

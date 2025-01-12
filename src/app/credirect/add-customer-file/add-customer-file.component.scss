@@ -1,3 +1,26 @@
 ::ng-deep .p-menuitem-link{
     cursor: pointer;
 }
+
+::ng-deep .p-listbox-list-wrapper {
+    max-height: none !important;
+    height: 35vh !important;
+}
+
+::ng-deep .full-width {
+    width: 100%; /* Makes the button take up the full width of its container */
+  }
+  
+//   /* Overrides for outlined buttons */
+//   ::ng-deep .p-button-outlined.full-width {
+//     background-color: transparent;
+//     border: 1px solid var(--primary-color); /* Adjust border color */
+//     color: var(--primary-color); /* Adjust text color */
+//   }
+  
+//   /* Overrides for primary buttons */
+//   ::ng-deep .p-button-primary.full-width {
+//     background-color: var(--primary-color); /* Adjust primary background color */
+//     color: white;
+//     border: none;
+//   }

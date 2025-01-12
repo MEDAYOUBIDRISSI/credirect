@@ -27,6 +27,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { SimulatorCredirectComponent } from './simulator-credirect/simulator-credirect.component';
 import { SimulatorCredirectV2Component } from './simulator-credirect-v2/simulator-credirect-v2.component';
+import { CardModule } from 'primeng/card';
+import { ListboxModule } from 'primeng/listbox';
 
 const routes: Routes = [
   {
@@ -102,6 +104,8 @@ const routes: Routes = [
     InputTextareaModule,
     RadioButtonModule,
     FormsModule,
+    CardModule,
+    ListboxModule,
     RouterModule.forChild(routes)
   ],
   providers:[

@@ -9,6 +9,11 @@ import { ProductService } from 'src/app/demo/service/product.service';
 interface expandedRows {
   [key: string]: boolean;
 }
+
+interface Role {
+  name: string,
+  code: string
+}
 @Component({
   selector: 'app-add-customer-file',
   templateUrl: './add-customer-file.component.html',
@@ -21,7 +26,6 @@ export class AddCustomerFileComponent implements OnInit{
   situations_familiales: SelectItem[] = [];
   civilites: SelectItem[] = [];
   coEmprunteur: string = 'non';
-  showTab: boolean = false;
   caisses: SelectItem[] = [];
 
   customers1: Customer[] = [];
@@ -39,15 +43,44 @@ export class AddCustomerFileComponent implements OnInit{
   idFrozen: boolean = false;
   loading: boolean = true;
 
-    @ViewChild('filter') filter!: ElementRef;
+  isSelected1 = false;
+  isSelected2 = false;
+  step = 0;
 
-  onCoEmprunteurChange(value: string): void {
-    if (value === 'oui') {
-      this.showTab = true; 
-    } else {
-      this.showTab = false;
+  roles!: Role[];
+  selectedRole!: Role;
+
+  isNextDisabled(): boolean {
+    if((this.step == 0 && !this.isSelected1 && !this.isSelected2) || this.step == 1 && !this.selectedRole){
+      return true;
+    }else{
+      return false;
     }
   }
+
+  selectCard(cardNumber: number) {
+    if (cardNumber === 1) {
+      this.isSelected1 = true;
+      this.isSelected2 = false;
+    } else if (cardNumber === 2) {
+      this.isSelected2 = true;
+      this.isSelected1 = false;
+    }
+  }
+
+  goToPreviousStep(){
+    if(this.step != 0){
+      this.step --;
+    }
+  }
+
+  goToNextStep(){
+    if(this.step < 2){
+      this.step ++;
+    }
+  }
+
+    @ViewChild('filter') filter!: ElementRef;
 
   constructor(private customerService: CustomerService, private productService: ProductService
   ) 
@@ -59,17 +92,17 @@ export class AddCustomerFileComponent implements OnInit{
   ngOnInit() {
     this.items = [
       {
-          label: 'Données Personnelles',
+          label: 'Informations générales',
       },
       {
-          label: 'Renseignements Bancaires',
+          label: 'Informations détaillées',
       },
       {
-          label: 'Engagements Bancaires',
+          label: "Zone d'implantation",
       },
-      {
-          label: 'Données Crédit',
-      }
+      // {
+      //     label: 'Données Crédit',
+      // }
     ];
 
     this.situations_familiales = [
@@ -120,6 +153,19 @@ this.statuses = [
     { label: 'Negotiation', value: 'negotiation' },
     { label: 'Renewal', value: 'renewal' },
     { label: 'Proposal', value: 'proposal' }
+];
+
+this.roles = [
+  { name: 'Emprunteur ', code: '1' },
+  { name: 'Co-emprunteur ', code: '2' },
+  { name: 'Caution personnelle et solidaire', code: '3' },
+  { name: 'Caution hypothécaire', code: '4' },
+  { name: 'Propriétaire', code: '5' },
+  { name: 'Propriétaire dans l’indivision', code: '6' },
+  { name: 'Usufruitier', code: '7' },
+  { name: 'Nu-propriétaire', code: '8' },
+  // { name: 'Istanbul', code: '9' },
+  // { name: 'Paris', code: '10' }
 ];
 
   }

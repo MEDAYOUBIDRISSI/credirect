@@ -18,11 +18,15 @@ export class AppMenuComponent implements OnInit {
                 label: 'Home',
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    { label: 'Fiche client', icon: 'pi pi-fw pi-home', routerLink: ['credirect/customer'] },
-                    { label: 'Renseignements Données Bancaires', icon: 'pi pi-fw pi-home' , routerLink: ['credirect/banking-informations']},
-                    { label: 'Engagements Données Bancaires', icon: 'pi pi-fw pi-home', routerLink: ['credirect/banking-data-commitments']},
-                    { label: 'Données crédit', icon: 'pi pi-fw pi-home', routerLink: ['credirect/data-credits']},
-                    { label: 'Dossier Banque', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']}
+                    { label: 'Agenda', icon: 'pi pi-fw pi-home', routerLink: ['credirect/customer'] },
+                    { label: 'Simulateur et calculette', icon: 'pi pi-fw pi-home' , routerLink: ['credirect/banking-informations']},
+                    { label: 'Fiche client', icon: 'pi pi-fw pi-home', routerLink: ['credirect/banking-data-commitments']},
+                    { label: 'Création dossier crédit', icon: 'pi pi-fw pi-home', routerLink: ['credirect/data-credits']},
+                    { label: 'Banque et organismes', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']},
+                    { label: 'Mandataires et apporteurs', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']},
+                    { label: 'Mandats', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']},
+                    { label: 'KPI', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']},
+
                 ]
             },
             {

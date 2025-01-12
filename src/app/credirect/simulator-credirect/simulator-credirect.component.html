@@ -1,95 +1,84 @@
-<div class="calculator-container">
-    <h1>Simulateur interne avec tableau d'amortissement</h1>
-  
-    <!-- Loan Input Form -->
-    <form (ngSubmit)="calculateAmortization()" #loanForm="ngForm">
-      <label>
-        Montant de l'emprunt:
-        <input type="number" [(ngModel)]="loanAmount" name="loanAmount" required />
-      </label>
-      <label>
-        Taux nominal du crédit (%):
-        <input type="number" [(ngModel)]="interestRate" name="interestRate" required />
-      </label>
-      <label>
-        Durée du prêt (années):
-        <input type="number" [(ngModel)]="loanTerm" name="loanTerm" required />
-      </label>
-      <label>
-        Nombre de versements par an:
-        <input type="number" [(ngModel)]="paymentsPerYear" name="paymentsPerYear" required />
-      </label>
-      <button type="submit">Calculer</button>
-    </form>
-  
-    <!-- Summary Table -->
-    <div class="summary-section" *ngIf="summary">
-      <h2>Résumé du Prêt</h2>
-      <table>
-        <tr>
-          <td>Montant de l'emprunt:</td>
-          <td>{{ loanAmount | number: '1.2-2' }}</td>
-        </tr>
-        <tr>
-          <td>Mensualité:</td>
-          <td>{{ summary.monthlyPayment | number: '1.2-2' }}</td>
-        </tr>
-        <tr>
-          <td>Total des intérêts:</td>
-          <td>{{ summary.totalInterest | number: '1.2-2' }}</td>
-        </tr>
-        <tr>
-          <td>Durée (mois):</td>
-          <td>{{ summary.totalPayments }}</td>
-        </tr>
-      </table>
+<div class="loan-simulator">
+  <h1>Loan Simulator</h1>
+
+  <div class="summary">
+    <div class="summary-item">
+      <h2>Loan Details</h2>
+      <p>Loan Amount: {{ loanAmount | number:'1.2-2' }}</p>
+      <p>Interest Rate: {{ interestRate }}%</p>
+      <p>Duration: {{ loanDuration }} years</p>
     </div>
-  
-    <!-- Amortization Table -->
-    <div class="amortization-section">
-      <h2>Tableau d'amortissement</h2>
-      <table *ngIf="amortizationSchedule.length > 0">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Montant total mensualité</th>
-            <th>Part du capital remboursé</th>
-            <th>Part des intérêts remboursés</th>
-            <th>Capital restant</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of amortizationSchedule; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ row.date }}</td>
-            <td>{{ row.monthlyPayment | number: '1.2-2' }}</td>
-            <td>{{ row.principalPaid | number: '1.2-2' }}</td>
-            <td>{{ row.interestPaid | number: '1.2-2' }}</td>
-            <td>{{ row.remainingBalance | number: '1.2-2' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Notary Fees Table -->
-    <div class="fees-section">
-      <h2>Frais notaire approximatives</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Montant</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let fee of notaryFees">
-            <td>{{ fee.description }}</td>
-            <td>{{ fee.amount | number: '1.2-2' }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>Total frais: {{ totalNotaryFees | number: '1.2-2' }}</p>
+
+    <div class="summary-item">
+      <h2>Summary</h2>
+      <p>Monthly Payment: {{ monthlyPayment | number:'1.2-2' }}</p>
+      <p>Total Interest: {{ totalInterest | number:'1.2-2' }}</p>
+      <p>Total Cost: {{ totalCost | number:'1.2-2' }}</p>
     </div>
   </div>
-  
+
+  <div class="inputs">
+    <label>
+      Loan Amount:
+      <input type="number" [(ngModel)]="loanAmount" (change)="calculateLoan()" />
+    </label>
+
+    <label>
+      Interest Rate (%):
+      <input type="number" [(ngModel)]="interestRate" (change)="calculateLoan()" />
+    </label>
+
+    <label>
+      Loan Duration (years):
+      <input type="number" [(ngModel)]="loanDuration" (change)="calculateLoan()" />
+    </label>
+
+    <label>
+      Monthly Insurance Rate:
+      <input type="number" [(ngModel)]="monthlyInsuranceRate" (change)="calculateLoan()" />
+    </label>
+
+    <label>
+      Early Repayment:
+      <input type="number" [(ngModel)]="earlyRepayment" (change)="calculateLoan()" />
+    </label>
+  </div>
+
+  <h2>Amortization Schedule</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Principal</th>
+        <th>Interest</th>
+        <th>Insurance</th>
+        <th>Total Payment</th>
+        <th>Remaining Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of amortizationSchedule; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>
+          <!-- {{ (new Date(2024, i % 12, 1)) | date:'MMM yyyy' }} -->
+        </td>
+        <td>
+          {{ row.principalPayment | number:'1.2-2' }}
+        </td>
+        <td>
+          {{ row.interestPayment | number:'1.2-2' }}
+        </td>
+        <td>
+          {{ (loanAmount * monthlyInsuranceRate) | number:'1.2-2' }}
+        </td>
+        <td>
+          {{ monthlyPayment | number:'1.2-2' }}
+        </td>
+        <td>
+          {{ row.remainingBalance | number:'1.2-2' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -8,35 +8,47 @@
         </div>
         <div class="col-12">
            <div class="grid">
-                <div class="col-12 xl:col-6">
+                <div class="col-12 xl:col-8">
+                    <h4>Tier : </h4>
                     <p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                                 <th pSortableColumn="code">Tel <p-sortIcon field="code"></p-sortIcon></th>
-                                <th pSortableColumn="category">Email <p-sortIcon field="category"></p-sortIcon></th>
+                                <th pSortableColumn="category">Rang du tier <p-sortIcon field="category"></p-sortIcon></th>
                                 <th>
                                     <p-button label="Ajouter autre" severity="info" />
                                 </th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-product>
+                        <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
                             <tr>
-                                <td style="width: 35%; min-width: 7rem;">{{product.name}}</td>
-                                <td style="width: 35%; min-width: 8rem;">{{product.code}}</td>
-                                <td style="width: 35%; min-width: 8rem;">{{product.category}}</td>
-                                <td style="width: 15%;">
+                                <td style="width: 25%; min-width: 7rem;">{{product.name}}</td>
+                                <td style="width: 25%; min-width: 8rem;">{{product.tel}}</td>
+                                <td style="width: 25%; min-width: 8rem;">
+                                    <p-tag *ngIf="product.is_primary" value="Primary" [rounded]="true" />
+                                    <p-tag *ngIf="!product.is_primary" severity="warn" value="Secondary" [rounded]="true" />
+                                </td>
+                                <td style="width: 25%;">
                                     <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="selectedCity?.code == 'CIM' 
+                                        || selectedCity?.code == 'CH' 
+                                        || selectedCity?.code == 'CBI' 
+                                        || selectedCity?.code == 'CBM'"> 
+                                <td colspan="3">
+                                    <p-slider [(ngModel)]="product.tier_interv" styleClass="w-100" />
                                 </td>
                             </tr>
                         </ng-template>
                     </p-table>
                 </div>
-                <div class="col-12 xl:col-3">
-                    <h5>Nature du crédit</h5>
+                <div class="col-12 xl:col-4">
+                    <h4>Nature du crédit : </h4>
                     <div class="row">
                         <div class="col-12">
-                            <p-listbox [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" class="w-full md:w-56" />
+                            <p-listbox [options]="cities" [(ngModel)]="selectedCity" (onChange)="onCityChange($event)" optionLabel="name" class="w-full md:w-56" />
                         </div>
                     </div>
                 </div>

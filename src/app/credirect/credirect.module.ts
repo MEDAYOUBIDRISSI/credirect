@@ -29,6 +29,7 @@ import { FormsModule } from '@angular/forms';
 import { SimulatorCredirectComponent } from './simulator-credirect/simulator-credirect.component';
 import { SimulatorCredirectV2Component } from './simulator-credirect-v2/simulator-credirect-v2.component';
 import { ListboxModule } from 'primeng/listbox';
+import { SliderModule } from 'primeng/slider';
 
 const routes: Routes = [
   {
@@ -110,6 +111,7 @@ const routes: Routes = [
     RadioButtonModule,
     FormsModule,
     ListboxModule,
+    SliderModule,
     RouterModule.forChild(routes)
   ],
   providers:[

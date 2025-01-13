@@ -30,6 +30,8 @@ import { SimulatorCredirectComponent } from './simulator-credirect/simulator-cre
 import { SimulatorCredirectV2Component } from './simulator-credirect-v2/simulator-credirect-v2.component';
 import { ListboxModule } from 'primeng/listbox';
 import { SliderModule } from 'primeng/slider';
+import { CardModule } from 'primeng/card';
+import { ListboxModule } from 'primeng/listbox';
 
 const routes: Routes = [
   {
@@ -112,6 +114,8 @@ const routes: Routes = [
     FormsModule,
     ListboxModule,
     SliderModule,
+    CardModule,
+    ListboxModule,
     RouterModule.forChild(routes)
   ],
   providers:[

@@ -56,533 +56,499 @@
         </div>
       </div>
     
-    
-    <div *ngIf="step == 2">
-    <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)" />
-    <div class="container">
-    <div class="row">
-        <div class="col-12" *ngIf="activeIndex == 0">
-            <p-tabView>
-                <!-- <p-tabPanel header="Données emprunteur"> -->
-                        <!-- <h5>Données personnelles</h5> -->
-                        <div class="grid p-fluid mt-3">
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="nom">Nom</label>
-                            <input pInputText id="nom" type="text" [(ngModel)]="nom" placeholder="Votre nom" />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="prenom">Prénom</label>
-                            <input pInputText id="prenom" type="text" [(ngModel)]="prenom" placeholder="Votre prénom" />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="date_naissance">Date de Naissance</label>
-                            <input pInputText id="date_naissance" type="date" [(ngModel)]="date_naissance" />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="civilite">Civilité</label>
-                            <p-dropdown
-                              [options]="civilites"
-                              [(ngModel)]="civilite"
-                              [showClear]="true"
-                              placeholder="Sélectionner"
-                            ></p-dropdown>
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="telephone">Téléphone</label>
-                            <input
-                              pInputText
-                              id="telephone"
-                              type="tel"
-                              [(ngModel)]="telephone"
-                              placeholder="Votre téléphone"
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="email">Email</label>
-                            <input
-                              pInputText
-                              id="email"
-                              type="email"
-                              [(ngModel)]="email"
-                              placeholder="Votre email"
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="num_fiche">Identité</label>
-                            <input
-                              id="Identity"
-                              type="text"
-                              [(ngModel)]="num_fiche"
-                              placeholder="1234"
-                              readonly
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="nationalite">Nationalité</label>
-                            <input
-                              pInputText
-                              id="nationalite"
-                              type="text"
-                              [(ngModel)]="nationalite"
-                              placeholder="Votre nationalité"
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="ville">Ville</label>
-                            <input
-                              pInputText
-                              id="ville"
-                              type="text"
-                              [(ngModel)]="ville"
-                              placeholder="Votre ville"
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="lieu_naissance">Lieu de Naissance</label>
-                            <input
-                              pInputText
-                              id="lieu_naissance"
-                              type="text"
-                              [(ngModel)]="lieu_naissance"
-                              placeholder="Votre lieu de naissance"
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="pays">Pays</label>
-                            <input
-                              pInputText
-                              id="pays"
-                              type="text"
-                              [(ngModel)]="pays"
-                              placeholder="Votre pays"
-                            />
-                          </div>
-          
-                          <div class="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="situation_familiale">Situation Familiale</label>
-                            <p-dropdown
-                              [options]="situations_familiales"
-                              [(ngModel)]="situation_familiale"
-                              [showClear]="true"
-                              placeholder="Sélectionner"
-                            ></p-dropdown>
-                          </div>
-          
-                          <div class="field col-12">
-                            <label htmlFor="adresse">Adresse</label>
-                            <textarea
-                              rows="5"
-                              id="adresse"
-                              pInputTextarea
-                              [(ngModel)]="adresse"
-                              placeholder="Votre adresse complète"
-                            ></textarea>
-                          </div>
-          
-                        </div>
+    <div *ngIf="step == 2 || step == 3 || step == 4" >
+        <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)" />
+        <div class="container">
+        <div class="row">
+            <div class="col-12" *ngIf="activeIndex == 0 && step == 2">
+                <div class="grid p-fluid mt-3">
 
+                <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="denomination ">Dénomination </label>
+                    <input pInputText id="denomination " type="text" [(ngModel)]="denomination " placeholder="Votre Dénomination " />
+                </div>
+    
+                <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="forme_juridique">Forme juridique</label>
+                    <p-dropdown
+                    [options]="formes_juridiques"
+                    [(ngModel)]="forme_juridique"
+                    [showClear]="true"
+                    placeholder="Sélectionner"
+                    ></p-dropdown>
+                </div>
+
+                <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="date_creation">Date de création</label>
+                    <input pInputText id="date_creation" type="date" [(ngModel)]="date_creation" />
+                </div>
+
+                <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="rc">N° RC</label>
+                    <input
+                    pInputText
+                    id="rc"
+                    type="text"
+                    [(ngModel)]="rc"
+                    placeholder="Votre N° RC"
+                    />
+                </div>
+
+                <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="business_activity">Activité</label>
+                    <p-dropdown
+                    [options]="business_activities"
+                    [(ngModel)]="business_activity"
+                    [showClear]="true"
+                    placeholder="Sélectionner"
+                    ></p-dropdown>
+                </div>
+                
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="nom">Nom</label>
+                    <input pInputText id="nom" type="text" [(ngModel)]="nom" placeholder="Votre nom" />
+                </div>
+
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="prenom">Prénom</label>
+                    <input pInputText id="prenom" type="text" [(ngModel)]="prenom" placeholder="Votre prénom" />
+                </div>
+
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="date_naissance">Date de Naissance</label>
+                    <input pInputText id="date_naissance" type="date" [(ngModel)]="date_naissance" />
+                </div>
+
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="civilite">Civilité</label>
+                    <p-dropdown
+                    [options]="civilites"
+                    [(ngModel)]="civilite"
+                    [showClear]="true"
+                    placeholder="Sélectionner"
+                    ></p-dropdown>
+                </div>
+
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="nationalite">Nationalité</label>
+                    <input
+                    pInputText
+                    id="nationalite"
+                    type="text"
+                    [(ngModel)]="nationalite"
+                    placeholder="Votre nationalité"
+                    />
+                </div>
+
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="email">Adresse mail</label>
+                    <input
+                    pInputText
+                    id="email"
+                    type="email"
+                    [(ngModel)]="email"
+                    placeholder="Votre email"
+                    />
+                </div>
+
+                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="num_fiche">Identité</label>
+                    <div class="flex flex-wrap gap-3">
                     
-                      <!-- <div class="card">
-                        <h5>Données professionnelles</h5>
-                        <div class="grid p-fluid mt-3">
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="type_profession">Type Profession</label>
-                                <p-dropdown [options]="types_profession" [(ngModel)]="type_profession" [showClear]="true" placeholder="Sélectionner"></p-dropdown>
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="rs_employeur">R.S Employeur</label>
-                                <input pInputText id="rs_employeur" type="text" [(ngModel)]="rs_employeur" placeholder="R.S Employeur" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="profession">Profession</label>
-                                <input pInputText id="profession" type="text" [(ngModel)]="profession" placeholder="Profession" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="date_embauche">Date d'embauche</label>
-                                <input pInputText id="date_embauche" type="date" [(ngModel)]="date_embauche" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="caisse">Caisse (pour retraité)</label>
-                                <input pInputText id="caisse" type="text" [(ngModel)]="caisse" placeholder="Caisse" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="revenus">Revenus</label>
-                                <input pInputText id="revenus" type="text" [(ngModel)]="revenus" placeholder="Revenus" />
-                            </div>
+                        <div *ngFor="let Identity of identities" class="flex align-items-center">
+                            <p-radioButton 
+                                [inputId]="Identity.key" 
+                                name="Identity" 
+                                [value]="Identity" 
+                                [(ngModel)]="selectedIdentity" />
+                            <label [for]="Identity.key" class="ml-2">
+                                {{ Identity.name }}
+                            </label>
                         </div>
-                    </div> -->
-                    
-                    <!-- <div class="card">
-                        <h5>Sourcing</h5>
-                        <div class="grid p-fluid mt-3">
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="source">Source</label>
-                                <p-dropdown [options]="sources" [(ngModel)]="source" [showClear]="true" placeholder="Sélectionner"></p-dropdown>
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="agent">Nom Agent (si agent)</label>
-                                <input pInputText id="agent" type="text" [(ngModel)]="agent" placeholder="Nom Agent" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="part_partipation">Part de Participation</label>
-                                <input pInputText id="part_partipation" type="text" [(ngModel)]="part_partipation" placeholder="Part de Participation" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="promoteur">Nom Promoteur (si promoteur)</label>
-                                <input pInputText id="promoteur" type="text" [(ngModel)]="promoteur" placeholder="Nom Promoteur" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="saisi_pour">Saisi pour</label>
-                                <input pInputText id="saisi_pour" type="text" [(ngModel)]="saisi_pour" placeholder="Saisi pour" />
-                            </div>
-                            <div class="field col-12 md:col-6 lg:col-4">
-                                <label htmlFor="apporteur">Nom Apporteur (si apporteur)</label>
-                                <input pInputText id="apporteur" type="text" [(ngModel)]="apporteur" placeholder="Nom Apporteur" />
-                            </div>
-                        </div>
-                    </div> -->
-                    
-                <!-- </p-tabPanel> -->
-                <!-- <p-tabPanel *ngIf="showTab" header="Données coEmprunteur">
-                    <div class="card">
-                        <h5>Co_Données personnelles</h5>
-                        <div class="grid p-fluid mt-3">
-                            <div class="field col-12 md:col-4">
-                                <label for="nom_coe">Nom CO.E</label>
-                                <input pInputText id="nom_coe" type="text" placeholder="Nom CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="prenom_coe">Prénom CO.E</label>
-                                <input pInputText id="prenom_coe" type="text" placeholder="Prénom CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="cin_coe">N. Cin/Séjour CO.E</label>
-                                <input pInputText id="cin_coe" type="text" placeholder="Cin/Séjour CO.E" />
-                            </div>
-                    
-                            <div class="field col-12 md:col-4">
-                                <label for="date_naissance">Date de naissance CO.E</label>
-                                <input pInputText id="date_naissance" type="date" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="lieu_naissance">Lieu de naissance CO.E</label>
-                                <input pInputText id="lieu_naissance" type="text" placeholder="Lieu de naissance CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="nationalite">Nationalité CO.E</label>
-                                <input pInputText id="nationalite" type="text" placeholder="Nationalité CO.E" />
-                            </div>
-                    
-                            <div class="field col-12 md:col-4">
-                                <label for="pays">Pays CO.E</label>
-                                <input pInputText id="pays" type="text" placeholder="Pays CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="ville">Ville CO.E</label>
-                                <input pInputText id="ville" type="text" placeholder="Ville CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="telephone">Téléphone CO.E</label>
-                                <input pInputText id="telephone" type="text" placeholder="Téléphone CO.E" />
-                            </div>
-                    
-                            <div class="field col-12 md:col-4">
-                                <label for="type_profession">Type Profession CO.E</label>
-                                <p-dropdown id="type_profession" [options]="professionOptions" placeholder="Sélectionner"></p-dropdown>
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="adresse">Adresse CO.E</label>
-                                <input pInputText id="adresse" type="text" placeholder="Adresse CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="situation_familiale">Situation Familiale CO.E</label>
-                                <p-dropdown id="situation_familiale" [options]="situations_familiales" placeholder="Sélectionner"></p-dropdown>
-                            </div>
-                    
-                            <div class="field col-12 md:col-4">
-                                <label for="profession">Profession CO.E</label>
-                                <input pInputText id="profession" type="text" placeholder="Profession CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="rs_employeur">R.S. Employeur CO.E</label>
-                                <input pInputText id="rs_employeur" type="text" placeholder="R.S. Employeur CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="caisse">Caisse CO.E</label>
-                                <p-dropdown id="caisse" [options]="caisses" placeholder="Sélectionner"></p-dropdown>
-                            </div>
-                    
-                            <div class="field col-12 md:col-4">
-                                <label for="revenu">Revenu CO.E</label>
-                                <input pInputText id="revenu" type="text" placeholder="Revenu CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="part_participation">Part de participation CO.E</label>
-                                <input pInputText id="part_participation" type="text" placeholder="Part de participation CO.E" />
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="date_embauche">Date d'embauche CO.E</label>
-                                <input pInputText id="date_embauche" type="date" />
+                    </div>
+                </div>
+
+                <div *ngIf="selectedIdentity == this.identities[0] && isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="CIN">CIN</label>
+                    <input
+                    pInputText
+                    id="CIN"
+                    type="text"
+                    [(ngModel)]="CIN"
+                    placeholder="Votre CIN"
+                    />
+                </div>
+
+                <div *ngIf="selectedIdentity == this.identities[1] && isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="carte_sejour">Carte Séjour</label>
+                    <input
+                    pInputText
+                    id="carte_sejour"
+                    type="text"
+                    [(ngModel)]="carte_sejour"
+                    placeholder="Votre Carte Séjour"
+                    />
+                </div>   
+
+                <div *ngIf="selectedIdentity == this.identities[2] && isSelected1" class="field col-12 md:col-6 lg:col-4">
+                    <label htmlFor="Passeport">Passeport</label>
+                    <input
+                    pInputText
+                    id="Passeport"
+                    type="text"
+                    [(ngModel)]="Passeport"
+                    placeholder="Votre Passeport"
+                    />
+                </div>
+
+                </div>
+            </div>
+            <div class="col-12" *ngIf="activeIndex == 1 && step == 3">
+                <div class="grid p-fluid mt-3">
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="social_capital">Capital social</label>
+                        <input pInputText id="social_capital" type="text" [(ngModel)]="social_capital" placeholder="Votre Capital social " />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="requested_amount">Montant sollicité </label>
+                        <input pInputText id="requested_amount" type="text" [(ngModel)]="requested_amount" placeholder="Votre Montant sollicité " />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="ville">Ville</label>
+                        <input
+                        pInputText
+                        id="ville"
+                        type="text"
+                        [(ngModel)]="ville"
+                        placeholder="Votre ville"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="pays">Pays</label>
+                        <input
+                        pInputText
+                        id="pays"
+                        type="text"
+                        [(ngModel)]="pays"
+                        placeholder="Votre pays"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="adresse">Adresse</label>
+                        <textarea
+                        rows="5"
+                        id="adresse"
+                        pInputTextarea
+                        [(ngModel)]="adresse"
+                        placeholder="Votre adresse complète"
+                        ></textarea>
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="ville">Ville</label>
+                        <input
+                        pInputText
+                        id="ville"
+                        type="text"
+                        [(ngModel)]="ville"
+                        placeholder="Votre ville"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="pays">Pays</label>
+                        <input
+                        pInputText
+                        id="pays"
+                        type="text"
+                        [(ngModel)]="pays"
+                        placeholder="Votre pays"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="pays_resi">Pays de Résidence</label>
+                        <input
+                        pInputText
+                        id="pays"
+                        type="text"
+                        [(ngModel)]="pays_resi"
+                        placeholder="Votre Pays de Résidence"
+                        />
+                    </div>
+    
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="situation_familiale">Situation Familiale</label>
+                        <p-dropdown
+                        [options]="situations_familiales"
+                        [(ngModel)]="situation_familiale"
+                        [showClear]="true"
+                        placeholder="Sélectionner"
+                        ></p-dropdown>
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="telephone_mobile">Téléphone Mobile</label>
+                        <input
+                        pInputText
+                        id="telephone_mobile"
+                        type="text"
+                        [(ngModel)]="telephone_mobile"
+                        placeholder="Votre Téléphone Mobile"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="telephone_fixe">Téléphone Fixe</label>
+                        <input
+                        pInputText
+                        id="telephone_fixe"
+                        type="text"
+                        [(ngModel)]="telephone_fixe"
+                        placeholder="Votre Téléphone fixe"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="telephone_professionnel">Téléphone Professionnel</label>
+                        <input
+                        pInputText
+                        id="telephone_professionnel"
+                        type="text"
+                        [(ngModel)]="telephone_professionnel"
+                        placeholder="Votre Téléphone Mobile"
+                        />
+                    </div>
+    
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="adresse">Adresse</label>
+                        <textarea
+                        rows="5"
+                        id="adresse"
+                        pInputTextarea
+                        [(ngModel)]="adresse"
+                        placeholder="Votre adresse complète"
+                        ></textarea>
+                    </div>
+    
+                    </div>
+            </div>
+            <div class="col-12" *ngIf="activeIndex == 2 && step == 4">
+                <div class="grid p-fluid mt-3">
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="nom">Nom</label>
+                        <input pInputText id="nom" type="text" [(ngModel)]="nom" placeholder="Votre nom" />
+                    </div>
+    
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="prenom">Prénom</label>
+                        <input pInputText id="prenom" type="text" [(ngModel)]="prenom" placeholder="Votre prénom" />
+                    </div>
+    
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="date_naissance">Date de Naissance</label>
+                        <input pInputText id="date_naissance" type="date" [(ngModel)]="date_naissance" />
+                    </div>
+    
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="civilite">Civilité</label>
+                        <p-dropdown
+                        [options]="civilites"
+                        [(ngModel)]="civilite"
+                        [showClear]="true"
+                        placeholder="Sélectionner"
+                        ></p-dropdown>
+                    </div>
+    
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="nationalite">Nationalité</label>
+                        <input
+                        pInputText
+                        id="nationalite"
+                        type="text"
+                        [(ngModel)]="nationalite"
+                        placeholder="Votre nationalité"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="num_fiche">Identité</label>
+                        <div class="flex flex-wrap gap-3">
+                        
+                            <div *ngFor="let Identity2 of identities2" class="flex align-items-center">
+                                <p-radioButton 
+                                    [inputId]="Identity2.key" 
+                                    name="Identity2" 
+                                    [value]="Identity2" 
+                                    [(ngModel)]="selectedIdentity2" />
+                                <label [for]="Identity2.key" class="ml-2">
+                                    {{ Identity2.name }}
+                                </label>
                             </div>
                         </div>
                     </div>
-                    
-                </p-tabPanel>
-                <p-tabPanel header="Anciens Credits (temporaire)">
-                    <p class="m-0">
-                      test
-                    </p>
-                  </p-tabPanel> -->
-              </p-tabView>    
-        </div>
-        <div class="col-12" *ngIf="activeIndex == 1">
-            <div class="card">
-                <h5>Renseignements Données Bancaires</h5>
-                <p-table #dt1 [value]="customers1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
-                    <ng-template pTemplate="caption">
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full"/>
-                            </span>
+    
+                    <div *ngIf="selectedIdentity2 == this.identities2[0] && isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="CIN">CIN</label>
+                        <input
+                        pInputText
+                        id="CIN"
+                        type="text"
+                        [(ngModel)]="CIN"
+                        placeholder="Votre CIN"
+                        />
+                    </div>
+    
+                    <div *ngIf="selectedIdentity2 == this.identities2[1] && isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="carte_sejour">Carte Séjour</label>
+                        <input
+                        pInputText
+                        id="carte_sejour"
+                        type="text"
+                        [(ngModel)]="carte_sejour"
+                        placeholder="Votre Carte Séjour"
+                        />
+                    </div>   
+    
+                    <div *ngIf="selectedIdentity2 == this.identities2[2] && isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="Passeport">Passeport</label>
+                        <input
+                        pInputText
+                        id="Passeport"
+                        type="text"
+                        [(ngModel)]="Passeport"
+                        placeholder="Votre Passeport"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="situation_familiale">Situation Familiale</label>
+                        <p-dropdown
+                        [options]="situations_familiales"
+                        [(ngModel)]="situation_familiale"
+                        [showClear]="true"
+                        placeholder="Sélectionner"
+                        ></p-dropdown>
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="ville">Ville</label>
+                        <input
+                        pInputText
+                        id="ville"
+                        type="text"
+                        [(ngModel)]="ville"
+                        placeholder="Votre ville"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="pays">Pays</label>
+                        <input
+                        pInputText
+                        id="pays"
+                        type="text"
+                        [(ngModel)]="pays"
+                        placeholder="Votre pays"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="pays_resi">Pays de Résidence</label>
+                        <input
+                        pInputText
+                        id="pays"
+                        type="text"
+                        [(ngModel)]="pays_resi"
+                        placeholder="Votre Pays de Résidence"
+                        />
+                    </div>
+
+                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="adresse">Adresse</label>
+                        <textarea
+                        rows="5"
+                        id="adresse"
+                        pInputTextarea
+                        [(ngModel)]="adresse"
+                        placeholder="Votre adresse complète"
+                        ></textarea>
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="num_fiche">Statut</label>
+                        <div class="flex flex-wrap gap-3">
+                            <div *ngFor="let Statut of statuts" class="flex align-items-center">
+                                <p-radioButton 
+                                    [inputId]="Statut.key" 
+                                    name="Statut" 
+                                    [value]="Statut" 
+                                    [(ngModel)]="selectedStatut" />
+                                <label [for]="Statut.key" class="ml-2">
+                                    {{ Statut.name }}
+                                </label>
+                            </div>
                         </div>
-                    </ng-template>
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="min-width: 12rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Utilisateur
-                                    <p-columnFilter type="text" field="Utilisateur" display="menu" placeholder="Search by Utilisateur"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width: 12rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Fiche client
-                                    <p-columnFilter type="text" field="country.name" display="menu" placeholder="Search by country"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width: 14rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Bénéficiaire
-                                    <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                                        <ng-template pTemplate="header">
-                                            <div class="px-3 pt-3 pb-0">
-                                                <span class="font-bold">Agent Picker</span>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
-                                                <ng-template let-option pTemplate="item">
-                                                    <div class="p-multiselect-representative-option">
-                                                        <img [alt]="option.label" src="assets/demo/images/avatar/{{option.image}}" width="32" style="vertical-align: middle" />
-                                                        <span class="ml-2">{{option.name}}</span>
-                                                    </div>
-                                                </ng-template>
-                                            </p-multiSelect>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width: 10rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Banque
-                                    <p-columnFilter type="date" field="date" display="menu" placeholder="mm/dd/yyyy"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width: 10rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Solde
-                                    <p-columnFilter type="numeric" field="balance" display="menu" currency="USD"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width: 12rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    CMC
-                                    <p-columnFilter field="status" matchMode="equals" display="menu">
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any" [style]="{'min-width': '12rem'}" >
-                                                <ng-template let-option pTemplate="item">
-                                                    <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                                </ng-template>
-                                            </p-dropdown>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width: 12rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Compte société (Pro)
-                                    <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                                        <ng-template pTemplate="filter" let-filter="filterCallback">
-                                            <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3" [style]="{'min-width': '12rem'}" ></p-slider>
-                                            <div class="flex align-items-center justify-content-between px-2">
-                                                <span>{{activityValues[0]}}</span>
-                                                <span>{{activityValues[1]}}</span>
-                                            </div>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th>
-                            <!-- <th style="min-width: 8rem">
-                                <div class="flex justify-content-between align-items-center">
-                                    Verified
-                                    <p-columnFilter type="boolean" field="verified" display="menu"></p-columnFilter>
-                                </div>
-                            </th> -->
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-customer>
-                        <tr>
-                            <td>
-                                {{customer.name}}
-                            </td>
-                            <td>
-                                <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" width="30">
-                                <span class="image-text ml-2">{{customer.country.name}}</span>
-                            </td>
-                            <td>
-                                <img [alt]="customer.representative.name" src="assets/demo/images/avatar/{{customer.representative.image}}" width="32" style="vertical-align: middle"/>
-                                <span class="image-text ml-2">{{customer.representative.name}}</span>
-                            </td>
-                            <td>
-                                {{customer.date | date: 'MM/dd/yyyy'}}
-                            </td>
-                            <td>
-                                {{customer.balance | currency:'USD':'symbol'}}
-                            </td>
-                            <td>
-                                <span [class]="'customer-badge status-' + customer.status">{{customer.status}}</span>
-                            </td>
-                            <td>
-                                <p-progressBar [value]="customer.activity" [showValue]="false" [style]="{'height': '0.5rem'}"></p-progressBar>
-                            </td>
-                            <td class="text-center">
-                                <i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': customer.verified, 'false-icon pi-times-circle text-pink-500': !customer.verified}"></i>
-                            </td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="8">No customers found.</td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="loadingbody">
-                        <tr>
-                            <td colspan="8">Loading customers data. Please wait.</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="num_fiche">Statut d'occupation</label>
+                        <div class="flex flex-wrap gap-3">
+                            <div *ngFor="let Statut_Occupation of statuts_Occupation" class="flex align-items-center">
+                                <p-radioButton 
+                                    [inputId]="Statut_Occupation.key" 
+                                    name="Statut_Occupation" 
+                                    [value]="Statut_Occupation" 
+                                    [(ngModel)]="selectedStatut_Occupation" />
+                                <label [for]="Statut_Occupation.key" class="ml-2">
+                                    {{ Statut_Occupation.name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="requested_amount">Montant sollicité</label>
+                        <input
+                        pInputText
+                        id="requested_amount"
+                        type="text"
+                        [(ngModel)]="requested_amount"
+                        placeholder="Votre Montant sollicité "
+                        />
+                    </div>
+    
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="provenance_client">Provenance du client</label>
+                        <p-dropdown
+                        [options]="provenances_clients"
+                        [(ngModel)]="provenance_client"
+                        [showClear]="true"
+                        placeholder="Sélectionner"
+                        ></p-dropdown>
+                    </div>
+
+                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="provenance_detail">Détail de provenance</label>
+                        <textarea
+                        rows="5"
+                        id="provenance_detail"
+                        pInputTextarea
+                        [(ngModel)]="provenance_detail"
+                        placeholder="Votre Détail de provenance"
+                        ></textarea>
+                    </div>
+
+                </div>
             </div>
         </div>
-        <div class="col-12" *ngIf="activeIndex == 2">
-            <div class="card">
-                <h5>Engagements Données Bancaires</h5>
-                <p-table #dt1 [value]="customers1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" 
-                         styleClass="p-datatable-gridlines" [paginator]="true" 
-                         [globalFilterFields]="['Utilisateur', 'Bénéficiaire', 'Organisme', 'Echéance', 'Encours', 'Durée', 'RAT', 'Nature Crédit', 'Fiche client', 'Compte société (Pro)']" 
-                         responsiveLayout="scroll">
-                    <ng-template pTemplate="caption">
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Rechercher un mot-clé" class="w-full"/>
-                            </span>
-                        </div>
-                    </ng-template>
-                    
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="min-width: 12rem">Utilisateur</th>
-                            <th style="min-width: 12rem">Bénéficiaire</th>
-                            <th style="min-width: 14rem">Organisme</th>
-                            <th style="min-width: 10rem">Echéance</th>
-                            <th style="min-width: 10rem">Encours</th>
-                            <th style="min-width: 12rem">Durée</th>
-                            <th style="min-width: 10rem">RAT</th>
-                            <th style="min-width: 12rem">Nature Crédit</th>
-                            <th style="min-width: 12rem">Fiche client</th>
-                            <th style="min-width: 12rem">Compte société (Pro)</th>
-                        </tr>
-                    </ng-template>
-                    
-                    <ng-template pTemplate="body" let-customer>
-                        <tr>
-                            <td>{{customer.name}}</td>
-                            <td>{{customer.representative.name}}</td>
-                            <td>{{customer.country.name}}</td>
-                            <td>{{customer.date | date: 'MM/dd/yyyy'}}</td>
-                            <td>{{customer.balance | currency:'USD':'symbol'}}</td>
-                            <td>{{customer.activity | number: '1.0-0'}}</td>
-                            <td>{{customer.status}}</td>
-                            <td>{{customer.status}}</td>
-                            <td>{{customer.country.name}}</td>
-                            <td>{{customer.activity}}</td>
-                        </tr>
-                    </ng-template>
-                    
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="10">Aucune donnée disponible.</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
-            
         </div>
-        <div class="col-12" *ngIf="activeIndex == 3">
-            <div class="card">
-                <h5>Engagements Données Bancaires</h5>
-                <p-table #dt1 [value]="customers1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" 
-                         styleClass="p-datatable-gridlines" [paginator]="true" 
-                         [globalFilterFields]="['Utilisateur', 'Bénéficiaire', 'Organisme', 'Echéance', 'Encours', 'Durée', 'RAT', 'Nature Crédit', 'Fiche client', 'Compte société (Pro)']" 
-                         responsiveLayout="scroll">
-                    <ng-template pTemplate="caption">
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Rechercher un mot-clé" class="w-full"/>
-                            </span>
-                        </div>
-                    </ng-template>
-                    
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="min-width: 12rem">Nom Client</th>
-                            <th style="min-width: 12rem">Utilisateur</th>
-                        </tr>
-                    </ng-template>
-                    
-                    <ng-template pTemplate="body" let-customer>
-                        <tr>
-                            <td>{{customer.name}}</td>
-                            <td>{{customer.representative.name}}</td>
-                        </tr>
-                    </ng-template>
-                    
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="10">Aucune donnée disponible.</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
-            
-        </div>
-    </div>
-    </div>
     </div>
 
     <div class="flex space-between mt-4" style="justify-content: space-between;">
@@ -592,11 +558,18 @@
           (click)="goToPreviousStep()">
         </p-button>
         
-        <p-button 
+        <p-button *ngIf="step != 4"
           type="button" 
           label="Suivant" 
           [disabled]="isNextDisabled()" 
           (click)="goToNextStep()">
+        </p-button>
+
+        <p-button *ngIf="step == 4"
+          type="button" 
+          label="Done" 
+          [disabled]="isNextDisabled()" 
+          >
         </p-button>
       </div>
 </div>

@@ -24,6 +24,9 @@ export class AddCustomerFileComponent implements OnInit{
   items: any[]=[];
   activeIndex= 0;
   situations_familiales: SelectItem[] = [];
+  provenances_clients: SelectItem[] = [];
+  formes_juridiques: SelectItem[] = [];
+  business_activities: SelectItem[] = [];
   civilites: SelectItem[] = [];
   coEmprunteur: string = 'non';
   caisses: SelectItem[] = [];
@@ -38,7 +41,6 @@ export class AddCustomerFileComponent implements OnInit{
   products: Product[] = [];
   rowGroupMetadata: any;
   expandedRows: expandedRows = {};
-  activityValues: number[] = [0, 100];
   isExpanded: boolean = false;
   idFrozen: boolean = false;
   loading: boolean = true;
@@ -49,6 +51,36 @@ export class AddCustomerFileComponent implements OnInit{
 
   roles!: Role[];
   selectedRole!: Role;
+
+  selectedIdentity: any = null;
+  selectedIdentity2: any = null;
+
+  identities: any[] = [
+      { name: 'CIN', key: 'A' },
+      { name: 'Carte Séjour', key: 'B' },
+      { name: 'Passeport', key: 'C' },
+  ];
+
+  identities2: any[] = [
+    { name: 'CIN', key: 'A' },
+    { name: 'Carte Séjour', key: 'B' },
+    { name: 'Passeport', key: 'C' },
+];
+
+  selectedStatut: any = null;
+
+  statuts: any[] = [
+      { name: 'Résident', key: 'A' },
+      { name: 'MRE', key: 'B' },
+      { name: 'ENR', key: 'C' },
+  ];
+
+  selectedStatut_Occupation: any = null;
+
+  statuts_Occupation: any[] = [
+      { name: 'Propriétaire', key: 'A' },
+      { name: 'Locataire', key: 'B' },
+  ];
 
   isNextDisabled(): boolean {
     if((this.step == 0 && !this.isSelected1 && !this.isSelected2) || this.step == 1 && !this.selectedRole){
@@ -62,24 +94,47 @@ export class AddCustomerFileComponent implements OnInit{
     if (cardNumber === 1) {
       this.isSelected1 = true;
       this.isSelected2 = false;
+      this.items = [
+        {
+            label: 'Informations générales',
+        },
+        {
+            label: 'Informations détaillées',
+        },
+        {
+            label: "Zone d'implantation",
+        },
+      ];
     } else if (cardNumber === 2) {
       this.isSelected2 = true;
       this.isSelected1 = false;
+      this.items = [
+        {
+            label: 'Informations générales',
+        },
+        {
+            label: 'Informations détaillées',
+        },
+        {
+            label: "Gérant/Manager",
+        },
+      ];
     }
   }
 
-  goToPreviousStep(){
-    if(this.step != 0){
-      this.step --;
+  goToPreviousStep() {
+    if (this.step > 0) {
+        this.step--;
+        this.activeIndex = this.step - 2;
     }
-  }
+}
 
-  goToNextStep(){
-    if(this.step < 2){
-      this.step ++;
+goToNextStep() {
+    if (this.step < 4) {
+        this.step++;
+        this.activeIndex = this.step - 2;
     }
-  }
-
+}
     @ViewChild('filter') filter!: ElementRef;
 
   constructor(private customerService: CustomerService, private productService: ProductService
@@ -90,20 +145,6 @@ export class AddCustomerFileComponent implements OnInit{
 
 
   ngOnInit() {
-    this.items = [
-      {
-          label: 'Informations générales',
-      },
-      {
-          label: 'Informations détaillées',
-      },
-      {
-          label: "Zone d'implantation",
-      },
-      // {
-      //     label: 'Données Crédit',
-      // }
-    ];
 
     this.situations_familiales = [
       { label: 'Célibataire', value: 1 },
@@ -111,6 +152,35 @@ export class AddCustomerFileComponent implements OnInit{
       { label: 'Veuf(e)', value: 3 },
       { label: 'Divorcé(e)', value: 4 },
     ];
+
+    this.provenances_clients = [
+      { label: 'Site Web', value: 1 },
+      { label: 'Compagne Facebook/Instagram', value: 2 },
+      { label: 'Promoteur Immobilier', value: 3 },
+      { label: 'Agence Immobilière', value: 4 },
+      { label: 'Mandataires', value: 5 },
+      { label: 'Apporteurs d’Affaire Individuel (AAI)', value: 6 },
+      { label: 'Parrainage', value: 7 },
+  ];
+
+  this.formes_juridiques = [
+    { label: 'Société à Responsabilité Limitée', value: 'Société à Responsabilité Limitée' },
+    { label: 'Association', value: 'Association' },
+    { label: 'Fondation', value: 'Fondation' },
+    { label: 'Société en commandite par actions', value: 'Société en commandite par actions' },
+    { label: 'Société Civil Immobilière', value: 'Société Civil Immobilière' },
+    { label: 'Société en Nom Collectif', value: 'Société en Nom Collectif' },
+    { label: 'Société anonyme', value: 'Société anonyme' },
+    { label: 'Société en commandite simple', value: 'Société en commandite simple' },
+    { label: 'Groupement d’interêt économique', value: 'Groupement d’interêt économique' },
+];
+
+this.business_activities = [
+  { label: 'Machines', value: 'Machines' },
+  { label: 'Distributeurs automatiques', value: 'Distributeurs automatiques' },
+  { label: 'Concessions', value: 'Concessions' },
+  { label: 'Opérations de vente au détail', value: 'Opérations de vente au détail' },
+];
 
     this.civilites = [
       { label: 'M', value: 1 },
@@ -144,86 +214,96 @@ export class AddCustomerFileComponent implements OnInit{
     { name: 'Onyama Limba', image: 'onyamalimba.png' },
     { name: 'Stephen Shaw', image: 'stephenshaw.png' },
     { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-];
+  ];
 
-this.statuses = [
-    { label: 'Unqualified', value: 'unqualified' },
-    { label: 'Qualified', value: 'qualified' },
-    { label: 'New', value: 'new' },
-    { label: 'Negotiation', value: 'negotiation' },
-    { label: 'Renewal', value: 'renewal' },
-    { label: 'Proposal', value: 'proposal' }
-];
+  this.statuses = [
+      { label: 'Unqualified', value: 'unqualified' },
+      { label: 'Qualified', value: 'qualified' },
+      { label: 'New', value: 'new' },
+      { label: 'Negotiation', value: 'negotiation' },
+      { label: 'Renewal', value: 'renewal' },
+      { label: 'Proposal', value: 'proposal' }
+  ];
 
-this.roles = [
-  { name: 'Emprunteur ', code: '1' },
-  { name: 'Co-emprunteur ', code: '2' },
-  { name: 'Caution personnelle et solidaire', code: '3' },
-  { name: 'Caution hypothécaire', code: '4' },
-  { name: 'Propriétaire', code: '5' },
-  { name: 'Propriétaire dans l’indivision', code: '6' },
-  { name: 'Usufruitier', code: '7' },
-  { name: 'Nu-propriétaire', code: '8' },
-  // { name: 'Istanbul', code: '9' },
-  // { name: 'Paris', code: '10' }
-];
+  this.roles = [
+    { name: 'Emprunteur ', code: '1' },
+    { name: 'Co-emprunteur ', code: '2' },
+    { name: 'Caution personnelle et solidaire', code: '3' },
+    { name: 'Caution hypothécaire', code: '4' },
+    { name: 'Propriétaire', code: '5' },
+    { name: 'Propriétaire dans l’indivision', code: '6' },
+    { name: 'Usufruitier', code: '7' },
+    { name: 'Nu-propriétaire', code: '8' },
+  ];
+
+  this.selectedIdentity = this.identities[0];
+  this.selectedIdentity2 = this.identities2[0];
+  this.selectedStatut = this.statuts[0];
+  this.selectedStatut_Occupation = this.statuts_Occupation[0];
 
   }
 
   onActiveIndexChange(event: number) {
     this.activeIndex = event;
+    if (event === 0) {
+      this.step = 2;
+  } else if (event === 1) {
+      this.step = 3; 
+  } else if (event === 2) {
+      this.step = 4;
+  }
   }
   
   onSort() {
     this.updateRowGroupMetaData();
-}
+  }
 
-updateRowGroupMetaData() {
-    this.rowGroupMetadata = {};
+  updateRowGroupMetaData() {
+      this.rowGroupMetadata = {};
 
-    if (this.customers3) {
-        for (let i = 0; i < this.customers3.length; i++) {
-            const rowData = this.customers3[i];
-            const representativeName = rowData?.representative?.name || '';
+      if (this.customers3) {
+          for (let i = 0; i < this.customers3.length; i++) {
+              const rowData = this.customers3[i];
+              const representativeName = rowData?.representative?.name || '';
 
-            if (i === 0) {
-                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-            }
-            else {
-                const previousRowData = this.customers3[i - 1];
-                const previousRowGroup = previousRowData?.representative?.name;
-                if (representativeName === previousRowGroup) {
-                    this.rowGroupMetadata[representativeName].size++;
-                }
-                else {
-                    this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-                }
-            }
-        }
-    }
-}
+              if (i === 0) {
+                  this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
+              }
+              else {
+                  const previousRowData = this.customers3[i - 1];
+                  const previousRowGroup = previousRowData?.representative?.name;
+                  if (representativeName === previousRowGroup) {
+                      this.rowGroupMetadata[representativeName].size++;
+                  }
+                  else {
+                      this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
+                  }
+              }
+          }
+      }
+  }
 
-expandAll() {
-    if (!this.isExpanded) {
-        this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
+  expandAll() {
+      if (!this.isExpanded) {
+          this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
 
-    } else {
-        this.expandedRows = {};
-    }
-    this.isExpanded = !this.isExpanded;
-}
+      } else {
+          this.expandedRows = {};
+      }
+      this.isExpanded = !this.isExpanded;
+  }
 
-formatCurrency(value: number) {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-}
+  formatCurrency(value: number) {
+      return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  }
 
-onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-}
+  onGlobalFilter(table: Table, event: Event) {
+      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
 
-clear(table: Table) {
-    table.clear();
-    this.filter.nativeElement.value = '';
-}
+  clear(table: Table) {
+      table.clear();
+      this.filter.nativeElement.value = '';
+  }
  
 }

@@ -28,10 +28,14 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { SimulatorCredirectComponent } from './simulator-credirect/simulator-credirect.component';
 import { SimulatorCredirectV2Component } from './simulator-credirect-v2/simulator-credirect-v2.component';
-import { ListboxModule } from 'primeng/listbox';
 import { SliderModule } from 'primeng/slider';
 import { CardModule } from 'primeng/card';
 import { ListboxModule } from 'primeng/listbox';
+import { DialogModule } from 'primeng/dialog';
+import { FullCalendarModule } from '@fullcalendar/angular'; // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
+import interactionPlugin from '@fullcalendar/interaction';
+import { AgendaComponent } from './agenda/agenda.component';
 
 const routes: Routes = [
   {
@@ -79,6 +83,10 @@ const routes: Routes = [
     path: 'simulator-v2',
     component: SimulatorCredirectV2Component,
   },
+  {
+    path: 'calendar',
+    component: AgendaComponent,
+  },
 ]
 
 @NgModule({
@@ -93,7 +101,8 @@ const routes: Routes = [
     InfoCompanyComponent,
     SimulatorCredirectComponent,
     SimulatorCredirectV2Component,
-    CustomerFolderComponent
+    CustomerFolderComponent,
+    AgendaComponent
   ],
   imports: [
     CommonModule,
@@ -116,6 +125,8 @@ const routes: Routes = [
     SliderModule,
     CardModule,
     ListboxModule,
+    DialogModule,
+    FullCalendarModule,
     RouterModule.forChild(routes)
   ],
   providers:[

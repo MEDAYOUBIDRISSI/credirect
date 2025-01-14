@@ -9,15 +9,15 @@
         <div class="col-12">
            <div class="grid">
                 <div class="col-12 xl:col-8">
-                    <h4>Tier : </h4>
-                    <p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                    <h4>Tier</h4>
+                    <p-table [value]="tiers" [paginator]="true" [rows]="5" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                                <th pSortableColumn="code">Tel <p-sortIcon field="code"></p-sortIcon></th>
-                                <th pSortableColumn="category">Rang du tier <p-sortIcon field="category"></p-sortIcon></th>
-                                <th>
-                                    <p-button label="Ajouter autre" severity="info" />
+                                <th pSortableColumn="code">Tel</th>
+                                <th pSortableColumn="category">Rang du tier</th>
+                                <th style="text-align: center;">
+                                    <p-button label="Ajouter autre" severity="info" (click)="showDialog()"/>
                                 </th>
                             </tr>
                         </ng-template>
@@ -25,12 +25,12 @@
                             <tr>
                                 <td style="width: 25%; min-width: 7rem;">{{product.name}}</td>
                                 <td style="width: 25%; min-width: 8rem;">{{product.tel}}</td>
-                                <td style="width: 25%; min-width: 8rem;">
-                                    <p-tag *ngIf="product.is_primary" value="Primary" [rounded]="true" />
-                                    <p-tag *ngIf="!product.is_primary" severity="warn" value="Secondary" [rounded]="true" />
+                                <td style="width: 25%; min-width: 8rem;text-align: center;">
+                                    <button *ngIf="product.is_primary" pButton pRipple type="button" label="Primary" class="p-button-rounded"></button>
+				                    <button *ngIf="!product.is_primary" pButton pRipple type="button" label="Secondary" class="p-button-rounded p-button-secondary"></button>
                                 </td>
-                                <td style="width: 25%;">
-                                    <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
+                                <td style="width: 25%;text-align: center;">
+                                    <button pButton pRipple type="button" icon="pi pi-eye"  class="p-button p-component p-button-text" (click)="showTiere(rowIndex)"></button>
                                 </td>
                             </tr>
                             <tr *ngIf="selectedCity?.code == 'CIM' 
@@ -38,14 +38,21 @@
                                         || selectedCity?.code == 'CBI' 
                                         || selectedCity?.code == 'CBM'"> 
                                 <td colspan="3">
-                                    <p-slider [(ngModel)]="product.tier_interv" styleClass="w-100" />
+                                    <div class="grid">
+                                        <div class="col-10">
+                                            <p-slider [(ngModel)]="product.tier_interv" styleClass="w-100"/>
+                                        </div>
+                                        <div class="col-2">
+                                            <span> {{ product.tier_interv }} % </span>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </ng-template>
                     </p-table>
                 </div>
                 <div class="col-12 xl:col-4">
-                    <h4>Nature du crédit : </h4>
+                    <h4>Nature du crédit</h4>
                     <div class="row">
                         <div class="col-12">
                             <p-listbox [options]="cities" [(ngModel)]="selectedCity" (onChange)="onCityChange($event)" optionLabel="name" class="w-full md:w-56" />
@@ -56,3 +63,51 @@
         </div>
     </div>
 </div>
+<!-- /////////////  Dialogs  //////////////// -->
+<!-- ///////////////Search By CIN//////////////// -->
+<p-dialog
+    [(visible)]="visibleAddTiers"
+    [modal]="true"
+    [style]="{ width: '25rem' }">
+        <ng-template pTemplate="header">
+            <div class="inline-flex items-center justify-center gap-2">
+                <h4>Ajouter nouveau tiere</h4>
+            </div>
+        </ng-template>
+        <span class="p-text-secondary block mb-2">rechercher par CIN s'il existe ou ajouter un nouveau</span>
+        <div class="flex items-center gap-4">
+            <label for="username" class="font-semibold w-24 mt-2">
+                CIN
+            </label>
+            <input pInputText id="cin" [(ngModel)]="cinSearch" class="flex-auto" autocomplete="off" />
+            <button pButton pRipple severity="info" icon="pi pi-search"  class="p-button-info" (click)="searchIfExist()"></button>
+        </div>
+        <div class="row mt-3" *ngIf="tierExistByCin">
+            <span>Est-ce que {{ tierExistByCinProfile?.name }} est celui que vous recherchez ?</span>
+            <br>
+            <button pButton pRipple class="p-button-success p-button-raised mt-2" type="button" label="ajouter le" (click)="addTierToList()"></button>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple type="button" label="Cancel" class="p-button-secondary mt-4" (click)="visibleAddTiers = false"></button>
+        </ng-template>
+</p-dialog>
+<!-- ///////////////Show Tier//////////////// -->
+<p-dialog
+[(visible)]="visibleShowTiers"
+[modal]="true"
+[style]="{ width: '25rem' }">
+    <div class="row">
+        <div class="col-12">
+            <div class="w-100 text-center">
+                <img [alt]="tierDialogBySearch?.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" width="80" style="vertical-align: middle" />      
+            </div>
+        </div>
+        <div class="col-12 text-center">
+            <span class="ml-1 vertical-align-middle">{{ tierDialogBySearch?.name }}</span>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+</p-dialog>
+

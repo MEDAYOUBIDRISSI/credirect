@@ -6,7 +6,7 @@
                 class="card shadow-sm"
                 [class.opacity-50]="!isSelected1" 
                 (click)="selectCard(1)"
-                style="cursor: pointer; border-radius: 5px; padding: 1rem; width: 22rem; height: 60vh;">   
+                style="cursor: pointer; border-radius: 5px; padding: 1rem; width: 22rem; height: 63vh;">   
                 <img 
                     alt="Card 1" 
                     class="w-100"  
@@ -18,7 +18,7 @@
                 </div>
     
                 <p class="mt-3">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. culpa ratione quam perferendis esse, cupiditate neque quas!
+                    Ajouter une personne physique : un individu identifiable qui peut être associé à des transactions ou des dossiers de crédit en son nom propre.
                 </p>
             </div>
     
@@ -26,7 +26,7 @@
                 class="card shadow-sm"
                 [class.opacity-50]="!isSelected2" 
                 (click)="selectCard(2)"
-                style="cursor: pointer; border-radius: 5px; padding: 1rem; width: 22rem; height: 60vh;">   
+                style="cursor: pointer; border-radius: 5px; padding: 1rem; width: 22rem; height: 63vh;">   
                 <img 
                     alt="Card 2" 
                     class="w-100"  
@@ -38,7 +38,7 @@
                 </div>
     
                 <p class="mt-3">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. culpa ratione quam perferendis esse, cupiditate neque quas!
+                    Ajouter une personne morale : une entité juridique, telle qu’une entreprise ou une organisation, pouvant être associée à des dossiers de crédit ou des engagements légaux.
                 </p>
             </div>
         </div>
@@ -552,6 +552,7 @@
     </div>
 
     <div class="flex space-between mt-4" style="justify-content: space-between;">
+        <span *ngIf="step == 0"></span>
         <p-button *ngIf="step != 0"
           type="button" 
           label="Précédent" 

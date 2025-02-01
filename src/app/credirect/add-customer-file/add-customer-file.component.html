@@ -553,7 +553,7 @@
 
     <div class="flex space-between mt-4" style="justify-content: space-between;">
         <span *ngIf="step == 0 || step == 5"></span>
-        <p-button *ngIf="step != 0 && step != 5"
+        <button *ngIf="step != 0 && step != 5"
           type="button" 
           label="Précédent" 
           (click)="goToPreviousStep()">

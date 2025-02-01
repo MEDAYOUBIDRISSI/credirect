@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { Customer, Representative } from 'src/app/demo/api/customer';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 interface expandedRows {
   [key: string]: boolean;
@@ -91,9 +92,9 @@ export class AddCustomerFileComponent implements OnInit{
   }
 
   selectCard(cardNumber: number) {
+    this.isSelected1 = cardNumber === 1;
+    this.isSelected2 = cardNumber === 2;
     if (cardNumber === 1) {
-      this.isSelected1 = true;
-      this.isSelected2 = false;
       this.items = [
         {
             label: 'Informations générales',
@@ -106,8 +107,6 @@ export class AddCustomerFileComponent implements OnInit{
         },
       ];
     } else if (cardNumber === 2) {
-      this.isSelected2 = true;
-      this.isSelected1 = false;
       this.items = [
         {
             label: 'Informations générales',
@@ -120,24 +119,32 @@ export class AddCustomerFileComponent implements OnInit{
         },
       ];
     }
+    // this.updateUrl();
   }
 
   goToPreviousStep() {
     if (this.step > 0) {
         this.step--;
         this.activeIndex = this.step - 2;
+        this.updateUrl();
     }
 }
 
 goToNextStep() {
-    if (this.step < 4) {
+    if (this.step < 6) {
         this.step++;
         this.activeIndex = this.step - 2;
+        this.updateUrl();
     }
 }
+
+private updateUrl(): void {
+  this.router.navigate(['/credirect/customer/add/', this.step]);
+}
+
     @ViewChild('filter') filter!: ElementRef;
 
-  constructor(private customerService: CustomerService, private productService: ProductService
+  constructor(private customerService: CustomerService, private productService: ProductService, private router: Router, private route: ActivatedRoute
   ) 
   {
     
@@ -145,6 +152,14 @@ goToNextStep() {
 
 
   ngOnInit() {
+
+    this.route.params.subscribe((params) => {
+      const stepFromUrl = +params['step']; // Convert to number
+      if (!isNaN(stepFromUrl) && stepFromUrl >= 0 && stepFromUrl <= 6) {
+        this.step = stepFromUrl;
+        this.activeIndex = this.step - 2; // Adjust activeIndex for steps 2, 3, 4
+      }
+    });
 
     this.situations_familiales = [
       { label: 'Célibataire', value: 1 },
@@ -226,8 +241,8 @@ this.business_activities = [
   ];
 
   this.roles = [
-    { name: 'Emprunteur ', code: '1' },
-    { name: 'Co-emprunteur ', code: '2' },
+    { name: 'Emprunteur', code: '1' },
+    { name: 'Co-emprunteur', code: '2' },
     { name: 'Caution personnelle et solidaire', code: '3' },
     { name: 'Caution hypothécaire', code: '4' },
     { name: 'Propriétaire', code: '5' },
@@ -240,18 +255,14 @@ this.business_activities = [
   this.selectedIdentity2 = this.identities2[0];
   this.selectedStatut = this.statuts[0];
   this.selectedStatut_Occupation = this.statuts_Occupation[0];
+  // this.step = 6;
 
   }
 
   onActiveIndexChange(event: number) {
     this.activeIndex = event;
-    if (event === 0) {
-      this.step = 2;
-  } else if (event === 1) {
-      this.step = 3; 
-  } else if (event === 2) {
-      this.step = 4;
-  }
+    this.step = event + 2;
+    this.updateUrl();
   }
   
   onSort() {

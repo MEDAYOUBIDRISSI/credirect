@@ -2,7 +2,12 @@
     <div class="row">
         <div class="col-12">
             <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                Cette section permet de gérer les informations détaillées d’un tiers, 
+                qu’il s’agisse d’une personne physique ou morale. Chaque fiche inclut des informations 
+                essentielles telles que l'identité, les coordonnées, et l’historique des interactions. 
+                Ce tiers peut être associé à un ou plusieurs dossiers de crédit, 
+                permettant une gestion centralisée et efficace des relations et des opérations 
+                financières.
             </p>
         </div>
         <div class="col-md-12">
@@ -42,11 +47,11 @@
                             </th>
                             <th style="min-width:15rem">
                                 <div class="flex align-items-center">
-                                    Numero Fiche
+                                    Nationalité 
                                     <p-columnFilter type="text" field="country.name" display="menu" />
                                 </div>
                             </th>
-                            <th style="min-width:15rem">
+                            <!-- <th style="min-width:15rem">
                                 <div class="flex align-items-center">
                                     Civilité
                                     <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
@@ -67,27 +72,27 @@
                                         </ng-template>
                                     </p-columnFilter>
                                 </div>
-                            </th>
-                            <th style="min-width:10rem">
+                            </th> -->
+                            <!-- <th style="min-width:10rem">
                                 <div class="flex align-items-center">
                                     Nom
                                     <p-columnFilter type="date" field="date" display="menu" />
                                 </div>
-                            </th>
+                            </th> -->
                             <th style="min-width:10rem">
                                 <div class="flex align-items-center">
-                                    Prénom
-                                    <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" />
+                                    N.Cin/Sejour
+                                    <p-columnFilter type="numeric" field="balance" display="menu" />
                                 </div>
                             </th>
                             <th style="min-width:10rem">
                                 <div class="flex align-items-center">
-                                    N. Cin/Sejour
+                                    Situation familiale
                                     <p-columnFilter field="status" matchMode="equals" display="menu">
                                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                             <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
                                                 <ng-template let-option pTemplate="item">
-                                                    <p-tag [value]="option.value" [severity]="getSeverity(option.label)" />
+                                                    <p-tag [value]="getSituationFmilialValue(option.label)" [severity]="getSeverity(option.label)" />
                                                 </ng-template>
                                             </p-dropdown>
                                         </ng-template>
@@ -110,13 +115,7 @@
                             </th>
                             <th style="min-width:10rem">
                                 <div class="flex align-items-center">
-                                    id import
-                                    <p-columnFilter type="boolean" field="verified" display="menu" />
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    ~ banque envoyee
+                                    Il a un dossier.
                                     <p-columnFilter type="boolean" field="verified" display="menu" />
                                 </div>
                             </th>
@@ -134,24 +133,21 @@
                                 <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span class="ml-1 vertical-align-middle">{{ customer.country.name }}</span>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="ml-1 vertical-align-middle">{{ customer.representative.name }}</span>
-                            </td>
-                            <td>
+                            </td> -->
+                            <!-- <td>
                                 {{ customer.date | date: 'MM/dd/yyyy' }}
+                            </td> -->
+                            <td>
+                               EE{{ customer.balance }}
                             </td>
                             <td>
-                                {{ customer.balance | currency: 'USD':'symbol' }}
-                            </td>
-                            <td>
-                                <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" />
+                                <p-tag [value]="getSituationFmilialValue(customer.status)" [severity]="getSeverity(customer.status)" />
                             </td>
                             <td>
                                 <p-progressBar [value]="customer.activity" [showValue]="false" />
-                            </td>
-                            <td class="text-center">
-                                <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': customer.verified, 'text-red-500 pi-times-circle': !customer.verified }"></i>
                             </td>
                             <td class="text-center">
                                 <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': customer.verified, 'text-red-500 pi-times-circle': !customer.verified }"></i>

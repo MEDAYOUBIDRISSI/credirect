@@ -110,9 +110,30 @@ export class ListCustomerFileComponent implements OnInit {
               return 'warning';
 
           case 'renewal':
-              return null;
+              return 'info';
           default:
-              return null;
+              return 'info';
       }
   }
+
+  getSituationFmilialValue(status: string) {
+    switch (status.toLowerCase()) {
+        case 'unqualified':
+            return 'veuf';
+
+        case 'qualified':
+            return 'marié (M)';
+
+        case 'new':
+            return 'célibataire (C)';
+
+        case 'negotiation':
+            return 'divorcé (D)';
+
+        case 'renewal':
+            return 'célibataire (C)';
+        default:
+            return 'célibataire (C)';
+    }
+}
 }

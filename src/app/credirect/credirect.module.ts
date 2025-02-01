@@ -45,8 +45,13 @@ const routes: Routes = [
     component: ListCustomerFileComponent,
   },
   {
-    path: 'customer/add',
+    path: 'customer/add/:step',
     component: AddCustomerFileComponent,
+  },
+  {
+    path: 'customer/add',
+    redirectTo: 'customer/add/0',
+    pathMatch: 'full',
   },
   {
     path: 'customer/folder/add',

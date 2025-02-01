@@ -36,6 +36,8 @@ import { FullCalendarModule } from '@fullcalendar/angular'; // must go before pl
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import interactionPlugin from '@fullcalendar/interaction';
 import { AgendaComponent } from './agenda/agenda.component';
+import { CustomerFolderMoreInfoComponent } from './customer-folder-more-info/customer-folder-more-info.component';
+import { CalendarModule } from 'primeng/calendar';
 
 const routes: Routes = [
   {
@@ -49,6 +51,10 @@ const routes: Routes = [
   {
     path: 'customer/folder/add',
     component: CustomerFolderComponent,
+  },
+  {
+    path: 'customer/folder/more-info',
+    component: CustomerFolderMoreInfoComponent,
   },
   {
     path: 'banking-informations',
@@ -102,7 +108,8 @@ const routes: Routes = [
     SimulatorCredirectComponent,
     SimulatorCredirectV2Component,
     CustomerFolderComponent,
-    AgendaComponent
+    AgendaComponent,
+    CustomerFolderMoreInfoComponent
   ],
   imports: [
     CommonModule,
@@ -127,6 +134,7 @@ const routes: Routes = [
     ListboxModule,
     DialogModule,
     FullCalendarModule,
+    CalendarModule,
     RouterModule.forChild(routes)
   ],
   providers:[

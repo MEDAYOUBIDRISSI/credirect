@@ -6,60 +6,175 @@
 
             </p>
         </div>
-        <div class="col-12">
-           <div class="grid">
-                <div class="col-12 xl:col-8">
-                    <h4>Tier</h4>
-                    <p-table [value]="tiers" [paginator]="true" [rows]="5" responsiveLayout="scroll">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                                <th pSortableColumn="code">Tel</th>
-                                <th pSortableColumn="category">Rang du tier</th>
-                                <th style="text-align: center;">
-                                    <p-button label="Ajouter autre" severity="info" (click)="showDialog()"/>
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
-                            <tr>
-                                <td style="width: 25%; min-width: 7rem;">{{product.name}}</td>
-                                <td style="width: 25%; min-width: 8rem;">{{product.tel}}</td>
-                                <td style="width: 25%; min-width: 8rem;text-align: center;">
-                                    <button *ngIf="product.is_primary" pButton pRipple type="button" label="Primary" class="p-button-rounded"></button>
-				                    <button *ngIf="!product.is_primary" pButton pRipple type="button" label="Secondary" class="p-button-rounded p-button-secondary"></button>
-                                </td>
-                                <td style="width: 25%;text-align: center;">
-                                    <button pButton pRipple type="button" icon="pi pi-eye"  class="p-button p-component p-button-text" (click)="showTiere(rowIndex)"></button>
-                                </td>
-                            </tr>
-                            <tr *ngIf="selectedCity?.code == 'CIM' 
-                                        || selectedCity?.code == 'CH' 
-                                        || selectedCity?.code == 'CBI' 
-                                        || selectedCity?.code == 'CBM'"> 
-                                <td colspan="3">
-                                    <div class="grid">
-                                        <div class="col-10">
-                                            <p-slider [(ngModel)]="product.tier_interv" styleClass="w-100"/>
-                                        </div>
-                                        <div class="col-2">
-                                            <span> {{ product.tier_interv }} % </span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </div>
-                <div class="col-12 xl:col-4">
-                    <h4>Nature du crédit</h4>
-                    <div class="row">
-                        <div class="col-12">
-                            <p-listbox [options]="cities" [(ngModel)]="selectedCity" (onChange)="onCityChange($event)" optionLabel="name" class="w-full md:w-56" />
+        <div class="card">
+            <!-- Step 0 -->
+            <div *ngIf="step == 0" class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center gap-4" style="display: flex;">
+                    <div 
+                        class="card shadow-sm"
+                        [class.opacity-50]="!isSelected1" 
+                        (click)="selectCard(1)"
+                        style="cursor: pointer; border-radius: 5px; padding: 1rem; width: 22rem; height: 63vh;">   
+                        <img 
+                            alt="Card 1" 
+                            class="w-100"  
+                            src="assets/demo/images/galleria/entrepreneur.svg"
+                            style="width: 20rem; height: 20rem;" />
+                        
+                        <div class="mt-3 full-width d-flex justify-content-center">
+                            <p-button label="Créer un dossier physique" [styleClass]="isSelected1 ? 'p-button-primary full-width w-100' : 'p-button-outlined full-width w-100'"></p-button>
                         </div>
+            
+                        <p class="mt-3">
+                            gérez les informations et les transactions liées à une personne physique pour des besoins financiers ou administratifs.
+                        </p>
+                    </div>
+            
+                    <!-- (click)="selectCard(2)" -->
+                    <div 
+                        class="card shadow-sm not-allow"
+                        [class.opacity-50]="!isSelected2" 
+                        
+                        style="cursor: pointer; border-radius: 5px; padding: 1rem; width: 22rem; height: 63vh;">   
+                        <img 
+                            alt="Card 2" 
+                            class="w-100"  
+                            src="assets/demo/images/galleria/organizer.svg"
+                            style="width: 20rem; height: 20rem;" />
+                        
+                        <div class="mt-3 full-width d-flex justify-content-center">
+                            <p-button label="Créer un dossier moral" [styleClass]="isSelected2 ? 'p-button-primary full-width w-100' : 'p-button-outlined full-width w-100'"></p-button>
+                        </div>
+            
+                        <p class="mt-3">
+                            gérez les informations et les transactions liées à une entité juridique pour des besoins financiers ou administratifs.
+                        </p>
                     </div>
                 </div>
-           </div> 
+            </div>
+            <!-- Step 1 -->
+            <div class="row" *ngIf="step == 1">
+                <div class="col-12" >
+                    <div class="grid">
+                         <div class="col-12 xl:col-7">
+                             <h4>Tier</h4>
+                             <p-table [value]="tiers" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                                 <ng-template pTemplate="header">
+                                     <tr>
+                                         <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                                         <th pSortableColumn="role">Role<p-sortIcon field="role"></p-sortIcon></th>
+                                         <th pSortableColumn="tel">Tel</th>
+                                         <th pSortableColumn="is_complete">Rang<p-sortIcon field="is_complete"></p-sortIcon></th>
+                                         <th style="text-align: center;">
+                                             <p-button label="Ajouter autre" severity="info" (click)="showDialog()"/>
+                                         </th>
+                                     </tr>
+                                 </ng-template>
+                                 <ng-template pTemplate="body" let-tierItem let-rowIndex="rowIndex">
+                                     <tr>
+                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.name}}</td>
+                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.role}}</td>
+                                         <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem.tel}}" tooltipPosition="top"></i></td>
+                                         <td style="width: 10%; min-width: 4rem;text-align: center;">
+                                            <p-tag *ngIf="tierItem.is_complete" value="Complet" severity="success" />
+                                            <p-tag *ngIf="!tierItem.is_complete" value="Incomplet" severity="danger" />
+                                         </td>
+                                         <td style="width: 25%;text-align: center;">
+                                             <button pButton pRipple type="button" icon="pi pi-eye"  class="p-button p-component p-button-text" (click)="showTiere(rowIndex)"></button>
+                                         </td>
+                                     </tr>
+                                     <tr *ngIf="selectedCreditType?.code == 'CIM' 
+                                                 || selectedCreditType?.code == 'CH' 
+                                                 || selectedCreditType?.code == 'CBI' 
+                                                 || selectedCreditType?.code == 'CBM'"> 
+                                         <td colspan="4">
+                                             <div class="grid">
+                                                <div class="col-12">
+                                                    <span>Pourcentage de participation</span>
+                                                </div>
+                                                 <div class="col-10">
+                                                     <p-slider [(ngModel)]="tierItem.tier_interv" styleClass="w-100"/>
+                                                 </div>
+                                                 <div class="col-2">
+                                                     <span> {{ tierItem.tier_interv }} % </span>
+                                                 </div>
+                                             </div>
+                                         </td>
+                                     </tr>
+                                 </ng-template>
+                             </p-table>
+                         </div>
+                         <div class="col-12 xl:col-5">
+                             <h4>Nature du crédit</h4>
+                             <div class="row">
+                                 <div class="col-12">
+                                     <p-listbox [options]="creditTypes" [(ngModel)]="selectedCreditType" (onChange)="onCreditTypeChange($event)" optionLabel="name" class="w-full md:w-56"/>
+                                 </div>
+                             </div>
+                         </div>
+                    </div> 
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="row" *ngIf="step == 2">
+                <div class="col-12" >
+                    <div class="grid">
+                         <div class="col-12 xl:col-12">
+                             <h4>Tier</h4>
+                             <p-table [value]="tiers" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                                 <ng-template pTemplate="header">
+                                     <tr>
+                                         <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                                         <th pSortableColumn="role">Role<p-sortIcon field="role"></p-sortIcon></th>
+                                         <th pSortableColumn="tel">Tel</th>
+                                         <th pSortableColumn="is_complete">status<p-sortIcon field="is_complete"></p-sortIcon></th>
+                                         <th style="text-align: center;">
+                                             
+                                         </th>
+                                     </tr>
+                                 </ng-template>
+                                 <ng-template pTemplate="body" let-tierItem let-rowIndex="rowIndex">
+                                     <tr>
+                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.name}}</td>
+                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.role}}</td>
+                                         <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem.tel}}" tooltipPosition="top"></i></td>
+                                         <td style="width: 10%; min-width: 4rem;text-align: center;">
+                                            <p-tag *ngIf="tierItem.is_complete" value="Complet" severity="success" />
+                                            <p-tag *ngIf="!tierItem.is_complete" value="Incomplet" severity="danger" />
+                                         </td>
+                                         <td style="width: 25%;text-align: center;">
+                                            <p-button class="mx-1" icon="pi pi-id-card" [rounded]="true" severity="info" pTooltip="Complete" tooltipPosition="top" routerLink="/credirect/customer/folder/more-info"/>
+                                         </td>
+                                     </tr>
+                                 </ng-template>
+                             </p-table>
+                         </div>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="flex space-between mt-4" style="justify-content: space-between;">
+                <span *ngIf="step == 0"></span>
+                <p-button *ngIf="step != 0"
+                  type="button" 
+                  label="Précédent" 
+                  (click)="goToPreviousStep()">
+                </p-button>
+                
+                <p-button *ngIf="step != 4"
+                  type="button" 
+                  label="Suivant" 
+                  [disabled]="isNextDisabled()" 
+                  (click)="goToNextStep()">
+                </p-button>
+        
+                <p-button *ngIf="step == 4"
+                  type="button" 
+                  label="Done" 
+                  [disabled]="isNextDisabled()" 
+                  >
+                </p-button>
+              </div>
         </div>
     </div>
 </div>
@@ -74,7 +189,7 @@
                 <h4>Ajouter nouveau tiere</h4>
             </div>
         </ng-template>
-        <span class="p-text-secondary block mb-2">rechercher par CIN s'il existe ou ajouter un nouveau</span>
+        <span class="p-text-secondary block mb-2">rechercher par CIN s'il existe</span>
         <div class="flex items-center gap-4">
             <label for="username" class="font-semibold w-24 mt-2">
                 CIN
@@ -86,6 +201,10 @@
             <span>Est-ce que {{ tierExistByCinProfile?.name }} est celui que vous recherchez ?</span>
             <br>
             <button pButton pRipple class="p-button-success p-button-raised mt-2" type="button" label="ajouter le" (click)="addTierToList()"></button>
+        </div>
+        <span class="p-text-secondary block mb-2 mt-3">ou ajouter un nouveau</span>
+        <div class="flex items-center gap-4">
+            <button pButton pRipple label="Ajouter tier" icon="pi pi-plus" class="p-button-info" routerLink="/credirect/customer/add"></button>
         </div>
         <ng-template pTemplate="footer">
             <button pButton pRipple type="button" label="Cancel" class="p-button-secondary mt-4" (click)="visibleAddTiers = false"></button>

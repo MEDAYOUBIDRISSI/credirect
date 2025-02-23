@@ -554,7 +554,8 @@
     <div class="flex space-between mt-4" style="justify-content: space-between;">
         <span *ngIf="step == 0 || step == 5"></span>
         <button *ngIf="step != 0 && step != 5"
-          type="button" 
+        pButton pRipple type="button"
+        class="p-button-primary" 
           label="Précédent" 
           (click)="goToPreviousStep()">
         </button>

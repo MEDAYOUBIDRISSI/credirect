@@ -22,11 +22,17 @@ export class AgendaComponent {
       center: 'title',
       right: 'dayGridMonth,dayGridWeek'
     },
-    events: [
-      { title: 'Event 1', date: '2025-01-01' },
-      { title: 'Event 2', date: '2025-01-02' },
-      { title: 'Oum Kell', date: '2025-01-02' },
-
+    events : [
+      { title: 'Demande de crédit immobilier - Ahmed El Amrani', date: '2025-02-05' },
+      { title: 'Demande de crédit à la consommation - Fatima Zahra', date: '2025-02-05' },
+      { title: 'Demande de Mourabaha - Mohamed Kettani', date: '2025-02-05' },
+      { title: 'Demande de crédit hypothécaire - Samira El Fassi', date: '2025-02-14' },
+      { title: 'Demande de crédit automobile - Hassan El Mansouri', date: '2025-02-17' },
+      { title: 'Demande de crédit révolving - Amina Belhaj', date: '2025-02-20' },
+      { title: 'Demande de crédit d’investissement - Omar El Khattabi', date: '2025-02-23' },
+      { title: 'Demande de crédit à la promotion immobilière - Zineb El Idrissi', date: '2025-02-25' },
+      { title: 'Demande de crédit-bail immobilier - Youssef Benchekroun', date: '2025-02-25' },
+      { title: 'Demande de crédit-bail mobilier - Nadia El Amraoui', date: '2025-02-28' },
     ]
   };
 

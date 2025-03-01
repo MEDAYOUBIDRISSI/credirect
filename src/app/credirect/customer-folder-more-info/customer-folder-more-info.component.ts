@@ -46,7 +46,8 @@ export class CustomerFolderMoreInfoComponent implements OnInit{
 
   selectedIdentity: any = null;
   selectedIdentity2: any = null;
-
+  rem1: any = true;
+  rem2: any = false;
   identities: any[] = [
       { name: 'CIN', key: 'A' },
       { name: 'Carte Séjour', key: 'B' },
@@ -106,6 +107,27 @@ export class CustomerFolderMoreInfoComponent implements OnInit{
     { label: 'Rentier', value: 'Rentier' },
   ];
   selectedProfession: string = '';
+  banks = [
+    { label: 'Banque Populaire', value: 'Banque Populaire' },
+    { label: 'Attijariwafa Bank', value: 'Attijariwafa Bank' },
+    { label: 'BMCE Bank', value: 'BMCE Bank' },
+    { label: 'Société Générale Maroc', value: 'Société Générale Maroc' },
+    { label: 'Crédit du Maroc', value: 'Crédit du Maroc' },
+    { label: 'CIH Bank', value: 'CIH Bank' },
+  ];
+  accountTypes = [
+    { label: 'PRINCIPAL', value: 'PRINCIPAL' },
+    { label: 'SECONDAIRE', value: 'SECONDAIRE' },
+  ];
+  engagementTypes = [
+    { label: 'Crédit immobilier', value: 'Crédit immobilier' },
+    { label: 'Crédit à la consommation', value: 'Crédit à la consommation' },
+    { label: 'Crédit automobile', value: 'Crédit automobile' },
+    { label: 'Crédit hypothécaire', value: 'Crédit hypothécaire' },
+    { label: 'Crédit d’investissement', value: 'Crédit d’investissement' },
+    { label: 'Crédit révolving', value: 'Crédit révolving' },
+    { label: 'Autre crédit', value: 'Autre crédit' },
+  ];
 
   isNextDisabled(): boolean {
     if((this.step == 0 && !this.isSelected1 && !this.isSelected2) || this.step == 1 && !this.selectedRole){
@@ -153,14 +175,16 @@ export class CustomerFolderMoreInfoComponent implements OnInit{
   goToPreviousStep() {
     if (this.step > 0) {
         this.step--;
-        this.activeIndex = this.step - 2;
+        this.activeIndex --;
+        // this.activeIndex = this.step - 2;
     }
 }
 
 goToNextStep() {
-    if (this.step < 4) {
+    if (this.step < 5) {
         this.step++;
-        this.activeIndex = this.step - 2;
+        this.activeIndex ++;
+        // this.activeIndex = this.step - 2;
     }
 }
     @ViewChild('filter') filter!: ElementRef;
@@ -323,11 +347,11 @@ this.business_activities = [
     this.activeIndex = event;
     if (event === 0) {
       this.step = 2;
-  } else if (event === 1) {
-      this.step = 3; 
-  } else if (event === 2) {
-      this.step = 4;
-  }
+    } else if (event === 1) {
+        this.step = 3; 
+    } else if (event === 2) {
+        this.step = 4;
+    }
   }
   
   onSort() {

@@ -64,7 +64,7 @@
                                          <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                                          <th pSortableColumn="role">Role<p-sortIcon field="role"></p-sortIcon></th>
                                          <th pSortableColumn="tel">Tel</th>
-                                         <th pSortableColumn="is_complete">Rang<p-sortIcon field="is_complete"></p-sortIcon></th>
+                                         <th pSortableColumn="is_complete">Status<p-sortIcon field="is_complete"></p-sortIcon></th>
                                          <th style="text-align: center;">
                                              <p-button label="Ajouter autre" severity="info" (click)="showDialog()"/>
                                          </th>
@@ -161,10 +161,10 @@
                   (click)="goToPreviousStep()">
                 </p-button>
                 
+                <!-- [disabled]="isNextDisabled()"  -->
                 <p-button *ngIf="step != 4"
                   type="button" 
                   label="Suivant" 
-                  [disabled]="isNextDisabled()" 
                   (click)="goToNextStep()">
                 </p-button>
         
@@ -214,18 +214,26 @@
 <p-dialog
 [(visible)]="visibleShowTiers"
 [modal]="true"
-[style]="{ width: '25rem' }">
+[style]="{ width: '50rem' }">
     <div class="row">
         <div class="col-12">
-            <div class="w-100 text-center">
-                <img [alt]="tierDialogBySearch?.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" width="80" style="vertical-align: middle" />      
+            <div class="user-details">
+                <p><strong>Civilité:</strong> {{ user.civilite }}</p>
+                <p><strong>Nom et Prénom:</strong> {{ user.nomPrenom }}</p>
+                <p><strong>Date de Naissance:</strong> {{ user.dateNaissance }}</p>
+                <p><strong>Nationalité:</strong> {{ user.nationalite }}</p>
+                <p><strong>Identité:</strong> {{ user.identite }}</p>
+                <p><strong>Adresse:</strong> {{ user.adresse }}, {{ user.ville }}, {{ user.pays }}</p>
+                <p><strong>Pays de Résidence:</strong> {{ user.paysResidence }}</p>
+                <p><strong>Situation Familiale:</strong> {{ user.situationFamiliale }}</p>
+                <p><strong>Téléphone:</strong> Mobile: {{ user.telephoneMobile }}, Fixe: {{ user.telephoneFixe }}, Professionnel: {{ user.telephoneProfessionnel }}</p>
+                <p><strong>Adresse e-mail:</strong> {{ user.email }}</p>
+                <p><strong>Statut:</strong> {{ user.statut }}</p>
+                <p><strong>Statut d'Occupation:</strong> {{ user.statutOccupation }}</p>
+                <p><strong>Provenance du Client:</strong> {{ user.provenanceClient }}</p>
+                <p><strong>Détail de Provenance (ORIGIN):</strong> {{ user.origin }}</p>
+                <p><strong>Montant Sollicité:</strong> {{ user.montantSollicite }}</p>
             </div>
-        </div>
-        <div class="col-12 text-center">
-            <span class="ml-1 vertical-align-middle">{{ tierDialogBySearch?.name }}</span>
-        </div>
-        <div class="row">
-
         </div>
     </div>
 </p-dialog>

@@ -1,600 +1,348 @@
 
 <div class="card">
-    <div *ngIf="step == 1" class="user-details-container">
-        <h2>User Details</h2>
-        <div class="user-details">
-          <p><strong>Civilité:</strong> {{ user.civilite }}</p>
-          <p><strong>Nom et Prénom:</strong> {{ user.nomPrenom }}</p>
-          <p><strong>Date de Naissance:</strong> {{ user.dateNaissance }}</p>
-          <p><strong>Nationalité:</strong> {{ user.nationalite }}</p>
-          <p><strong>Identité:</strong> {{ user.identite }}</p>
-          <p><strong>Adresse:</strong> {{ user.adresse }}, {{ user.ville }}, {{ user.pays }}</p>
-          <p><strong>Pays de Résidence:</strong> {{ user.paysResidence }}</p>
-          <p><strong>Situation Familiale:</strong> {{ user.situationFamiliale }}</p>
-          <p><strong>Téléphone:</strong> Mobile: {{ user.telephoneMobile }}, Fixe: {{ user.telephoneFixe }}, Professionnel: {{ user.telephoneProfessionnel }}</p>
-          <p><strong>Adresse e-mail:</strong> {{ user.email }}</p>
-          <p><strong>Statut:</strong> {{ user.statut }}</p>
-          <p><strong>Statut d'Occupation:</strong> {{ user.statutOccupation }}</p>
-          <p><strong>Provenance du Client:</strong> {{ user.provenanceClient }}</p>
-          <p><strong>Détail de Provenance (ORIGIN):</strong> {{ user.origin }}</p>
-          <p><strong>Montant Sollicité:</strong> {{ user.montantSollicite }}</p>
-        </div>
-    </div>
-    
-    <div *ngIf="step == 2 || step == 3 || step == 4" >
+    <div *ngIf="step == 1 || step == 2 || step == 3 || step == 4" >
         <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)" />
         <div class="container">
-        <div class="row">
-            <div class="col-12" *ngIf="activeIndex == 0 && step == 2">
-                <div class="grid p-fluid mt-3">
-                  <!-- Profession Dropdown -->
-                  <div class="field col-12">
-                    <label for="profession">Profession</label>
-                    <p-dropdown
-                      id="profession"
-                      [options]="professions"
-                      (onChange)="onProfessionChange($event)"
-                      [(ngModel)]="selectedProfession"
-                      placeholder="Sélectionnez votre profession"
-                    ></p-dropdown>
-                  </div>
-              
-                  <!-- Salarié Inputs -->
-                  <div *ngIf="selectedProfession === 'Salarié'" class="field col-12">
-                    <div class="grid">
-                      <div class="field col-12 md:col-6">
-                        <label for="fonction">Fonction</label>
-                        <input id="fonction" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="employeur">Employeur</label>
-                        <input id="employeur" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="dateEmbauche">Date d’embauche</label>
-                        <p-calendar
-                          id="dateEmbauche"                          
-                          [showIcon]="true"
-                          dateFormat="dd/mm/yy"
-                        ></p-calendar>
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="salaire">Salaire</label>
-                        <input id="salaire" type="number" pInputText />
-                      </div>
-                    </div>
-                  </div>
-              
-                  <!-- Commerçant Inputs -->
-                  <div *ngIf="selectedProfession === 'Commerçant'" class="field col-12">
-                    <div class="grid">
-                      <div class="field col-12 md:col-6">
-                        <label for="rcNumber">N°RC</label>
-                        <input id="rcNumber" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="creationDate">Date de création RC</label>
-                        <p-calendar
-                          id="creationDate"
-                          [showIcon]="true"
-                          dateFormat="dd/mm/yy"
-                        ></p-calendar>
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="natureActivite">Nature Activité</label>
-                        <input id="natureActivite" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="adresseActivite">Adresse de l’activité + ville + pays</label>
-                        <input id="adresseActivite" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="revenu">Revenu</label>
-                        <input id="revenu" type="number" pInputText />
-                      </div>
-                    </div>
-                  </div>
-              
-                  <!-- Profession Libérale Inputs -->
-                  <div *ngIf="selectedProfession === 'ProfessionLibérale'" class="field col-12">
-                    <div class="grid">
-                      <div class="field col-12 md:col-6">
-                        <label for="natureActiviteLib">Nature Activité</label>
-                        <input id="natureActiviteLib" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="dateDebutExercice">Date de début d’exercice</label>
-                        <p-calendar
-                          id="dateDebutExercice"
-                          [showIcon]="true"
-                          dateFormat="dd/mm/yy"
-                        ></p-calendar>
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="ifNumber">N° IF ou TP</label>
-                        <input id="ifNumber" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="adresseActiviteLib">Adresse de l’activité + ville + pays</label>
-                        <input id="adresseActiviteLib" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="honoraires">Honoraires</label>
-                        <input id="honoraires" type="number" pInputText />
-                      </div>
-                    </div>
-                  </div>
-              
-                  <!-- Gérant de Société Inputs -->
-                  <div *ngIf="selectedProfession === 'GérantSociété'" class="field col-12">
-                    <div class="grid">
-                      <div class="field col-12 md:col-6">
-                        <label for="denomination">Dénomination</label>
-                        <input id="denomination" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="rcNumberGerant">N°RC</label>
-                        <input id="rcNumberGerant" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="creationDateGerant">Date de création</label>
-                        <p-calendar
-                          id="creationDateGerant"
-                          [showIcon]="true"
-                          dateFormat="dd/mm/yy"
-                        ></p-calendar>
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="capitalSocial">Capital social</label>
-                        <input id="capitalSocial" type="number" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="activiteEntreprise">Activité de l’entreprise</label>
-                        <input id="activiteEntreprise" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="adresseActiviteGerant">Adresse de l’activité + ville + pays</label>
-                        <input id="adresseActiviteGerant" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="resultatAnneeN">Résultat année N</label>
-                        <input id="resultatAnneeN" type="number" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="chiffreAffaireAnneeN">Chiffre d’affaire année N</label>
-                        <input id="chiffreAffaireAnneeN" type="number" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="resultatAnneeN1">Résultat année N-1</label>
-                        <input id="resultatAnneeN1" type="number" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="chiffreAffaireAnneeN1">Chiffre d’affaire année N-1</label>
-                        <input id="chiffreAffaireAnneeN1" type="number" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="partsParticipation">Parts de participation société</label>
-                        <input id="partsParticipation" type="number" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="revenuGerant">Revenu</label>
-                        <input id="revenuGerant" type="number" pInputText />
-                      </div>
-                    </div>
-                  </div>
-              
-                  <!-- Retraité ou Pensionnaire Inputs -->
-                  <div *ngIf="selectedProfession === 'Retraité'" class="field col-12">
-                    <div class="grid">
-                      <div class="field col-12 md:col-6">
-                        <label for="pensionType">Nature de la pension</label>
-                        <input id="pensionType" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="organismePension">Organisme (CIMR, CMR, RCAR, CNSS)</label>
-                        <input id="organismePension" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="typePension">Type de pension (Retraite, veuvage, invalidité)</label>
-                        <input id="typePension" type="text"  pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="montantPension">Montant de la pension</label>
-                        <input id="montantPension" type="number" pInputText />
-                      </div>
-                    </div>
-                  </div>
-              
-                  <!-- Rentier Inputs -->
-                  <div *ngIf="selectedProfession === 'Rentier'" class="field col-12">
-                    <div class="grid">
-                      <div class="field col-12 md:col-6">
-                        <label for="natureBail">Nature du bail</label>
-                        <input id="natureBail" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="typeBien">Type de bien (Appartement, Maison, Magasin, etc.)</label>
-                        <input id="typeBien" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="agrement">Agrément</label>
-                        <input id="agrement" type="text" pInputText />
-                      </div>
-                      <div class="field col-12 md:col-6">
-                        <label for="rente">Rente</label>
-                        <input id="rente" type="number" pInputText />
-                      </div>
-                    </div>
+            <div class="row">
+                <div class="col-12" *ngIf="activeIndex == 0 && step == 1">
+                  <div class="user-details">
+                  <p><strong>Civilité:</strong> {{ user.civilite }}</p>
+                  <p><strong>Nom et Prénom:</strong> {{ user.nomPrenom }}</p>
+                  <p><strong>Date de Naissance:</strong> {{ user.dateNaissance }}</p>
+                  <p><strong>Nationalité:</strong> {{ user.nationalite }}</p>
+                  <p><strong>Identité:</strong> {{ user.identite }}</p>
+                  <p><strong>Adresse:</strong> {{ user.adresse }}, {{ user.ville }}, {{ user.pays }}</p>
+                  <p><strong>Pays de Résidence:</strong> {{ user.paysResidence }}</p>
+                  <p><strong>Situation Familiale:</strong> {{ user.situationFamiliale }}</p>
+                  <p><strong>Téléphone:</strong> Mobile: {{ user.telephoneMobile }}, Fixe: {{ user.telephoneFixe }}, Professionnel: {{ user.telephoneProfessionnel }}</p>
+                  <p><strong>Adresse e-mail:</strong> {{ user.email }}</p>
+                  <p><strong>Statut:</strong> {{ user.statut }}</p>
+                  <p><strong>Statut d'Occupation:</strong> {{ user.statutOccupation }}</p>
+                  <p><strong>Provenance du Client:</strong> {{ user.provenanceClient }}</p>
+                  <p><strong>Détail de Provenance (ORIGIN):</strong> {{ user.origin }}</p>
+                  <p><strong>Montant Sollicité:</strong> {{ user.montantSollicite }}</p>
                   </div>
                 </div>
-              </div>
-            <div class="col-12" *ngIf="activeIndex == 1 && step == 3">
-                <div class="grid p-fluid mt-3">
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="social_capital">Capital social</label>
-                        <input pInputText id="social_capital" type="text" [(ngModel)]="social_capital" placeholder="Votre Capital social " />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="requested_amount">Montant sollicité </label>
-                        <input pInputText id="requested_amount" type="text" [(ngModel)]="requested_amount" placeholder="Votre Montant sollicité " />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="ville">Ville</label>
-                        <input
-                        pInputText
-                        id="ville"
-                        type="text"
-                        [(ngModel)]="ville"
-                        placeholder="Votre ville"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays">Pays</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays"
-                        placeholder="Votre pays"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="adresse">Adresse</label>
-                        <textarea
-                        rows="5"
-                        id="adresse"
-                        pInputTextarea
-                        [(ngModel)]="adresse"
-                        placeholder="Votre adresse complète"
-                        ></textarea>
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="ville">Ville</label>
-                        <input
-                        pInputText
-                        id="ville"
-                        type="text"
-                        [(ngModel)]="ville"
-                        placeholder="Votre ville"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays">Pays</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays"
-                        placeholder="Votre pays"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays_resi">Pays de Résidence</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays_resi"
-                        placeholder="Votre Pays de Résidence"
-                        />
-                    </div>
-    
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="situation_familiale">Situation Familiale</label>
+                <div class="col-12" *ngIf="activeIndex == 1 && step == 2">
+                  <div class="grid p-fluid mt-3">
+                      <!-- Profession Dropdown -->
+                      <div class="field col-12">
+                      <label for="profession">Profession</label>
+                      <p-dropdown
+                          id="profession"
+                          [options]="professions"
+                          (onChange)="onProfessionChange($event)"
+                          [(ngModel)]="selectedProfession"
+                          placeholder="Sélectionnez votre profession"
+                      ></p-dropdown>
+                      </div>
+                  
+                      <!-- Salarié Inputs -->
+                      <div *ngIf="selectedProfession === 'Salarié'" class="field col-12">
+                      <div class="grid">
+                          <div class="field col-12 md:col-6">
+                          <label for="fonction">Fonction</label>
+                          <input id="fonction" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="employeur">Employeur</label>
+                          <input id="employeur" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="dateEmbauche">Date d’embauche</label>
+                          <p-calendar
+                              id="dateEmbauche"                          
+                              [showIcon]="true"
+                              dateFormat="dd/mm/yy"
+                          ></p-calendar>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="salaire">Salaire</label>
+                          <input id="salaire" type="number" pInputText />
+                          </div>
+                      </div>
+                      </div>
+                  
+                      <!-- Commerçant Inputs -->
+                      <div *ngIf="selectedProfession === 'Commerçant'" class="field col-12">
+                      <div class="grid">
+                          <div class="field col-12 md:col-6">
+                          <label for="rcNumber">N°RC</label>
+                          <input id="rcNumber" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="creationDate">Date de création RC</label>
+                          <p-calendar
+                              id="creationDate"
+                              [showIcon]="true"
+                              dateFormat="dd/mm/yy"
+                          ></p-calendar>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="natureActivite">Nature Activité</label>
+                          <input id="natureActivite" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="adresseActivite">Adresse de l’activité + ville + pays</label>
+                          <input id="adresseActivite" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="revenu">Revenu</label>
+                          <input id="revenu" type="number" pInputText />
+                          </div>
+                      </div>
+                      </div>
+                  
+                      <!-- Profession Libérale Inputs -->
+                      <div *ngIf="selectedProfession === 'ProfessionLibérale'" class="field col-12">
+                      <div class="grid">
+                          <div class="field col-12 md:col-6">
+                          <label for="natureActiviteLib">Nature Activité</label>
+                          <input id="natureActiviteLib" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="dateDebutExercice">Date de début d’exercice</label>
+                          <p-calendar
+                              id="dateDebutExercice"
+                              [showIcon]="true"
+                              dateFormat="dd/mm/yy"
+                          ></p-calendar>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="ifNumber">N° IF ou TP</label>
+                          <input id="ifNumber" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="adresseActiviteLib">Adresse de l’activité + ville + pays</label>
+                          <input id="adresseActiviteLib" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="honoraires">Honoraires</label>
+                          <input id="honoraires" type="number" pInputText />
+                          </div>
+                      </div>
+                      </div>
+                  
+                      <!-- Gérant de Société Inputs -->
+                      <div *ngIf="selectedProfession === 'GérantSociété'" class="field col-12">
+                      <div class="grid">
+                          <div class="field col-12 md:col-6">
+                          <label for="denomination">Dénomination</label>
+                          <input id="denomination" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="rcNumberGerant">N°RC</label>
+                          <input id="rcNumberGerant" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="creationDateGerant">Date de création</label>
+                          <p-calendar
+                              id="creationDateGerant"
+                              [showIcon]="true"
+                              dateFormat="dd/mm/yy"
+                          ></p-calendar>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="capitalSocial">Capital social</label>
+                          <input id="capitalSocial" type="number" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="activiteEntreprise">Activité de l’entreprise</label>
+                          <input id="activiteEntreprise" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="adresseActiviteGerant">Adresse de l’activité + ville + pays</label>
+                          <input id="adresseActiviteGerant" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="resultatAnneeN">Résultat année N</label>
+                          <input id="resultatAnneeN" type="number" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="chiffreAffaireAnneeN">Chiffre d’affaire année N</label>
+                          <input id="chiffreAffaireAnneeN" type="number" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="resultatAnneeN1">Résultat année N-1</label>
+                          <input id="resultatAnneeN1" type="number" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="chiffreAffaireAnneeN1">Chiffre d’affaire année N-1</label>
+                          <input id="chiffreAffaireAnneeN1" type="number" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="partsParticipation">Parts de participation société</label>
+                          <input id="partsParticipation" type="number" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="revenuGerant">Revenu</label>
+                          <input id="revenuGerant" type="number" pInputText />
+                          </div>
+                      </div>
+                      </div>
+                  
+                      <!-- Retraité ou Pensionnaire Inputs -->
+                      <div *ngIf="selectedProfession === 'Retraité'" class="field col-12">
+                      <div class="grid">
+                          <div class="field col-12 md:col-6">
+                          <label for="pensionType">Nature de la pension</label>
+                          <input id="pensionType" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="organismePension">Organisme (CIMR, CMR, RCAR, CNSS)</label>
+                          <input id="organismePension" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="typePension">Type de pension (Retraite, veuvage, invalidité)</label>
+                          <input id="typePension" type="text"  pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="montantPension">Montant de la pension</label>
+                          <input id="montantPension" type="number" pInputText />
+                          </div>
+                      </div>
+                      </div>
+                  
+                      <!-- Rentier Inputs -->
+                      <div *ngIf="selectedProfession === 'Rentier'" class="field col-12">
+                      <div class="grid">
+                          <div class="field col-12 md:col-6">
+                          <label for="natureBail">Nature du bail</label>
+                          <input id="natureBail" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="typeBien">Type de bien (Appartement, Maison, Magasin, etc.)</label>
+                          <input id="typeBien" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="agrement">Agrément</label>
+                          <input id="agrement" type="text" pInputText />
+                          </div>
+                          <div class="field col-12 md:col-6">
+                          <label for="rente">Rente</label>
+                          <input id="rente" type="number" pInputText />
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="activeIndex == 2 && step == 3">
+                    <div class="grid p-fluid mt-3">
+                    <!-- Bank Name Dropdown -->
+                    <div class="field col-12">
+                        <label for="bankName">Nom de la banque</label>
                         <p-dropdown
-                        [options]="situations_familiales"
-                        [(ngModel)]="situation_familiale"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
+                        id="bankName"
+                        [options]="banks"
+                        placeholder="Sélectionnez la banque"
                         ></p-dropdown>
                     </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="telephone_mobile">Téléphone Mobile</label>
-                        <input
-                        pInputText
-                        id="telephone_mobile"
-                        type="text"
-                        [(ngModel)]="telephone_mobile"
-                        placeholder="Votre Téléphone Mobile"
-                        />
+                
+                    <!-- Agency Input -->
+                    <div class="field col-12 md:col-6">
+                        <label for="agency">Agence</label>
+                        <input id="agency" type="text" pInputText />
                     </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="telephone_fixe">Téléphone Fixe</label>
-                        <input
-                        pInputText
-                        id="telephone_fixe"
-                        type="text"
-                        [(ngModel)]="telephone_fixe"
-                        placeholder="Votre Téléphone fixe"
-                        />
+                
+                    <!-- Account Balance Input -->
+                    <div class="field col-12 md:col-6">
+                        <label for="accountBalance">Solde du compte</label>
+                        <input id="accountBalance" type="number" pInputText />
                     </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="telephone_professionnel">Téléphone Professionnel</label>
-                        <input
-                        pInputText
-                        id="telephone_professionnel"
-                        type="text"
-                        [(ngModel)]="telephone_professionnel"
-                        placeholder="Votre Téléphone Mobile"
-                        />
+                
+                    <!-- Cumulative Credit Movements Input -->
+                    <div class="field col-12 md:col-6">
+                        <label for="cumulativeCredit">Cumul mouvement créditeur</label>
+                        <input id="cumulativeCredit" type="number" pInputText />
                     </div>
-    
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="adresse">Adresse</label>
-                        <textarea
-                        rows="5"
-                        id="adresse"
-                        pInputTextarea
-                        [(ngModel)]="adresse"
-                        placeholder="Votre adresse complète"
-                        ></textarea>
-                    </div>
-    
-                    </div>
-            </div>
-            <div class="col-12" *ngIf="activeIndex == 2 && step == 4">
-                <div class="grid p-fluid mt-3">
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="nom">Nom</label>
-                        <input pInputText id="nom" type="text" [(ngModel)]="nom" placeholder="Votre nom" />
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="prenom">Prénom</label>
-                        <input pInputText id="prenom" type="text" [(ngModel)]="prenom" placeholder="Votre prénom" />
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="date_naissance">Date de Naissance</label>
-                        <input pInputText id="date_naissance" type="date" [(ngModel)]="date_naissance" />
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="civilite">Civilité</label>
+                
+                    <!-- Account Type Dropdown -->
+                    <div class="field col-12 md:col-6">
+                        <label for="accountType">Nature du compte</label>
                         <p-dropdown
-                        [options]="civilites"
-                        [(ngModel)]="civilite"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
+                        id="accountType"
+                        [options]="accountTypes"
+                        placeholder="Sélectionnez le type de compte"
                         ></p-dropdown>
                     </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="nationalite">Nationalité</label>
-                        <input
-                        pInputText
-                        id="nationalite"
-                        type="text"
-                        [(ngModel)]="nationalite"
-                        placeholder="Votre nationalité"
-                        />
                     </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="num_fiche">Identité</label>
-                        <div class="flex flex-wrap gap-3">
-                        
-                            <div *ngFor="let Identity2 of identities2" class="flex align-items-center">
-                                <p-radioButton 
-                                    [inputId]="Identity2.key" 
-                                    name="Identity2" 
-                                    [value]="Identity2" 
-                                    [(ngModel)]="selectedIdentity2" />
-                                <label [for]="Identity2.key" class="ml-2">
-                                    {{ Identity2.name }}
-                                </label>
-                            </div>
+                </div>
+                <div class="col-12" *ngIf="activeIndex == 3 && step == 4">
+                    <div class="grid p-fluid mt-3">
+                      <!-- Nature of Commitment Dropdown -->
+                      <div class="field col-12">
+                        <label for="natureEngagement">Nature de l’engagement</label>
+                        <p-dropdown
+                          id="natureEngagement"
+                          [options]="engagementTypes"
+                          placeholder="Sélectionnez la nature de l’engagement"
+                        ></p-dropdown>
+                      </div>
+                  
+                      <!-- Bank or Organization Input -->
+                      <div class="field col-12 md:col-6">
+                        <label for="bankOrganisme">Banque ou organisme</label>
+                        <input id="bankOrganisme" type="text" pInputText />
+                      </div>
+                  
+                      <!-- Due Date Input -->
+                      <div class="field col-12 md:col-6">
+                        <label for="echeance">Echéance</label>
+                        <p-calendar
+                          id="echeance"
+                          [showIcon]="true"
+                          dateFormat="dd/mm/yy"
+                        ></p-calendar>
+                      </div>
+                  
+                      <!-- Outstanding Balance Input -->
+                      <div class="field col-12 md:col-6">
+                        <label for="encours">Encours</label>
+                        <input id="encours" type="number" pInputText />
+                      </div>
+                  
+                      <!-- Repayable in Advance Radio Buttons -->
+                      <div class="field col-12 md:col-6">
+                        <label>Remboursable par anticipation</label>
+                        <div class="flex align-items-center">
+                          <p-radioButton
+                            name="remboursable"
+                            value="Oui"
+                            label="Oui"
+                            [(ngModel)]="rem1" 
+                          ></p-radioButton>
+                          <p-radioButton
+                            name="remboursable"
+                            value="Non"
+                            label="Non"
+                            class="ml-3"
+                            [(ngModel)]="rem2" 
+                          ></p-radioButton>
                         </div>
+                      </div>
                     </div>
-    
-                    <div *ngIf="selectedIdentity2 == this.identities2[0] && isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="CIN">CIN</label>
-                        <input
-                        pInputText
-                        id="CIN"
-                        type="text"
-                        [(ngModel)]="CIN"
-                        placeholder="Votre CIN"
-                        />
-                    </div>
-    
-                    <div *ngIf="selectedIdentity2 == this.identities2[1] && isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="carte_sejour">Carte Séjour</label>
-                        <input
-                        pInputText
-                        id="carte_sejour"
-                        type="text"
-                        [(ngModel)]="carte_sejour"
-                        placeholder="Votre Carte Séjour"
-                        />
-                    </div>   
-    
-                    <div *ngIf="selectedIdentity2 == this.identities2[2] && isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="Passeport">Passeport</label>
-                        <input
-                        pInputText
-                        id="Passeport"
-                        type="text"
-                        [(ngModel)]="Passeport"
-                        placeholder="Votre Passeport"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="situation_familiale">Situation Familiale</label>
-                        <p-dropdown
-                        [options]="situations_familiales"
-                        [(ngModel)]="situation_familiale"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
-                        ></p-dropdown>
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="ville">Ville</label>
-                        <input
-                        pInputText
-                        id="ville"
-                        type="text"
-                        [(ngModel)]="ville"
-                        placeholder="Votre ville"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays">Pays</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays"
-                        placeholder="Votre pays"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays_resi">Pays de Résidence</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays_resi"
-                        placeholder="Votre Pays de Résidence"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="adresse">Adresse</label>
-                        <textarea
-                        rows="5"
-                        id="adresse"
-                        pInputTextarea
-                        [(ngModel)]="adresse"
-                        placeholder="Votre adresse complète"
-                        ></textarea>
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="num_fiche">Statut</label>
-                        <div class="flex flex-wrap gap-3">
-                            <div *ngFor="let Statut of statuts" class="flex align-items-center">
-                                <p-radioButton 
-                                    [inputId]="Statut.key" 
-                                    name="Statut" 
-                                    [value]="Statut" 
-                                    [(ngModel)]="selectedStatut" />
-                                <label [for]="Statut.key" class="ml-2">
-                                    {{ Statut.name }}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="num_fiche">Statut d'occupation</label>
-                        <div class="flex flex-wrap gap-3">
-                            <div *ngFor="let Statut_Occupation of statuts_Occupation" class="flex align-items-center">
-                                <p-radioButton 
-                                    [inputId]="Statut_Occupation.key" 
-                                    name="Statut_Occupation" 
-                                    [value]="Statut_Occupation" 
-                                    [(ngModel)]="selectedStatut_Occupation" />
-                                <label [for]="Statut_Occupation.key" class="ml-2">
-                                    {{ Statut_Occupation.name }}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="requested_amount">Montant sollicité</label>
-                        <input
-                        pInputText
-                        id="requested_amount"
-                        type="text"
-                        [(ngModel)]="requested_amount"
-                        placeholder="Votre Montant sollicité "
-                        />
-                    </div>
-    
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="provenance_client">Provenance du client</label>
-                        <p-dropdown
-                        [options]="provenances_clients"
-                        [(ngModel)]="provenance_client"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
-                        ></p-dropdown>
-                    </div>
-
-                    <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="provenance_detail">Détail de provenance</label>
-                        <textarea
-                        rows="5"
-                        id="provenance_detail"
-                        pInputTextarea
-                        [(ngModel)]="provenance_detail"
-                        placeholder="Votre Détail de provenance"
-                        ></textarea>
-                    </div>
-
                 </div>
             </div>
-        </div>
         </div>
     </div>
 
     <div class="flex space-between mt-4" style="justify-content: space-between;">
-        <p-button
-          type="button" 
+        <button
+          pButton pRipple class="p-button-primary" 
           label="Précédent" 
           (click)="goToPreviousStep()">
-        </p-button>
+        </button>
         
         <!-- [disabled]="isNextDisabled()" -->
-        <p-button *ngIf="step != 4"
-          type="button" 
+        <button *ngIf="step != 4"
+          pButton pRipple class="p-button-primary" 
           label="Suivant"
           (click)="goToNextStep()">
-        </p-button>
-
-        <p-button *ngIf="step == 4"
-          type="button" 
-          label="Done" 
-          [disabled]="isNextDisabled()" 
-          >
-        </p-button>
-      </div>
+        </button>
+        
+        <button *ngIf="step == 4"
+          pButton pRipple class="p-button-primary" 
+          label="Done">
+        </button>
+    </div>
 </div>

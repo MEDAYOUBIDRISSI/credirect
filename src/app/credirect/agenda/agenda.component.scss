@@ -1,0 +1,10 @@
+.credirect-agenda{
+    ::ng-deep .fc-event-title{
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+    ::ng-deep .fc-event{
+        margin-bottom: 4px;
+    }
+}

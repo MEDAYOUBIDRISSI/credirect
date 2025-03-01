@@ -26,8 +26,29 @@ export class CustomerFolderComponent implements OnInit{
   items: any[]=[];
   isSelected1 = false;
   isSelected2 = false;
-  step = 2;
+  step = 0;
   selectedRole!: Role;
+  user = {
+    civilite: 'Monsieur',
+    nomPrenom: 'El Amrani Ahmed',
+    dateNaissance: '10/12/1990',
+    nationalite: 'Marocaine',
+    identite: 'CIN',
+    adresse: '45 Rue Mohammed V',
+    ville: 'Casablanca',
+    pays: 'Maroc',
+    paysResidence: 'Maroc',
+    situationFamiliale: 'Marié',
+    telephoneMobile: '06 12 34 56 78',
+    telephoneFixe: '05 22 33 44 55',
+    telephoneProfessionnel: '05 22 99 88 77',
+    email: 'ahmed.elamrani@example.com',
+    statut: 'Résident',
+    statutOccupation: 'Locataire',
+    provenanceClient: 'Agence immobilière',
+    origin: 'Agence XYZ - Casablanca',
+    montantSollicite: '500,000 MAD'
+  };
   constructor() { }
 
   ngOnInit() {

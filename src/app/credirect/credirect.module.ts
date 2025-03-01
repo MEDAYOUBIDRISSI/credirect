@@ -38,6 +38,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { AgendaComponent } from './agenda/agenda.component';
 import { CustomerFolderMoreInfoComponent } from './customer-folder-more-info/customer-folder-more-info.component';
 import { CalendarModule } from 'primeng/calendar';
+import { CustomerFolderListComponent } from './customer-folder-list/customer-folder-list.component';
+import { CustomerFolderFinancingPlansComponent } from './customer-folder-financing-plans/customer-folder-financing-plans.component';
+import { ChipModule } from 'primeng/chip';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { EditorModule } from 'primeng/editor';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 const routes: Routes = [
   {
@@ -60,6 +66,14 @@ const routes: Routes = [
   {
     path: 'customer/folder/more-info',
     component: CustomerFolderMoreInfoComponent,
+  },
+  {
+    path: 'customer/folder/list',
+    component: CustomerFolderListComponent,
+  },
+  {
+    path: 'customer/folder/financing-plans',
+    component: CustomerFolderFinancingPlansComponent,
   },
   {
     path: 'banking-informations',
@@ -114,7 +128,9 @@ const routes: Routes = [
     SimulatorCredirectV2Component,
     CustomerFolderComponent,
     AgendaComponent,
-    CustomerFolderMoreInfoComponent
+    CustomerFolderMoreInfoComponent,
+    CustomerFolderListComponent,
+    CustomerFolderFinancingPlansComponent
   ],
   imports: [
     CommonModule,
@@ -140,6 +156,10 @@ const routes: Routes = [
     DialogModule,
     FullCalendarModule,
     CalendarModule,
+    ChipModule,
+    AngularEditorModule,
+    EditorModule,
+    InputSwitchModule,
     RouterModule.forChild(routes)
   ],
   providers:[

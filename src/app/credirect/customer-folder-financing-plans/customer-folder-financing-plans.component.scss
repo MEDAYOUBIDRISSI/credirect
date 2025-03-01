@@ -1,0 +1,13 @@
+.canauxVentes{
+    ::ng-deep .p-chip{
+        height: 2rem;
+        background-color: orange;
+        color: white;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+}
+.styleUnderInputs{
+    display: flex;
+    flex-direction: column;
+}

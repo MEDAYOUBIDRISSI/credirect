@@ -341,145 +341,203 @@
             <div class="col-12" *ngIf="activeIndex == 2 && step == 4">
                 <div class="grid p-fluid mt-3">
 
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="nom">Nom</label>
-                        <input pInputText id="nom" type="text" [(ngModel)]="nom" placeholder="Votre nom" />
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="prenom">Prénom</label>
-                        <input pInputText id="prenom" type="text" [(ngModel)]="prenom" placeholder="Votre prénom" />
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="date_naissance">Date de Naissance</label>
-                        <input pInputText id="date_naissance" type="date" [(ngModel)]="date_naissance" />
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="civilite">Civilité</label>
-                        <p-dropdown
-                        [options]="civilites"
-                        [(ngModel)]="civilite"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
-                        ></p-dropdown>
-                    </div>
-    
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="nationalite">Nationalité</label>
-                        <input
-                        pInputText
-                        id="nationalite"
-                        type="text"
-                        [(ngModel)]="nationalite"
-                        placeholder="Votre nationalité"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="num_fiche">Identité</label>
-                        <div class="flex flex-wrap gap-3">
-                        
-                            <div *ngFor="let Identity2 of identities2" class="flex align-items-center">
-                                <p-radioButton 
-                                    [inputId]="Identity2.key" 
-                                    name="Identity2" 
-                                    [value]="Identity2" 
-                                    [(ngModel)]="selectedIdentity2" />
-                                <label [for]="Identity2.key" class="ml-2">
-                                    {{ Identity2.name }}
+                    <div *ngFor="let manager of managers; let i = index" class="manager-item card">
+                        <div *ngIf="isSelected2" class="grid">
+                            <h4 class="col-12">Manager {{ i + 1 }}</h4>
+                          <!-- Nom -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'nom' + i">Nom</label>
+                            <input
+                              pInputText
+                              [id]="'nom' + i"
+                              type="text"
+                              [(ngModel)]="manager.nom"
+                              placeholder="Votre nom"
+                            />
+                          </div>
+                  
+                          <!-- Prénom -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'prenom' + i">Prénom</label>
+                            <input
+                              pInputText
+                              [id]="'prenom' + i"
+                              type="text"
+                              [(ngModel)]="manager.prenom"
+                              placeholder="Votre prénom"
+                            />
+                          </div>
+                  
+                          <!-- Date de Naissance -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'dateNaissance' + i">Date de Naissance</label>
+                            <input
+                              pInputText
+                              [id]="'dateNaissance' + i"
+                              type="date"
+                              [(ngModel)]="manager.dateNaissance"
+                            />
+                          </div>
+                  
+                          <!-- Civilité -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'civilite' + i">Civilité</label>
+                            <p-dropdown
+                              [id]="'civilite' + i"
+                              [options]="civilites"
+                              [(ngModel)]="manager.civilite"
+                              [showClear]="true"
+                              placeholder="Sélectionner"
+                            ></p-dropdown>
+                          </div>
+                  
+                          <!-- Nationalité -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'nationalite' + i">Nationalité</label>
+                            <input
+                              pInputText
+                              [id]="'nationalite' + i"
+                              type="text"
+                              [(ngModel)]="manager.nationalite"
+                              placeholder="Votre nationalité"
+                            />
+                          </div>
+                  
+                          <!-- Identité -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'identite' + i">Identité</label>
+                            <div class="flex flex-wrap gap-3">
+                              <div *ngFor="let identity of identities2" class="flex align-items-center">
+                                <p-radioButton
+                                  [inputId]="identity.key + i"
+                                  name="identite{{i}}"
+                                  [value]="identity"
+                                  [(ngModel)]="manager.selectedIdentity2"
+                                />
+                                <label [for]="identity.key + i" class="ml-2">
+                                  {{ identity.name }}
                                 </label>
+                              </div>
                             </div>
+                          </div>
+                  
+                          <!-- CIN -->
+                          <div *ngIf="manager.selectedIdentity2 == identities2[0] && isSelected2" class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'cin' + i">CIN</label>
+                            <input
+                              pInputText
+                              [id]="'cin' + i"
+                              type="text"
+                              [(ngModel)]="manager.cin"
+                              placeholder="Votre CIN"
+                            />
+                          </div>
+                  
+                          <!-- Carte Séjour -->
+                          <div *ngIf="manager.selectedIdentity2 == identities2[1] && isSelected2" class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'carteSejour' + i">Carte Séjour</label>
+                            <input
+                              pInputText
+                              [id]="'carteSejour' + i"
+                              type="text"
+                              [(ngModel)]="manager.carteSejour"
+                              placeholder="Votre Carte Séjour"
+                            />
+                          </div>
+                  
+                          <!-- Passeport -->
+                          <div *ngIf="manager.selectedIdentity2 == identities2[2] && isSelected2" class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'passeport' + i">Passeport</label>
+                            <input
+                              pInputText
+                              [id]="'passeport' + i"
+                              type="text"
+                              [(ngModel)]="manager.passeport"
+                              placeholder="Votre Passeport"
+                            />
+                          </div>
+                  
+                          <!-- Situation Familiale -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'situationFamiliale' + i">Situation Familiale</label>
+                            <p-dropdown
+                              [id]="'situationFamiliale' + i"
+                              [options]="situations_familiales"
+                              [(ngModel)]="manager.situationFamiliale"
+                              [showClear]="true"
+                              placeholder="Sélectionner"
+                            ></p-dropdown>
+                          </div>
+                  
+                          <!-- Ville -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'ville' + i">Ville</label>
+                            <input
+                              pInputText
+                              [id]="'ville' + i"
+                              type="text"
+                              [(ngModel)]="manager.ville"
+                              placeholder="Votre ville"
+                            />
+                          </div>
+                  
+                          <!-- Pays -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'pays' + i">Pays</label>
+                            <input
+                              pInputText
+                              [id]="'pays' + i"
+                              type="text"
+                              [(ngModel)]="manager.pays"
+                              placeholder="Votre pays"
+                            />
+                          </div>
+                  
+                          <!-- Pays de Résidence -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'paysResidence' + i">Pays de Résidence</label>
+                            <input
+                              pInputText
+                              [id]="'paysResidence' + i"
+                              type="text"
+                              [(ngModel)]="manager.paysResidence"
+                              placeholder="Votre Pays de Résidence"
+                            />
+                          </div>
+                  
+                          <!-- Adresse -->
+                          <div class="field col-12 md:col-6 lg:col-4">
+                            <label [for]="'adresse' + i">Adresse</label>
+                            <textarea
+                              rows="5"
+                              [id]="'adresse' + i"
+                              pInputTextarea
+                              [(ngModel)]="manager.adresse"
+                              placeholder="Votre adresse complète"
+                            ></textarea>
+                          </div>
                         </div>
-                    </div>
-    
-                    <div *ngIf="selectedIdentity2 == this.identities2[0] && isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="CIN">CIN</label>
-                        <input
-                        pInputText
-                        id="CIN"
-                        type="text"
-                        [(ngModel)]="CIN"
-                        placeholder="Votre CIN"
-                        />
-                    </div>
-    
-                    <div *ngIf="selectedIdentity2 == this.identities2[1] && isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="carte_sejour">Carte Séjour</label>
-                        <input
-                        pInputText
-                        id="carte_sejour"
-                        type="text"
-                        [(ngModel)]="carte_sejour"
-                        placeholder="Votre Carte Séjour"
-                        />
-                    </div>   
-    
-                    <div *ngIf="selectedIdentity2 == this.identities2[2] && isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="Passeport">Passeport</label>
-                        <input
-                        pInputText
-                        id="Passeport"
-                        type="text"
-                        [(ngModel)]="Passeport"
-                        placeholder="Votre Passeport"
-                        />
+                        
+                        <!-- Delete Button -->
+                        <button *ngIf="isSelected2 && i > 0"
+                            pButton
+                            type="button"
+                            label="Supprimer"
+                            icon="pi pi-trash"
+                            class="p-button-danger p-mt-2"
+                            (click)="removeManager(i)"
+                          ></button>
                     </div>
 
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="situation_familiale">Situation Familiale</label>
-                        <p-dropdown
-                        [options]="situations_familiales"
-                        [(ngModel)]="situation_familiale"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
-                        ></p-dropdown>
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="ville">Ville</label>
-                        <input
-                        pInputText
-                        id="ville"
-                        type="text"
-                        [(ngModel)]="ville"
-                        placeholder="Votre ville"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays">Pays</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays"
-                        placeholder="Votre pays"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays_resi">Pays de Résidence</label>
-                        <input
-                        pInputText
-                        id="pays"
-                        type="text"
-                        [(ngModel)]="pays_resi"
-                        placeholder="Votre Pays de Résidence"
-                        />
-                    </div>
-
-                    <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="adresse">Adresse</label>
-                        <textarea
-                        rows="5"
-                        id="adresse"
-                        pInputTextarea
-                        [(ngModel)]="adresse"
-                        placeholder="Votre adresse complète"
-                        ></textarea>
-                    </div>
+                      <!-- Add Manager Button -->
+                        <button *ngIf="isSelected2"
+                        pButton
+                        type="button"
+                        label="Ajouter un Manager"
+                        icon="pi pi-plus"
+                        class="p-button-primary"
+                        (click)="addManager()"
+                        ></button>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
                         <label htmlFor="num_fiche">Statut</label>
@@ -732,41 +790,50 @@
 				</div>
 			</div>
         </div>
-        <div *ngIf="isSelected2" class="card">
-            <h3 style="color: #f1a253;"><strong>Gérant/Manager</strong></h3>
-            <div class="grid formgrid">
-				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Nom - Prénom :</strong> KELLOUCH Oumaima</h5>
-				</div>
-				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>CIN :</strong> GK144477</h5>
-				</div>
+            <div *ngIf="isSelected2" class="card">
+              <h3 style="color: #f1a253;"><strong>Gérant/Manager</strong></h3>
+              <div *ngFor="let manager of managers; let i = index" class="grid formgrid">
+                <h3 class="col-12">Manager {{ i + 1 }}</h3>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Date de Naissance :</strong> 05/06/1998</h5>
-				</div>
+                  <h5><strong>Nom - Prénom :</strong> {{ manager.nom }} {{ manager.prenom }}</h5>
+                </div>
+                <div *ngIf="manager.cin" class="col-12 mb-2 lg:col-6 lg:mb-0">
+                  <h5><strong>CIN :</strong> {{ manager.cin }}</h5>
+                </div>
+                <div *ngIf="manager.carteSejour" class="col-12 mb-2 lg:col-6 lg:mb-0">
+                    <h5><strong>Carte Séjour :</strong> {{ manager.carteSejour }}</h5>
+                  </div>
+                  <div *ngIf="manager.passeport" class="col-12 mb-2 lg:col-6 lg:mb-0">
+                    <h5><strong>Passeport :</strong> {{ manager.passeport }}</h5>
+                  </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Civilité :</strong> Mme </h5>
-				</div>
+                  <h5><strong>Date de Naissance :</strong> {{ manager.dateNaissance }}</h5>
+                </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Nationalité :</strong> Marocain(e)</h5>
-				</div>
+                  <h5><strong>Civilité :</strong> {{ manager.civilite }}</h5>
+                </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Situation familiale :</strong> Célibataire</h5>
-				</div>
+                  <h5><strong>Nationalité :</strong> {{ manager.nationalite }}</h5>
+                </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Ville :</strong> Casablanca</h5>
-				</div>
-				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Pays :</strong> Maroc</h5>
-				</div>
+                  <h5><strong>Situation familiale :</strong> {{ manager.situationFamiliale }}</h5>
+                </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Pays de Résidence :</strong> Maroc</h5>
-				</div>
+                  <h5><strong>Ville :</strong> {{ manager.ville }}</h5>
+                </div>
+                <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                  <h5><strong>Pays :</strong> {{ manager.pays }}</h5>
+                </div>
+                <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                  <h5><strong>Pays de Résidence :</strong> {{ manager.paysResidence }}</h5>
+                </div>
                 <div class="col-12">
-					<h5><strong>Adresse :</strong> Bourgone n229, Casablanca</h5>
-				</div>
-			</div>
-        </div>
+                  <h5><strong>Adresse :</strong> {{ manager.adresse }}</h5>
+                </div>
+                <!-- Add a separator between managers -->
+                <div *ngIf="i < managers.length - 1" class="col-12 my-3" style="border-bottom: 1px solid #ddd;"></div>
+              </div>
+          </div>
     </div>
 </div>
 

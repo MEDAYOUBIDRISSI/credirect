@@ -15,12 +15,48 @@ interface Role {
   name: string,
   code: string
 }
+
+export class Manager {
+  nom: string;
+  prenom: string;
+  dateNaissance: string;
+  civilite: string;
+  nationalite: string;
+  selectedIdentity: any;
+  cin: string;
+  carteSejour: string;
+  passeport: string;
+  situationFamiliale: string;
+  ville: string;
+  pays: string;
+  paysResidence: string;
+  adresse: string;
+}
 @Component({
   selector: 'app-add-customer-file',
   templateUrl: './add-customer-file.component.html',
   styleUrl: './add-customer-file.component.scss'
 })
 export class AddCustomerFileComponent implements OnInit{
+  
+managers: Manager[] = [
+  {
+    nom: '',
+    prenom: '',
+    dateNaissance: '',
+    civilite: '',
+    nationalite: '',
+    selectedIdentity: null,
+    cin: '',
+    carteSejour: '',
+    passeport: '',
+    situationFamiliale: '',
+    ville: '',
+    pays: '',
+    paysResidence: '',
+    adresse: ''
+  }
+];
 
   items: any[]=[];
   activeIndex= 0;
@@ -142,6 +178,14 @@ private updateUrl(): void {
   this.router.navigate(['/credirect/customer/add/', this.step]);
 }
 
+addManager() {
+  this.managers.push(new Manager());
+}
+
+removeManager(index: number) {
+  this.managers.splice(index, 1);
+}
+
     @ViewChild('filter') filter!: ElementRef;
 
   constructor(private customerService: CustomerService, private productService: ProductService, private router: Router, private route: ActivatedRoute
@@ -162,21 +206,21 @@ private updateUrl(): void {
     });
 
     this.situations_familiales = [
-      { label: 'Célibataire', value: 1 },
-      { label: 'Marié(e)', value: 2 },
-      { label: 'Veuf(e)', value: 3 },
-      { label: 'Divorcé(e)', value: 4 },
+      { label: 'Célibataire', value: 'Célibataire' },
+      { label: 'Marié(e)', value: 'Marié(e)' },
+      { label: 'Veuf(e)', value: 'Veuf(e)' },
+      { label: 'Divorcé(e)', value: 'Divorcé(e)' },
     ];
 
     this.provenances_clients = [
-      { label: 'Site Web', value: 1 },
-      { label: 'Compagne Facebook/Instagram', value: 2 },
-      { label: 'Promoteur Immobilier', value: 3 },
-      { label: 'Agence Immobilière', value: 4 },
-      { label: 'Mandataires', value: 5 },
-      { label: 'Apporteurs d’Affaire Individuel (AAI)', value: 6 },
-      { label: 'Parrainage', value: 7 },
-  ];
+      { label: 'Site Web', value: 'Site Web' },
+      { label: 'Compagne Facebook/Instagram', value: 'Compagne Facebook/Instagram' },
+      { label: 'Promoteur Immobilier', value: 'Promoteur Immobilier' },
+      { label: 'Agence Immobilière', value: 'Agence Immobilière' },
+      { label: 'Mandataires', value: 'Mandataires' },
+      { label: 'Apporteurs d’Affaire Individuel (AAI)', value: 'Apporteurs d’Affaire Individuel (AAI)' },
+      { label: 'Parrainage', value: 'Parrainage' },
+    ];
 
   this.formes_juridiques = [
     { label: 'Société à Responsabilité Limitée', value: 'Société à Responsabilité Limitée' },
@@ -198,16 +242,16 @@ this.business_activities = [
 ];
 
     this.civilites = [
-      { label: 'M', value: 1 },
-      { label: 'Mme', value: 2 },
-      { label: 'Melle', value: 3 },
+      { label: 'M', value: 'M' },
+      { label: 'Mme', value: 'Mme' },
+      { label: 'Melle', value: 'Melle' },
     ];
 
     this.caisses = [
-      { label: 'CIMR', value: 1 },
-      { label: 'CMR', value: 2 },
-      { label: 'RCAR', value: 3 },
-      { label: 'CNSS', value: 4 },
+      { label: 'CIMR', value: 'CIMR' },
+      { label: 'CMR', value: 'CMR' },
+      { label: 'RCAR', value: 'RCAR' },
+      { label: 'CNSS', value: 'CNSS' },
     ];
 
     this.customerService.getCustomersLarge().then(customers => {
@@ -316,5 +360,5 @@ this.business_activities = [
       table.clear();
       this.filter.nativeElement.value = '';
   }
- 
+
 }

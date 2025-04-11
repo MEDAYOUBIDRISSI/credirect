@@ -11,7 +11,9 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
    steps = [
     { label: 'Projet' },
     { label: 'Caractéristiques du Crédit' },
-    { label: 'Garantie et Commentaire' },
+    { label: 'Garantie' },
+    { label: 'Commentaire' },
+    { label: 'Banque et dépôt' },
   ];
 
   // Index de l'étape active
@@ -157,6 +159,21 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
     },
   };
 
+  facturation = {
+    honorairesFactures: null, // Honoraires facturés
+    depots: [] as any[], // Liste des dépôts
+  };
+
+  // Liste des banques
+  banks = [
+    { label: 'Banque Populaire', value: 'Banque Populaire' },
+    { label: 'Attijariwafa Bank', value: 'Attijariwafa Bank' },
+    { label: 'BMCE Bank', value: 'BMCE Bank' },
+    { label: 'Société Générale Maroc', value: 'Société Générale Maroc' },
+    { label: 'Crédit du Maroc', value: 'Crédit du Maroc' },
+    { label: 'CIH Bank', value: 'CIH Bank' },
+  ];
+
   constructor() {}
 
   ngOnInit(): void {
@@ -270,6 +287,20 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
     if (!montantCredit || !prixVente) return;
 
     this.quotiteFinancement = (montantCredit / prixVente) * 100;
+  }
+
+  addDepot(): void {
+    this.facturation.depots.push({
+      banque: '',
+      interlocuteur: '',
+      agence: '',
+      dateEnvoi: null,
+    });
+  }
+
+  // Supprimer un dépôt
+  removeDepot(index: number): void {
+    this.facturation.depots.splice(index, 1);
   }
 
 }

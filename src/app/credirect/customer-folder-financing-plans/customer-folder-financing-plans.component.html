@@ -312,6 +312,11 @@
                                     <p-chip class="mx-1 cursorPointer chip-add-e" (click)="AddEmptyCanauxVentes()"><div>Other<i class="ph ph-plus cursorPointer"></i></div></p-chip>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="activeIndex === 3" class="step-content">
+                        <div class="p-fluid">
                             <div class="p-field mt-4">
                                 <h5 for="commentaires">Commentaires</h5>
                                 <angular-editor [config]="ckeConfig" [(ngModel)]="planFinancement.commentaires">
@@ -320,6 +325,99 @@
                             </div>
                         </div>
                     </div>
+                    <div *ngIf="activeIndex === 4" class="step-content">
+                        <h3>Facturation et Dépôt</h3>
+                        <p>Complétez les informations de facturation et choisissez les banques de dépôt.</p>
+                      
+                        <!-- Volet 1 : Complément d’information sur la facturation et honoraires client -->
+                        <div class="p-fluid">
+                          <div class="p-field">
+                            <label for="honorairesFactures">Honoraires Facturés (MAD)</label>
+                            <input
+                              id="honorairesFactures"
+                              type="number"
+                              [(ngModel)]="facturation.honorairesFactures"
+                              pInputText
+                            />
+                          </div>
+                        </div>
+                      
+                        <!-- Volet 2 : Choix de banque de dépôt et suivi -->
+                        <div class="p-mt-4">
+                          <h4>Choix de Banque de Dépôt</h4>
+                          <p>Ajoutez une ou plusieurs banques de dépôt.</p>
+                      
+                          <!-- Liste des dépôts -->
+                          <div *ngFor="let depot of facturation.depots; let i = index" class="p-mb-4 p-p-3 p-shadow-2">
+                            <div class="p-grid">
+                              <!-- Banque (Dropdown) -->
+                            <div class="p-col-12 p-md-4">
+                                <label for="banque{{i}}">Banque</label>
+                                <p-dropdown
+                                id="banque{{i}}"
+                                [options]="banks"
+                                [(ngModel)]="depot.banque"
+                                placeholder="Sélectionnez une banque"
+                                ></p-dropdown>
+                            </div>
+                      
+                              <!-- Interlocuteur -->
+                              <div class="p-col-12 p-md-4">
+                                <label for="interlocuteur{{i}}">Interlocuteur</label>
+                                <input
+                                  id="interlocuteur{{i}}"
+                                  type="text"
+                                  [(ngModel)]="depot.interlocuteur"
+                                  pInputText
+                                />
+                              </div>
+                      
+                              <!-- Agence -->
+                              <div class="p-col-12 p-md-4">
+                                <label for="agence{{i}}">Agence</label>
+                                <input
+                                  id="agence{{i}}"
+                                  type="text"
+                                  [(ngModel)]="depot.agence"
+                                  pInputText
+                                />
+                              </div>
+                      
+                              <!-- Date d’envoi -->
+                              <div class="p-col-12 p-md-4">
+                                <label for="dateEnvoi{{i}}">Date d’envoi</label>
+                                <p-calendar
+                                  id="dateEnvoi{{i}}"
+                                  [(ngModel)]="depot.dateEnvoi"
+                                  [showIcon]="true"
+                                  dateFormat="dd/mm/yy"
+                                ></p-calendar>
+                              </div>
+                      
+                              <!-- Bouton Supprimer -->
+                              <div class="p-col-12 p-md-4 p-d-flex p-align-center">
+                                <button
+                                  pButton
+                                  type="button"
+                                  icon="pi pi-trash"
+                                  class="p-button-danger"
+                                  (click)="removeDepot(i)"
+                                ></button>
+                              </div>
+                            </div>
+                          </div>
+                      
+                          <!-- Bouton Ajouter un Dépôt -->
+                          <button
+                            pButton
+                            type="button"
+                            label="Ajouter un Dépôt"
+                            icon="pi pi-plus"
+                            class="p-button-secondary"
+                            (click)="addDepot()"
+                          ></button>
+                        </div>
+                      </div>
                     <!-- Boutons de navigation -->
                     <div class="flex space-between mt-4" style="justify-content: space-between;">
                         <button

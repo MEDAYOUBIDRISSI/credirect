@@ -44,6 +44,7 @@ import { ChipModule } from 'primeng/chip';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { EditorModule } from 'primeng/editor';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { DossierTrackingComponent } from './dossier-tracking/dossier-tracking.component';
 
 const routes: Routes = [
   {
@@ -116,6 +117,10 @@ const routes: Routes = [
     path: 'calendar',
     component: AgendaComponent,
   },
+  {
+    path: 'folder-tracking',
+    component: DossierTrackingComponent,
+  },
 ]
 
 @NgModule({
@@ -134,7 +139,8 @@ const routes: Routes = [
     AgendaComponent,
     CustomerFolderMoreInfoComponent,
     CustomerFolderListComponent,
-    CustomerFolderFinancingPlansComponent
+    CustomerFolderFinancingPlansComponent,
+    DossierTrackingComponent
   ],
   imports: [
     CommonModule,

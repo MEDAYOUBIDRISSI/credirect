@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api/selectitem';
 import { CustomerService } from 'src/app/demo/service/customer.service';
 import { Table } from 'primeng/table';
@@ -11,55 +11,84 @@ interface expandedRows {
   [key: string]: boolean;
 }
 
-interface Role {
-  name: string,
-  code: string
-}
+// interface Role {
+//   name: string,
+//   code: string
+// }
 
-export class Manager {
-  nom: string;
-  prenom: string;
-  dateNaissance: string;
-  civilite: string;
-  nationalite: string;
-  selectedIdentity: any;
-  cin: string;
-  carteSejour: string;
-  passeport: string;
-  situationFamiliale: string;
-  ville: string;
-  pays: string;
-  paysResidence: string;
-  adresse: string;
-}
 @Component({
   selector: 'app-add-customer-file',
   templateUrl: './add-customer-file.component.html',
   styleUrl: './add-customer-file.component.scss'
 })
-export class AddCustomerFileComponent implements OnInit{
-  
-managers: Manager[] = [
-  {
-    nom: '',
-    prenom: '',
-    dateNaissance: '',
-    civilite: '',
-    nationalite: '',
-    selectedIdentity: null,
+export class AddCustomerFileComponent implements OnInit {
+  // Properties
+  customerId?: any;
+  LastName?: any;
+  FirstName?: any;
+  BirthDate?: any;
+  Nationality?: any;
+  IdentityID?: number;
+  CIN?: any;
+  carteSejour?: any;
+  PassportNumber?: any;
+  Email?: any;
+  Address?: any;
+  City?: any;
+  CountryID?: any;
+  ResidenceCountryID?: any;
+  MaritalStatusID?: any;
+  id_ProvenanceClient?: any;
+  id_FormeJuridique?: any;
+  id_Activite?: any;
+  id_Civilite?: any;
+  id_Caisse?: any;
+  id_Statut?: any;
+  id_StatutOccupation?: any;
+  id_Representant?: any;
+  Matricule?: any;
+  MobilePhone?: any;
+  LandlinePhone?: any;
+  WorkPhone?: any;
+  ResidencyStatusID?: any;
+  IsOwner?: any;
+  IsTenant?: any;
+  RequestedAmount?: any;
+  CompanyName?: any;
+  LegalForm?: any;
+  CreationDate?: any;
+  RegistrationNumber?: any;
+  CompanyAddress?: any;
+  CompanyCity?: any;
+  CompanyCountryID?: any;
+  SocialCapital?: any;
+  BusinessActivityID?: any;
+  is_individual:any;
+  is_organisation: any;
+  RoleID: any;
+  ResidencePermit: any;
+  OriginID: any;
+  originDetails: any;
+  ClientTitleID: any;
+
+  managers: any[] = [{
+    managerLastName: '',
+    managerFirstName: '',
+    managerBirthDate: '',
+    managerNationality: '',
+    id_Identity: 0,
     cin: '',
     carteSejour: '',
     passeport: '',
-    situationFamiliale: '',
-    ville: '',
-    pays: '',
-    paysResidence: '',
-    adresse: ''
-  }
-];
+    managerAddress: '',
+    managerCity: '',
+    managerCountryID: 0,
+    managerResidenceCountryID: 0,
+    id_ManagerMaritalStatus: 0
+  }];
 
-  items: any[]=[];
-  activeIndex= 0;
+  items: any[] = [];
+  activeIndex = 0;
   situations_familiales: SelectItem[] = [];
   provenances_clients: SelectItem[] = [];
   formes_juridiques: SelectItem[] = [];
@@ -86,221 +115,156 @@ managers: Manager[] = [
   isSelected2 = false;
   step = 0;
 
-  roles!: Role[];
-  selectedRole!: Role;
+  titles: any[] = [];
+  roles: any[] = [];
+  maritalStatuses: any[] = [];
+  legalForms: any[] = [];
+  businessActivities: any[] = [];
+  clientOrigins: any[] = [];
+
+  selectedTitle: any;
+  selectedRole: any;
+  selectedMaritalStatus: any;
+  selectedLegalForm: any;
+  selectedBusinessActivity: any;
+  selectedClientOrigin: any; 
 
   selectedIdentity: any = null;
   selectedIdentity2: any = null;
 
   identities: any[] = [
-      { name: 'CIN', key: 'A' },
-      { name: 'Carte Séjour', key: 'B' },
-      { name: 'Passeport', key: 'C' },
+    { name: 'CIN', key: 'A' },
+    { name: 'Carte Séjour', key: 'B' },
+    { name: 'Passeport', key: 'C' },
   ];
 
   identities2: any[] = [
     { name: 'CIN', key: 'A' },
     { name: 'Carte Séjour', key: 'B' },
     { name: 'Passeport', key: 'C' },
-];
+  ];
 
   selectedStatut: any = null;
-
   statuts: any[] = [
-      { name: 'Résident', key: 'A' },
-      { name: 'MRE', key: 'B' },
-      { name: 'ENR', key: 'C' },
+    { name: 'Résident', key: 'A' },
+    { name: 'MRE', key: 'B' },
+    { name: 'ENR', key: 'C' },
   ];
 
   selectedStatut_Occupation: any = null;
-
   statuts_Occupation: any[] = [
-      { name: 'Propriétaire', key: 'A' },
-      { name: 'Locataire', key: 'B' },
+    { name: 'Propriétaire', key: 'A' },
+    { name: 'Locataire', key: 'B' },
   ];
 
-  isNextDisabled(): boolean {
-    if((this.step == 0 && !this.isSelected1 && !this.isSelected2) || this.step == 1 && !this.selectedRole){
-      return true;
-    }else{
-      return false;
+  @ViewChild('filter') filter!: ElementRef;
+
+  constructor(
+    private customerService: CustomerService,
+    private productService: ProductService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) {
+    if (this.route.snapshot.paramMap.get('customerId')) {
+      this.customerId = this.route.snapshot.paramMap.get('customerId');
     }
+  }
+
+  ngOnInit() {
+
+    this.loadLookups();
+
+    this.route.params.subscribe((params) => {
+      const stepFromUrl = +params['step'];
+      const customerIdFromUrl = params['customerId'];
+      
+      if (!isNaN(stepFromUrl)) {  
+        this.step = stepFromUrl;
+        this.activeIndex = this.step > 1 ? this.step - 2 : 0;
+      }
+      
+      if (customerIdFromUrl) {
+        this.customerId = customerIdFromUrl;
+      }
+      
+      this.cdr.detectChanges();
+    });
+
+    this.initializeDropdowns();
+
+    this.customerService.getCustomersLarge().then(customers => {
+      this.customers1 = customers;
+      this.loading = false;
+      this.customers1.forEach(customer => customer.date = new Date(customer.date).toISOString());
+    });  }
+
+  // Component Methods
+  isNextDisabled(): boolean {
+    return (this.step == 0 && !this.isSelected1 && !this.isSelected2) || 
+           (this.step == 1 && !this.selectedRole);
   }
 
   selectCard(cardNumber: number) {
     this.isSelected1 = cardNumber === 1;
     this.isSelected2 = cardNumber === 2;
+    
     if (cardNumber === 1) {
       this.items = [
-        {
-            label: 'Informations générales',
-        },
-        {
-            label: 'Informations détaillées',
-        },
-        {
-            label: "Zone d'implantation",
-        },
+        { label: 'Informations générales' },
+        { label: 'Informations détaillées' },
+        { label: "Zone d'implantation" }
       ];
     } else if (cardNumber === 2) {
       this.items = [
-        {
-            label: 'Informations générales',
-        },
-        {
-            label: 'Informations détaillées',
-        },
-        {
-            label: "Gérant/Manager",
-        },
+        { label: 'Informations générales' },
+        { label: 'Informations détaillées' },
+        { label: "Gérant/Manager" }
       ];
     }
-    // this.updateUrl();
   }
 
   goToPreviousStep() {
     if (this.step > 0) {
-        this.step--;
-        this.activeIndex = this.step - 2;
-        this.updateUrl();
+      this.step--;
+      this.activeIndex = this.step - 2;
+      this.updateUrl();
     }
-}
-
-goToNextStep() {
-    if (this.step < 6) {
-        this.step++;
-        this.activeIndex = this.step - 2;
-        this.updateUrl();
-    }
-}
-
-private updateUrl(): void {
-  this.router.navigate(['/credirect/customer/add/', this.step]);
-}
-
-addManager() {
-  this.managers.push(new Manager());
-}
-
-removeManager(index: number) {
-  this.managers.splice(index, 1);
-}
-
-    @ViewChild('filter') filter!: ElementRef;
-
-  constructor(private customerService: CustomerService, private productService: ProductService, private router: Router, private route: ActivatedRoute
-  ) 
-  {
-    
   }
 
+  goToNextStep() {
+    if (this.step < 6) {
+      this.step++;
+      this.activeIndex = this.step - 2;
+      this.updateUrl();
+    }
+  }
 
-  ngOnInit() {
+  private updateUrl(): void {
+    this.router.navigate(['/credirect/customer/add/' + this.step + '/' + this.customerId]);
+    this.cdr.detectChanges();
+  }
 
-    this.route.params.subscribe((params) => {
-      const stepFromUrl = +params['step']; // Convert to number
-      if (!isNaN(stepFromUrl) && stepFromUrl >= 0 && stepFromUrl <= 6) {
-        this.step = stepFromUrl;
-        this.activeIndex = this.step - 2; // Adjust activeIndex for steps 2, 3, 4
-      }
+  addManager() {
+    this.managers.push({
+      managerLastName: '',
+      managerFirstName: '',
+      managerBirthDate: '',
+      managerNationality: '',
+      id_Identity: 0,
+      cin: '',
+      carteSejour: '',
+      passeport: '',
+      managerAddress: '',
+      managerCity: '',
+      managerCountryID: 0,
+      managerResidenceCountryID: 0,
+      id_ManagerMaritalStatus: 0
     });
+  }
 
-    this.situations_familiales = [
-      { label: 'Célibataire', value: 'Célibataire' },
-      { label: 'Marié(e)', value: 'Marié(e)' },
-      { label: 'Veuf(e)', value: 'Veuf(e)' },
-      { label: 'Divorcé(e)', value: 'Divorcé(e)' },
-    ];
-
-    this.provenances_clients = [
-      { label: 'Site Web', value: 'Site Web' },
-      { label: 'Compagne Facebook/Instagram', value: 'Compagne Facebook/Instagram' },
-      { label: 'Promoteur Immobilier', value: 'Promoteur Immobilier' },
-      { label: 'Agence Immobilière', value: 'Agence Immobilière' },
-      { label: 'Mandataires', value: 'Mandataires' },
-      { label: 'Apporteurs d’Affaire Individuel (AAI)', value: 'Apporteurs d’Affaire Individuel (AAI)' },
-      { label: 'Parrainage', value: 'Parrainage' },
-    ];
-
-  this.formes_juridiques = [
-    { label: 'Société à Responsabilité Limitée', value: 'Société à Responsabilité Limitée' },
-    { label: 'Association', value: 'Association' },
-    { label: 'Fondation', value: 'Fondation' },
-    { label: 'Société en commandite par actions', value: 'Société en commandite par actions' },
-    { label: 'Société Civil Immobilière', value: 'Société Civil Immobilière' },
-    { label: 'Société en Nom Collectif', value: 'Société en Nom Collectif' },
-    { label: 'Société anonyme', value: 'Société anonyme' },
-    { label: 'Société en commandite simple', value: 'Société en commandite simple' },
-    { label: 'Groupement d’interêt économique', value: 'Groupement d’interêt économique' },
-];
-
-this.business_activities = [
-  { label: 'Machines', value: 'Machines' },
-  { label: 'Distributeurs automatiques', value: 'Distributeurs automatiques' },
-  { label: 'Concessions', value: 'Concessions' },
-  { label: 'Opérations de vente au détail', value: 'Opérations de vente au détail' },
-];
-
-    this.civilites = [
-      { label: 'M', value: 'M' },
-      { label: 'Mme', value: 'Mme' },
-      { label: 'Melle', value: 'Melle' },
-    ];
-
-    this.caisses = [
-      { label: 'CIMR', value: 'CIMR' },
-      { label: 'CMR', value: 'CMR' },
-      { label: 'RCAR', value: 'RCAR' },
-      { label: 'CNSS', value: 'CNSS' },
-    ];
-
-    this.customerService.getCustomersLarge().then(customers => {
-      this.customers1 = customers;
-      this.loading = false;
-
-      // @ts-ignore
-      this.customers1.forEach(customer => customer.date = new Date(customer.date));
-  });
-
-  this.representatives = [
-    { name: 'Amy Elsner', image: 'amyelsner.png' },
-    { name: 'Anna Fali', image: 'annafali.png' },
-    { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-    { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-    { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-    { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-    { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-    { name: 'Onyama Limba', image: 'onyamalimba.png' },
-    { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-    { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-  ];
-
-  this.statuses = [
-      { label: 'Unqualified', value: 'unqualified' },
-      { label: 'Qualified', value: 'qualified' },
-      { label: 'New', value: 'new' },
-      { label: 'Negotiation', value: 'negotiation' },
-      { label: 'Renewal', value: 'renewal' },
-      { label: 'Proposal', value: 'proposal' }
-  ];
-
-  this.roles = [
-    { name: 'Emprunteur', code: '1' },
-    { name: 'Co-emprunteur', code: '2' },
-    { name: 'Caution personnelle et solidaire', code: '3' },
-    { name: 'Caution hypothécaire', code: '4' },
-    { name: 'Propriétaire', code: '5' },
-    { name: 'Propriétaire dans l’indivision', code: '6' },
-    { name: 'Usufruitier', code: '7' },
-    { name: 'Nu-propriétaire', code: '8' },
-  ];
-
-  this.selectedIdentity = this.identities[0];
-  this.selectedIdentity2 = this.identities2[0];
-  this.selectedStatut = this.statuts[0];
-  this.selectedStatut_Occupation = this.statuts_Occupation[0];
-  // this.step = 6;
-
+  removeManager(index: number) {
+    this.managers.splice(index, 1);
   }
 
   onActiveIndexChange(event: number) {
@@ -308,57 +272,167 @@ this.business_activities = [
     this.step = event + 2;
     this.updateUrl();
   }
-  
+
+  // Data Methods
+  private initializeDropdowns() {
+
+    this.selectedIdentity = this.identities[0];
+    this.selectedIdentity2 = this.identities2[0];
+    this.selectedStatut = this.statuts[0];
+    this.selectedStatut_Occupation = this.statuts_Occupation[0];
+  }
+
+  // Table Methods
   onSort() {
     this.updateRowGroupMetaData();
   }
 
   updateRowGroupMetaData() {
-      this.rowGroupMetadata = {};
+    this.rowGroupMetadata = {};
 
-      if (this.customers3) {
-          for (let i = 0; i < this.customers3.length; i++) {
-              const rowData = this.customers3[i];
-              const representativeName = rowData?.representative?.name || '';
+    if (this.customers3) {
+      for (let i = 0; i < this.customers3.length; i++) {
+        const rowData = this.customers3[i];
+        const representativeName = rowData?.representative?.name || '';
 
-              if (i === 0) {
-                  this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-              }
-              else {
-                  const previousRowData = this.customers3[i - 1];
-                  const previousRowGroup = previousRowData?.representative?.name;
-                  if (representativeName === previousRowGroup) {
-                      this.rowGroupMetadata[representativeName].size++;
-                  }
-                  else {
-                      this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-                  }
-              }
+        if (i === 0) {
+          this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
+        } else {
+          const previousRowData = this.customers3[i - 1];
+          const previousRowGroup = previousRowData?.representative?.name;
+          if (representativeName === previousRowGroup) {
+            this.rowGroupMetadata[representativeName].size++;
+          } else {
+            this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
           }
+        }
       }
+    }
   }
 
   expandAll() {
-      if (!this.isExpanded) {
-          this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
-
-      } else {
-          this.expandedRows = {};
-      }
-      this.isExpanded = !this.isExpanded;
+    if (!this.isExpanded) {
+      this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
+    } else {
+      this.expandedRows = {};
+    }
+    this.isExpanded = !this.isExpanded;
   }
 
   formatCurrency(value: number) {
-      return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
   onGlobalFilter(table: Table, event: Event) {
-      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
   clear(table: Table) {
-      table.clear();
-      this.filter.nativeElement.value = '';
+    table.clear();
+    this.filter.nativeElement.value = '';
   }
 
+  // Data Submission
+  submitClientData(): Promise<any> {
+    const clientData = {
+      ClientID: this.customerId ? this.customerId : null,
+      is_individual : this.isSelected1,
+      is_organisation : this.is_organisation,
+      RoleID: this.selectedRole?.value || null,
+      LastName: this.LastName,
+      FirstName: this.FirstName,
+      BirthDate: this.BirthDate,
+      ClientTitleID: this.selectedTitle?.value || null,
+      Nationality : this.Nationality,
+      Email : this.Email,
+      CIN : this.CIN,
+      ResidencePermit : this.ResidencePermit,
+      PassportNumber : this.PassportNumber,
+      City : this.City,
+      CountryID : this.CountryID,
+      ResidenceCountryID : this.ResidenceCountryID,
+      MaritalStatusID : this.selectedMaritalStatus?.value || null,
+      MobilePhone : this.MobilePhone,
+      LandlinePhone : this.LandlinePhone,
+      WorkPhone : this.WorkPhone,
+      Address: this.Address,
+
+      IsOwner : this.IsOwner,
+      sTenant: this.IsTenant,
+      RequestedAmount : this.RequestedAmount,
+      OriginID : this.selectedClientOrigin?.value || null,
+      originDetails : this.originDetails,
+
+      LegalFormID : this.selectedLegalForm?.value || null,
+    };
+  
+    return new Promise((resolve, reject) => {
+      this.customerService.createOrUpdateClient(clientData).subscribe({
+        next: (response) => {
+          console.log('Client data submitted successfully', response);
+          this.customerId = response;
+          resolve(response);
+        },
+        error: (err) => {
+          console.error('Error submitting client data', err);
+          reject(err);
+        }
+      });
+    });
+  }
+  
+  async onNextClick() {
+    try {
+      await this.submitClientData();
+      this.goToNextStep();
+    } catch (error) {
+      console.error('Error submitting client data:', error);
+    }
+  }
+
+  loadLookups() {
+    this.customerService.getClientRoles().subscribe(roles => {
+      this.roles = roles.map(role => ({
+        label: role.roleLabel,
+        value: role.roleID
+      }));
+    });
+
+    this.customerService.getClientTitles().subscribe({
+      next: (titles) => {
+        this.titles = titles.map(t => ({
+          label: t.clientTitleLabel,
+          value: t.clientTitleID
+        }));
+      }
+    });
+
+  this.customerService.getMaritalStatuses().subscribe(statuses => {
+    this.maritalStatuses = statuses.map(status => ({
+      label: status.maritalStatusLabel,
+      value: status.maritalStatusID    
+    }));
+  });
+
+  this.customerService.getLegalForms().subscribe(forms => {
+    this.legalForms = forms.map(form => ({
+      label: form.legalFormLabel,      
+      value: form.legalFormID          
+    }));
+  });
+
+  this.customerService.getBusinessActivities().subscribe(activities => {
+    this.businessActivities = activities.map(activity => ({
+      label: activity.businessActivityLabel,
+      value: activity.businessActivityID    
+    }));
+  });
+
+  this.customerService.getClientOrigins().subscribe(origins => {
+    this.clientOrigins = origins.map(origin => ({
+      label: origin.originLabel, 
+      value: origin.originID      
+    }));
+  });
+  }
 }

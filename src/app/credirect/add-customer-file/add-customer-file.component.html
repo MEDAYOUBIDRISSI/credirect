@@ -50,7 +50,7 @@
           <p-listbox 
             [options]="roles"
             [(ngModel)]="selectedRole" 
-            optionLabel="name"
+            optionLabel="label"
             class="w-48">
           </p-listbox>
         </div>
@@ -64,27 +64,28 @@
                 <div class="grid p-fluid mt-3">
 
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="denomination ">Dénomination </label>
-                    <input pInputText id="denomination " type="text" [(ngModel)]="denomination " placeholder="Votre Dénomination " />
+                    <label for="CompanyName ">Dénomination </label>
+                    <input pInputText id="CompanyName " type="text" [(ngModel)]="CompanyName " placeholder="Votre Dénomination " />
                 </div>
     
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="forme_juridique">Forme juridique</label>
+                    <label for="forme_juridique">Forme juridique</label>
                     <p-dropdown
-                    [options]="formes_juridiques"
-                    [(ngModel)]="forme_juridique"
-                    [showClear]="true"
-                    placeholder="Sélectionner"
-                    ></p-dropdown>
+                      [options]="legalForms"
+                      [(ngModel)]="selectedLegalForm"
+                      optionLabel="label"
+                      [showClear]="true"
+                      placeholder="Sélectionner une forme juridique">
+                    </p-dropdown>
                 </div>
 
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="date_creation">Date de création</label>
+                    <label for="date_creation">Date de création</label>
                     <input pInputText id="date_creation" type="date" [(ngModel)]="date_creation" />
                 </div>
 
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="rc">N° RC</label>
+                    <label for="rc">N° RC</label>
                     <input
                     pInputText
                     id="rc"
@@ -95,42 +96,44 @@
                 </div>
 
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="business_activity">Activité</label>
+                    <label for="business_activity">Activité</label>
                     <p-dropdown
-                    [options]="business_activities"
-                    [(ngModel)]="business_activity"
-                    [showClear]="true"
-                    placeholder="Sélectionner"
-                    ></p-dropdown>
+                      [options]="businessActivities"
+                      [(ngModel)]="selectedBusinessActivity"
+                      optionLabel="label"
+                      [showClear]="true"
+                      placeholder="Sélectionner une activité">
+                    </p-dropdown>
                 </div>
                 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="nom">Nom</label>
-                    <input pInputText id="nom" type="text" [(ngModel)]="nom" placeholder="Votre nom" />
+                  <label for="LastName">Nom</label>
+                  <input pInputText id="LastName" type="text" [(ngModel)]="LastName" placeholder="Votre nom" />
                 </div>
 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="prenom">Prénom</label>
-                    <input pInputText id="prenom" type="text" [(ngModel)]="prenom" placeholder="Votre prénom" />
+                    <label for="FirstName">Prénom</label>
+                    <input pInputText id="FirstName" type="text" [(ngModel)]="FirstName" placeholder="Votre prénom" />
                 </div>
 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="date_naissance">Date de Naissance</label>
-                    <input pInputText id="date_naissance" type="date" [(ngModel)]="date_naissance" />
+                    <label for="BirthDate">Date de Naissance</label>
+                    <input pInputText id="BirthDate" type="date" [(ngModel)]="BirthDate" />
                 </div>
 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="civilite">Civilité</label>
-                    <p-dropdown
-                    [options]="civilites"
-                    [(ngModel)]="civilite"
+                  <label for="civilite">Civilité</label>
+                  <p-dropdown
+                    [options]="titles"
+                    [(ngModel)]="selectedTitle"
+                    optionLabel="label"
                     [showClear]="true"
-                    placeholder="Sélectionner"
-                    ></p-dropdown>
+                    placeholder="Sélectionner">
+                  </p-dropdown>
                 </div>
 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="nationalite">Nationalité</label>
+                    <label for="nationalite">Nationalité</label>
                     <input
                     pInputText
                     id="nationalite"
@@ -141,7 +144,7 @@
                 </div>
 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="email">Adresse mail</label>
+                    <label for="email">Adresse mail</label>
                     <input
                     pInputText
                     id="email"
@@ -152,7 +155,7 @@
                 </div>
 
                 <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="num_fiche">Identité</label>
+                    <label for="num_fiche">Identité</label>
                     <div class="flex flex-wrap gap-3">
                     
                         <div *ngFor="let Identity of identities" class="flex align-items-center">
@@ -169,7 +172,7 @@
                 </div>
 
                 <div *ngIf="selectedIdentity == this.identities[0] && isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="CIN">CIN</label>
+                    <label for="CIN">CIN</label>
                     <input
                     pInputText
                     id="CIN"
@@ -180,7 +183,7 @@
                 </div>
 
                 <div *ngIf="selectedIdentity == this.identities[1] && isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="carte_sejour">Carte Séjour</label>
+                    <label for="carte_sejour">Carte Séjour</label>
                     <input
                     pInputText
                     id="carte_sejour"
@@ -191,7 +194,7 @@
                 </div>   
 
                 <div *ngIf="selectedIdentity == this.identities[2] && isSelected1" class="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="Passeport">Passeport</label>
+                    <label for="Passeport">Passeport</label>
                     <input
                     pInputText
                     id="Passeport"
@@ -207,17 +210,17 @@
                 <div class="grid p-fluid mt-3">
 
                     <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="social_capital">Capital social</label>
+                        <label for="social_capital">Capital social</label>
                         <input pInputText id="social_capital" type="text" [(ngModel)]="social_capital" placeholder="Votre Capital social " />
                     </div>
 
                     <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="requested_amount">Montant sollicité </label>
+                        <label for="requested_amount">Montant sollicité </label>
                         <input pInputText id="requested_amount" type="text" [(ngModel)]="requested_amount" placeholder="Votre Montant sollicité " />
                     </div>
 
                     <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="ville">Ville</label>
+                        <label for="ville">Ville</label>
                         <input
                         pInputText
                         id="ville"
@@ -228,7 +231,7 @@
                     </div>
 
                     <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="pays">Pays</label>
+                        <label for="pays">Pays</label>
                         <input
                         pInputText
                         id="pays"
@@ -239,7 +242,7 @@
                     </div>
 
                     <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="adresse">Adresse</label>
+                        <label for="adresse">Adresse</label>
                         <textarea
                         rows="5"
                         id="adresse"
@@ -250,7 +253,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-3">
-                        <label htmlFor="ville">Ville</label>
+                        <label for="ville">Ville</label>
                         <input
                         pInputText
                         id="ville"
@@ -261,7 +264,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-3">
-                        <label htmlFor="pays">Pays</label>
+                        <label for="pays">Pays</label>
                         <input
                         pInputText
                         id="pays"
@@ -272,7 +275,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-3">
-                        <label htmlFor="pays_resi">Pays de Résidence</label>
+                        <label for="pays_resi">Pays de Résidence</label>
                         <input
                         pInputText
                         id="pays"
@@ -283,17 +286,18 @@
                     </div>
     
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-3">
-                        <label htmlFor="situation_familiale">Situation Familiale</label>
+                        <label for="situation_familiale">Situation Familiale</label>
                         <p-dropdown
-                        [options]="situations_familiales"
-                        [(ngModel)]="situation_familiale"
-                        [showClear]="true"
-                        placeholder="Sélectionner"
-                        ></p-dropdown>
+                          [options]="maritalStatuses"
+                          [(ngModel)]="selectedMaritalStatus"
+                          optionLabel="label"
+                          [showClear]="true"
+                          placeholder="Sélectionner un état civil">
+                        </p-dropdown>
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="telephone_mobile">Téléphone Mobile</label>
+                        <label for="telephone_mobile">Téléphone Mobile</label>
                         <input
                         pInputText
                         id="telephone_mobile"
@@ -304,7 +308,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="telephone_fixe">Téléphone Fixe</label>
+                        <label for="telephone_fixe">Téléphone Fixe</label>
                         <input
                         pInputText
                         id="telephone_fixe"
@@ -315,7 +319,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="telephone_professionnel">Téléphone Professionnel</label>
+                        <label for="telephone_professionnel">Téléphone Professionnel</label>
                         <input
                         pInputText
                         id="telephone_professionnel"
@@ -326,7 +330,7 @@
                     </div>
     
                     <div *ngIf="isSelected1" class="field col-12">
-                        <label htmlFor="adresse">Adresse</label>
+                        <label for="adresse">Adresse</label>
                         <textarea
                         rows="5"
                         id="adresse"
@@ -540,7 +544,7 @@
                         ></button>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="num_fiche">Statut</label>
+                        <label for="num_fiche">Statut</label>
                         <div class="flex flex-wrap gap-3">
                             <div *ngFor="let Statut of statuts" class="flex align-items-center">
                                 <p-radioButton 
@@ -556,7 +560,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="num_fiche">Statut d'occupation</label>
+                        <label for="num_fiche">Statut d'occupation</label>
                         <div class="flex flex-wrap gap-3">
                             <div *ngFor="let Statut_Occupation of statuts_Occupation" class="flex align-items-center">
                                 <p-radioButton 
@@ -572,7 +576,7 @@
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="requested_amount">Montant sollicité</label>
+                        <label for="requested_amount">Montant sollicité</label>
                         <input
                         pInputText
                         id="requested_amount"
@@ -583,17 +587,18 @@
                     </div>
     
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="provenance_client">Provenance du client</label>
+                        <label for="provenance_client">Provenance du client</label>
                         <p-dropdown
-                        [options]="provenances_clients"
-                        [(ngModel)]="provenance_client"
+                        [options]="clientOrigins"
+                        [(ngModel)]="selectedClientOrigin"
+                        optionLabel="label"
                         [showClear]="true"
-                        placeholder="Sélectionner"
-                        ></p-dropdown>
+                        placeholder="Sélectionner une origine">
+                      </p-dropdown>
                     </div>
 
                     <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="provenance_detail">Détail de provenance</label>
+                        <label for="provenance_detail">Détail de provenance</label>
                         <textarea
                         rows="5"
                         id="provenance_detail"
@@ -623,7 +628,7 @@
           class="p-button-primary" 
           label="Suivant" 
           [disabled]="isNextDisabled()" 
-          (click)="goToNextStep()">
+          (click)="onNextClick()">
         </button>
 
         <button *ngIf="step == 4"
@@ -631,7 +636,7 @@
           class="p-button-primary" 
           label="Done" 
           [disabled]="isNextDisabled()" 
-          (click)="goToNextStep()">
+          (click)="onNextClick()">
         </button>
     </div>   
     
@@ -674,7 +679,7 @@
 					<h5><strong>Nature du tiers :</strong> Personne Physique</h5> 
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Nom - Prénom :</strong> KELLOUCH Oumaima</h5>
+					<h5><strong>Nom - Prénom :</strong> {{ nom }} {{ prenom }}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>CIN :</strong> GK144477</h5>
@@ -804,7 +809,7 @@
                     <h5><strong>Carte Séjour :</strong> {{ manager.carteSejour }}</h5>
                   </div>
                   <div *ngIf="manager.passeport" class="col-12 mb-2 lg:col-6 lg:mb-0">
-                    <h5><strong>Passeport :</strong> {{ manager.passeport }}</h5>
+                    <h5><strong>Passeport: </strong> {{ manager.passeport }}</h5>
                   </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                   <h5><strong>Date de Naissance :</strong> {{ manager.dateNaissance }}</h5>

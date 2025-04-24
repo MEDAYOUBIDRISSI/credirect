@@ -71,8 +71,12 @@ const routes: Routes = [
     component: AddCustomerFileComponent,
   },
   {
+    path: 'customer/add/:step/:customerId',
+    component: AddCustomerFileComponent,
+  },
+  {
     path: 'customer/add',
-    redirectTo: 'customer/add/0',
+    redirectTo: 'customer/add/0/0',
     pathMatch: 'full',
   },
   {

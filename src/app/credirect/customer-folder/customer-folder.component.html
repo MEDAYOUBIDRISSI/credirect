@@ -1,7 +1,7 @@
 <div class="card h-100">
     <div class="row">
         <div class="col-12">
-            <h3>Gestion de dossier de crédit</h3>
+            <h3>Gestion de dossier de crédit <span *ngIf="folderID != null"> #{{ tiers[0]?.matricule }}</span></h3>
             <p>
 
             </p>
@@ -57,7 +57,7 @@
                 <div class="col-12" >
                     <div class="grid">
                          <div class="col-12 xl:col-7">
-                             <h4>Tier</h4>
+                             <h4>Les tiers liés à ce dossier.</h4>
                              <p-table [value]="tiers" [paginator]="true" [rows]="5" responsiveLayout="scroll">
                                  <ng-template pTemplate="header">
                                      <tr>
@@ -66,18 +66,18 @@
                                          <th pSortableColumn="tel">Tel</th>
                                          <th pSortableColumn="is_complete">Status<p-sortIcon field="is_complete"></p-sortIcon></th>
                                          <th style="text-align: center;">
-                                             <p-button label="Ajouter autre" severity="info" (click)="showDialog()"/>
+                                             <p-button [label]="tiers.length == 0 ? 'Ajouter tier' : 'Ajouter autre'" severity="info" (click)="showDialog()"/>
                                          </th>
                                      </tr>
                                  </ng-template>
                                  <ng-template pTemplate="body" let-tierItem let-rowIndex="rowIndex">
                                      <tr>
-                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.name}}</td>
-                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.role}}</td>
-                                         <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem.tel}}" tooltipPosition="top"></i></td>
+                                         <td style="width: 40%; min-width: 7rem;">{{ tierItem?.lastName + " " + tierItem?.firstName }}</td>
+                                         <td style="width: 40%; min-width: 7rem;">{{tierItem?.role}}</td>
+                                         <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem?.tel}}" tooltipPosition="top"></i></td>
                                          <td style="width: 10%; min-width: 4rem;text-align: center;">
-                                            <p-tag *ngIf="tierItem.is_complete" value="Complet" severity="success" />
-                                            <p-tag *ngIf="!tierItem.is_complete" value="Incomplet" severity="danger" />
+                                            <p-tag *ngIf="tierItem?.is_complete" value="Complet" severity="success" />
+                                            <p-tag *ngIf="!tierItem?.is_complete" value="Incomplet" severity="danger" />
                                          </td>
                                          <td style="width: 25%;text-align: center;">
                                              <button pButton pRipple type="button" icon="pi pi-eye"  class="p-button p-component p-button-text" (click)="showTiere(rowIndex)"></button>
@@ -117,6 +117,9 @@
             </div>
             <!-- Step 2 -->
             <div class="row" *ngIf="step == 2">
+                <div class="col-12" *ngIf="folderID != null">
+                    <h4>La nature du crédit choisi est <span><p-tag icon="pi pi-info-circle" severity="info" value="{{ selectedCreditType?.name }}" /></span></h4>
+                </div>
                 <div class="col-12" >
                     <div class="grid">
                          <div class="col-12 xl:col-12">
@@ -135,15 +138,16 @@
                                  </ng-template>
                                  <ng-template pTemplate="body" let-tierItem let-rowIndex="rowIndex">
                                      <tr>
-                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.name}}</td>
-                                         <td style="width: 40%; min-width: 7rem;">{{tierItem.role}}</td>
+                                         <td style="width: 30%; min-width: 7rem;">{{ tierItem?.lastName + " " + tierItem?.firstName }}</td>
+                                         <td style="width: 30%; min-width: 7rem;">{{tierItem.role}}</td>
                                          <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem.tel}}" tooltipPosition="top"></i></td>
                                          <td style="width: 10%; min-width: 4rem;text-align: center;">
                                             <p-tag *ngIf="tierItem.is_complete" value="Complet" severity="success" />
                                             <p-tag *ngIf="!tierItem.is_complete" value="Incomplet" severity="danger" />
                                          </td>
-                                         <td style="width: 25%;text-align: center;">
-                                            <p-button class="mx-1" icon="pi pi-id-card" [rounded]="true" severity="info" pTooltip="Complete" tooltipPosition="top" routerLink="/credirect/customer/folder/more-info"/>
+                                         <td style="width: 20%;text-align: center;">
+                                            <p-button class="mx-1" icon="pi pi-eye" [rounded]="true" severity="Secondary" pTooltip="Complete" tooltipPosition="top" (click)="showTiere(rowIndex)"/>
+                                            <p-button class="mx-1" icon="pi pi-id-card" [rounded]="true" severity="info" pTooltip="Complete" tooltipPosition="top" [routerLink]="['/credirect/customer/folder/more-info/', tierItem?.clientID]"/>
                                          </td>
                                      </tr>
                                  </ng-template>
@@ -153,7 +157,16 @@
                 </div>
             </div>
 
-            <div class="flex space-between mt-4" style="justify-content: space-between;">
+            <div class="row">
+                <div *ngIf="folderCreatedError">
+                    <p-messages [(value)]="folderCreatedErrorMessage" [enableService]="false" [closable]="true" />
+               </div> 
+               <div *ngIf="folderCreatedSuccess">
+                    <p-messages [(value)]="folderCreatedSuccessMessage" [enableService]="false" [closable]="true" />
+                </div> 
+            </div>
+
+            <div class="flex space-between mt-4" style="justify-content: space-between;" *ngIf="folderID == null">
                 <span *ngIf="step == 0"></span>
                 <p-button *ngIf="step != 0"
                   type="button" 
@@ -198,10 +211,13 @@
             <button pButton pRipple severity="info" icon="pi pi-search"  class="p-button-info" (click)="searchIfExist()"></button>
         </div>
         <div class="row mt-3" *ngIf="tierExistByCin">
-            <span>Est-ce que {{ tierExistByCinProfile?.name }} est celui que vous recherchez ?</span>
+            <span>Est-ce que <b class="color-orange">{{ tierExistByCinProfile?.lastName + " " + tierExistByCinProfile?.firstName }}</b> est celui que vous recherchez ?</span>
             <br>
             <button pButton pRipple class="p-button-success p-button-raised mt-2" type="button" label="ajouter le" (click)="addTierToList()"></button>
         </div>
+       <div *ngIf="tierNexistPas">
+            <p-messages [(value)]="messages" [enableService]="false" [closable]="true" />
+       </div> 
         <span class="p-text-secondary block mb-2 mt-3">ou ajouter un nouveau</span>
         <div class="flex items-center gap-4">
             <button pButton pRipple label="Ajouter tier" icon="pi pi-plus" class="p-button-info" routerLink="/credirect/customer/add"></button>
@@ -218,23 +234,25 @@
     <div class="row">
         <div class="col-12">
             <div class="user-details">
-                <p><strong>Civilité:</strong> {{ user.civilite }}</p>
-                <p><strong>Nom et Prénom:</strong> {{ user.nomPrenom }}</p>
-                <p><strong>Date de Naissance:</strong> {{ user.dateNaissance }}</p>
-                <p><strong>Nationalité:</strong> {{ user.nationalite }}</p>
-                <p><strong>Identité:</strong> {{ user.identite }}</p>
-                <p><strong>Adresse:</strong> {{ user.adresse }}, {{ user.ville }}, {{ user.pays }}</p>
-                <p><strong>Pays de Résidence:</strong> {{ user.paysResidence }}</p>
-                <p><strong>Situation Familiale:</strong> {{ user.situationFamiliale }}</p>
-                <p><strong>Téléphone:</strong> Mobile: {{ user.telephoneMobile }}, Fixe: {{ user.telephoneFixe }}, Professionnel: {{ user.telephoneProfessionnel }}</p>
-                <p><strong>Adresse e-mail:</strong> {{ user.email }}</p>
-                <p><strong>Statut:</strong> {{ user.statut }}</p>
-                <p><strong>Statut d'Occupation:</strong> {{ user.statutOccupation }}</p>
-                <p><strong>Provenance du Client:</strong> {{ user.provenanceClient }}</p>
-                <p><strong>Détail de Provenance (ORIGIN):</strong> {{ user.origin }}</p>
-                <p><strong>Montant Sollicité:</strong> {{ user.montantSollicite }}</p>
+                <p><strong>Civilité:</strong> {{ tierDialogBySearch?.civilite }}</p>
+                <p><strong>Nom et Prénom:</strong> {{ tierDialogBySearch?.lastName + " " + tierDialogBySearch?.firstName }}</p>
+                <p><strong>Date de Naissance:</strong> {{ tierDialogBySearch?.dateNaissance }}</p>
+                <p><strong>Nationalité:</strong> {{ tierDialogBySearch?.nationalite }}</p>
+                <p><strong>Identité:</strong> {{ tierDialogBySearch?.identite }}</p>
+                <p><strong>Adresse:</strong> {{ tierDialogBySearch?.adresse }}, {{ tierDialogBySearch?.ville }}, {{ tierDialogBySearch?.pays }}</p>
+                <p><strong>Pays de Résidence:</strong> {{ tierDialogBySearch?.paysResidence }}</p>
+                <p><strong>Situation Familiale:</strong> {{ tierDialogBySearch?.situationFamiliale }}</p>
+                <p><strong>Téléphone:</strong> Mobile: {{ tierDialogBySearch?.telephoneMobile }}, Fixe: {{ tierDialogBySearch?.telephoneFixe }}, Professionnel: {{ tierDialogBySearch?.telephoneProfessionnel }}</p>
+                <p><strong>Adresse e-mail:</strong> {{ tierDialogBySearch?.email }}</p>
+                <p><strong>Statut:</strong> {{ tierDialogBySearch?.statut }}</p>
+                <p><strong>Statut d'Occupation:</strong> {{ tierDialogBySearch?.statutOccupation }}</p>
+                <p><strong>Provenance du Client:</strong> {{ tierDialogBySearch?.provenanceClient }}</p>
+                <p><strong>Détail de Provenance (ORIGIN):</strong> {{ tierDialogBySearch?.origin }}</p>
+                <p><strong>Montant Sollicité:</strong> {{ tierDialogBySearch?.montantSollicite }}</p>
             </div>
         </div>
     </div>
 </p-dialog>
+
+
 

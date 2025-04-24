@@ -1,0 +1,21 @@
+<div class="card h-100">
+    <!-- Bank selector -->
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="bank" class="font-bold">Banque :</label>
+        <p-dropdown id="bank"
+                    [options]="bankOptions"
+                    [(ngModel)]="selectedBank"
+                    (onChange)="buildChart()"
+                    optionLabel="label"
+                    placeholder="Choisir une banque"></p-dropdown>
+    </div>
+
+    <!-- KPI combo chart -->
+    <p-card *ngIf="chartData" header="Suivi mensuel – {{selectedBank?.label}}">
+    <p-chart type="bar"
+                [data]="chartData"
+                [options]="chartOpts"
+                style="height:420px"></p-chart>
+    </p-card>
+</div>  
+  

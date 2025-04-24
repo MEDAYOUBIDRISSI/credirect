@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api/selectitem';
-import { CustomerService } from 'src/app/demo/service/customer.service';
 import { Table } from 'primeng/table';
 import { Customer, Representative } from 'src/app/demo/api/customer';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CustomerService } from 'src/app/service/customer.service';
 @Component({
   selector: 'app-customer-folder-more-info',
   templateUrl: './customer-folder-more-info.component.html',
@@ -14,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class CustomerFolderMoreInfoComponent implements OnInit{
 
   items: any[]=[];
+  tierID = null;
   activeIndex= 0;
   situations_familiales: SelectItem[] = [];
   provenances_clients: SelectItem[] = [];
@@ -76,27 +78,28 @@ export class CustomerFolderMoreInfoComponent implements OnInit{
   ];
 
   user = {
-    civilite: 'Monsieur',
-    nomPrenom: 'El Amrani Ahmed',
-    dateNaissance: '10/12/1990',
-    nationalite: 'Marocaine',
-    identite: 'CIN',
-    adresse: '45 Rue Mohammed V',
-    ville: 'Casablanca',
-    pays: 'Maroc',
-    paysResidence: 'Maroc',
-    situationFamiliale: 'Marié',
-    telephoneMobile: '06 12 34 56 78',
-    telephoneFixe: '05 22 33 44 55',
-    telephoneProfessionnel: '05 22 99 88 77',
-    email: 'ahmed.elamrani@example.com',
-    statut: 'Résident',
-    statutOccupation: 'Locataire',
-    provenanceClient: 'Agence immobilière',
-    origin: 'Agence XYZ - Casablanca',
-    montantSollicite: '500,000 MAD'
+    // civilite: 'Monsieur',
+    // nomPrenom: 'El Amrani Ahmed',
+    // dateNaissance: '10/12/1990',
+    // nationalite: 'Marocaine',
+    // identite: 'CIN',
+    // cin: 'EE570567',
+    // adresse: '45 Rue Mohammed V',
+    // ville: 'Casablanca',
+    // pays: 'Maroc',
+    // paysResidence: 'Maroc',
+    // situationFamiliale: 'Marié',
+    // telephoneMobile: '06 12 34 56 78',
+    // telephoneFixe: '05 22 33 44 55',
+    // telephoneProfessionnel: '05 22 99 88 77',
+    // email: 'ahmed.elamrani@example.com',
+    // statut: 'Résident',
+    // statutOccupation: 'Locataire',
+    // provenanceClient: 'Agence immobilière',
+    // origin: 'Agence XYZ - Casablanca',
+    // montantSollicite: '500,000 MAD'
   };
-
+ 
   // form: FormGroup;
   professions = [
     { label: 'Salarié', value: 'Salarié' },
@@ -190,53 +193,10 @@ goToNextStep() {
     @ViewChild('filter') filter!: ElementRef;
 
   constructor(
-    private customerService: CustomerService, 
-    private productService: ProductService,
-    private fb: FormBuilder) 
+    private CustomerService: CustomerService,
+    private route: ActivatedRoute) 
   {
-    // this.form = this.fb.group({
-    //   profession: ['', Validators.required],
-    //   // Salarié
-    //   fonction: [''],
-    //   employeur: [''],
-    //   dateEmbauche: [''],
-    //   salaire: [''],
-    //   // Commerçant
-    //   rcNumber: [''],
-    //   creationDate: [''],
-    //   natureActivite: [''],
-    //   adresseActivite: [''],
-    //   revenu: [''],
-    //   // Profession Libérale
-    //   natureActiviteLib: [''],
-    //   dateDebutExercice: [''],
-    //   ifNumber: [''],
-    //   adresseActiviteLib: [''],
-    //   honoraires: [''],
-    //   // Gérant de Société
-    //   denomination: [''],
-    //   rcNumberGerant: [''],
-    //   creationDateGerant: [''],
-    //   capitalSocial: [''],
-    //   activiteEntreprise: [''],
-    //   adresseActiviteGerant: [''],
-    //   resultatAnneeN: [''],
-    //   chiffreAffaireAnneeN: [''],
-    //   resultatAnneeN1: [''],
-    //   chiffreAffaireAnneeN1: [''],
-    //   partsParticipation: [''],
-    //   revenuGerant: [''],
-    //   // Retraité ou Pensionnaire
-    //   pensionType: [''],
-    //   organismePension: [''],
-    //   typePension: [''],
-    //   montantPension: [''],
-    //   // Rentier
-    //   natureBail: [''],
-    //   typeBien: [''],
-    //   agrement: [''],
-    //   rente: [''],
-    // });
+    this.tierID = this.route.snapshot.paramMap.get('client_id')
   }
   onProfessionChange(event) {
     console.log(event.value);
@@ -244,8 +204,8 @@ goToNextStep() {
   }
 
   ngOnInit() {
-
-    this.selectCard(1)
+    this.getTierByID();
+    this.selectCard(1);
     this.situations_familiales = [
       { label: 'Célibataire', value: 1 },
       { label: 'Marié(e)', value: 2 },
@@ -295,13 +255,13 @@ this.business_activities = [
       { label: 'CNSS', value: 4 },
     ];
 
-    this.customerService.getCustomersLarge().then(customers => {
-      this.customers1 = customers;
-      this.loading = false;
+  //   this.customerService.getCustomersLarge().then(customers => {
+  //     this.customers1 = customers;
+  //     this.loading = false;
 
-      // @ts-ignore
-      this.customers1.forEach(customer => customer.date = new Date(customer.date));
-  });
+  //     // @ts-ignore
+  //     this.customers1.forEach(customer => customer.date = new Date(customer.date));
+  // });
 
   this.representatives = [
     { name: 'Amy Elsner', image: 'amyelsner.png' },
@@ -404,6 +364,18 @@ this.business_activities = [
   clear(table: Table) {
       table.clear();
       this.filter.nativeElement.value = '';
+  }
+
+  getTierByID(){
+    let body = {
+      tierID: this.tierID
+    }
+    this.CustomerService.getTierByID(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.user = res.data[0];
+        console.log("user", this.user);
+      }
+    })
   }
  
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { CustomerService } from 'src/app/service/customer.service';
 
 interface Role {
   name: string,
@@ -28,6 +31,7 @@ export class CustomerFolderComponent implements OnInit{
   isSelected2 = false;
   step = 0;
   selectedRole!: Role;
+  folderID = null;
   user = {
     civilite: 'Monsieur',
     nomPrenom: 'El Amrani Ahmed',
@@ -49,45 +53,40 @@ export class CustomerFolderComponent implements OnInit{
     origin: 'Agence XYZ - Casablanca',
     montantSollicite: '500,000 MAD'
   };
-  constructor() { }
+  messages = [{ severity: 'error', detail: "Ce tiers n'existe pas dans le système" }];
+  folderCreatedErrorMessage = [{ severity: 'error', detail: "Champs required" }];
+  folderCreatedSuccessMessage = [{ severity: 'success', detail: "Mise à jour effectuée avec succès" }];
+  constructor(private CustomerService: CustomerService,
+              private route: ActivatedRoute) {
+    this.folderID = this.route.snapshot.paramMap.get('dossier_id')
+   }
 
   ngOnInit() {
-    this.tiers = [
-      { name: 'Idrissi Mohamed Ayoub', tel: '06988480', is_complete: true, tier_interv: 40, cin: "EE456745", role: "Emprunteur" },
-      { name: 'Oum kel', tel: '06988481', is_complete: false, tier_interv: 40, cin: "EE456767", role: "Caution personnelle et solidaire" },
-      { name: 'Othman Credirect', tel: '06988482', is_complete: false, tier_interv: 20, cin: "EE456700", role: "Co-emprunteur" },
-    ];
     
-    this.newTiers = [
-      { name: 'Ahmed Ben Ali', tel: '06988484', is_complete: false, tier_interv: 0, cin: "EE456702", role: "Caution hypothécaire" },
-      { name: 'Meryem Ouazzani', tel: '06988485', is_complete: false, tier_interv: 0, cin: "EE456703", role: "Emprunteur" },
-      { name: 'Hamid Oulhaj', tel: '06988486', is_complete: false, tier_interv: 0, cin: "EE456704", role: "Co-emprunteur" },
-      { name: 'Khalid Toumi', tel: '06988487', is_complete: false, tier_interv: 0, cin: "EE456705", role: "Caution personnelle et solidaire" },
-      { name: 'Sanaa Bekkali', tel: '06988488', is_complete: false, tier_interv: 0, cin: "EE456706", role: "Caution hypothécaire" },
-      { name: 'Yassine Bouchaib', tel: '06988489', is_complete: false, tier_interv: 0, cin: "EE456707", role: "Emprunteur" },
-      { name: 'Rachid Lahlou', tel: '06988490', is_complete: false, tier_interv: 0, cin: "EE456708", role: "Co-emprunteur" },
-      { name: 'Imane Tazi', tel: '06988491', is_complete: false, tier_interv: 0, cin: "EE456709", role: "Caution personnelle et solidaire" },
-      { name: 'Mohamed Hatim', tel: '06988492', is_complete: false, tier_interv: 0, cin: "EE456710", role: "Caution hypothécaire" },
-      { name: 'Siham Belhaj', tel: '06988493', is_complete: false, tier_interv: 0, cin: "EE456711", role: "Emprunteur" },
-      { name: 'Nabil Essamadi', tel: '06988494', is_complete: false, tier_interv: 0, cin: "EE456712", role: "Co-emprunteur" },
-      { name: 'Layla Mourad', tel: '06988495', is_complete: false, tier_interv: 0, cin: "EE456713", role: "Caution personnelle et solidaire" },
-      { name: 'Karim Chafik', tel: '06988496', is_complete: false, tier_interv: 0, cin: "EE456714", role: "Caution hypothécaire" },
-      { name: 'Hind Karouia', tel: '06988497', is_complete: false, tier_interv: 0, cin: "EE456715", role: "Emprunteur" },
-    ];
-
-    this.creditTypes = [
-        { name: 'Crédit immobilier (le pourcentage est requis)', code: 'CIM' },
-        { name: 'Crédit consommation', code: 'CC' },
-        { name: 'Crédit hypothécaire (le pourcentage est requis)', code: 'CH' },
-        { name: 'Crédit-Bail Immobilier (le pourcentage est requis)', code: 'CBI' },
-        { name: 'Crédit-Bail Mobilier (le pourcentage est requis)', code: 'CBM' },
-        { name: 'Crédit à la promotion immobilière', code: 'CPI' },
-        { name: 'Crédit d’investissement', code: 'CI' }
-    ];
+    // this.newTiers = [
+    //   { name: 'Ahmed Ben Ali', tel: '06988484', is_complete: false, tier_interv: 0, cin: "EE456702", role: "Caution hypothécaire" },
+    //   { name: 'Meryem Ouazzani', tel: '06988485', is_complete: false, tier_interv: 0, cin: "EE456703", role: "Emprunteur" },
+    //   { name: 'Hamid Oulhaj', tel: '06988486', is_complete: false, tier_interv: 0, cin: "EE456704", role: "Co-emprunteur" },
+    //   { name: 'Khalid Toumi', tel: '06988487', is_complete: false, tier_interv: 0, cin: "EE456705", role: "Caution personnelle et solidaire" },
+    //   { name: 'Sanaa Bekkali', tel: '06988488', is_complete: false, tier_interv: 0, cin: "EE456706", role: "Caution hypothécaire" },
+    //   { name: 'Yassine Bouchaib', tel: '06988489', is_complete: false, tier_interv: 0, cin: "EE456707", role: "Emprunteur" },
+    //   { name: 'Rachid Lahlou', tel: '06988490', is_complete: false, tier_interv: 0, cin: "EE456708", role: "Co-emprunteur" },
+    //   { name: 'Imane Tazi', tel: '06988491', is_complete: false, tier_interv: 0, cin: "EE456709", role: "Caution personnelle et solidaire" },
+    //   { name: 'Mohamed Hatim', tel: '06988492', is_complete: false, tier_interv: 0, cin: "EE456710", role: "Caution hypothécaire" },
+    //   { name: 'Siham Belhaj', tel: '06988493', is_complete: false, tier_interv: 0, cin: "EE456711", role: "Emprunteur" },
+    //   { name: 'Nabil Essamadi', tel: '06988494', is_complete: false, tier_interv: 0, cin: "EE456712", role: "Co-emprunteur" },
+    //   { name: 'Layla Mourad', tel: '06988495', is_complete: false, tier_interv: 0, cin: "EE456713", role: "Caution personnelle et solidaire" },
+    //   { name: 'Karim Chafik', tel: '06988496', is_complete: false, tier_interv: 0, cin: "EE456714", role: "Caution hypothécaire" },
+    //   { name: 'Hind Karouia', tel: '06988497', is_complete: false, tier_interv: 0, cin: "EE456715", role: "Emprunteur" },
+    // ];
+    this.getAllCreditType()
+    if(this.folderID != null){
+      this.getTiresByFolderID()
+      this.step = 2;
+    }
   }
 
   onCreditTypeChange(event: any): void {
-    console.log('Selected city:', event.value); // Logs the selected city object
     console.log('selectedCreditType city:', this.selectedCreditType); // Logs the selected city object
   }
 
@@ -95,20 +94,35 @@ export class CustomerFolderComponent implements OnInit{
     this.visibleAddTiers = false;
   }
   showDialog(){
+    this.tierExistByCin = false;
+    this.tierNexistPas = false;
     this.visibleAddTiers = true;
   }
 
   tierExistByCin = false;
-  tierExistByCinProfile = null;
+  tierExistByCinProfile:any = null;
+  tierNexistPas = false;
   searchIfExist(){
-    const result = this.newTiers.find(tier => tier.cin == this.cinSearch);
-    if(result){
-      this.tierExistByCin = true
-      this.tierExistByCinProfile = result;
-    }else{
-      this.tierExistByCin = false;
-      this.tierExistByCinProfile = null;
+    let body = {
+      clientID: 0,
+      CIN: this.cinSearch
     }
+    this.tierExistByCinProfile = null;
+    this.tierExistByCin = false;
+    this.tierNexistPas = false;
+    this.CustomerService.getTiereByCIN(body).then((res: any) => {
+      if (res?.status_code == 200) {
+        this.tierExistByCin = true
+        this.tierExistByCinProfile = res?.data;
+        
+      }
+      else{
+        this.tierExistByCin = false;
+        this.tierNexistPas = true;
+        this.tierExistByCinProfile = null;
+        
+      }
+    })
   }
 
   showTiere(idTier){
@@ -116,9 +130,11 @@ export class CustomerFolderComponent implements OnInit{
     this.visibleShowTiers = true;
   }
 
-  addTierToList(){
-    this.tiers.push(this.tierExistByCinProfile) 
-    console.log(this.tierExistByCinProfile)
+  addTierToList() {
+    const exists = this.tiers.some(tier => tier?.cin == this.tierExistByCinProfile?.cin);
+    if (!exists) {
+      this.tiers.push(this.tierExistByCinProfile);
+    }
     this.visibleAddTiers = false;
   }
 
@@ -173,8 +189,66 @@ export class CustomerFolderComponent implements OnInit{
 
   goToNextStep() {
     if (this.step < 4) {
-        this.step++;
+        if(this.step == 1){
+          this.cretaeFolder();
+        }
+        else{
+          this.step++;
+        }
         // this.activeIndex = this.step - 2;
     }
-}
+  }
+
+  folderCreatedError = false;
+  folderCreatedSuccess = false;
+  cretaeFolder(){
+    let body = {
+      folderID:null,
+      tiers: this.tiers,
+      creditType: this.selectedCreditType?.code,
+    }
+    if(this.selectedCreditType && this.tiers?.length > 0){
+      console.log("body", body);
+      this.step++;
+      this.CustomerService.addOrUpdateFolder(body).then((res: any) => {
+        console.log("res", res);
+        if (res.status_code === 200) {
+          this.folderCreatedSuccess = true;
+          setTimeout(() => {
+            this.folderCreatedSuccess = false;
+          }, 4000);
+        }
+      })
+    }
+    else{
+      this.folderCreatedError = true;
+      setTimeout(() => {
+        this.folderCreatedError = false;
+      }, 4000);
+    }
+  }
+
+  getTiresByFolderID(){
+    let body = {
+      folderID: this.folderID
+    }
+    this.CustomerService.getTiersByFolderID(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.tiers = res.data;
+        this.selectedCreditType = { code: this.tiers[0]?.creditTypeID, name: this.tiers[0]?.creditTypeLabel};
+      }
+    })
+  }
+
+  getAllCreditType(){
+    let body = {
+    }
+    this.CustomerService.getAllCreditType(body).then((res: any) => {
+      console.log("res", res);
+      if (res.status_code === 200) {
+        this.creditTypes = res.data;
+        console.log("creditTypes", this.creditTypes);
+      }
+    })
+  }
 }

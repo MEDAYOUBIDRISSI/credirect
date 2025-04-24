@@ -8,9 +8,10 @@
                   <div class="user-details">
                   <p><strong>Civilité:</strong> {{ user.civilite }}</p>
                   <p><strong>Nom et Prénom:</strong> {{ user.nomPrenom }}</p>
-                  <p><strong>Date de Naissance:</strong> {{ user.dateNaissance }}</p>
+                  <p><strong>Date de Naissance:</strong> {{ user.dateNaissance | date:'yyyy/MM/dd' }}</p>
                   <p><strong>Nationalité:</strong> {{ user.nationalite }}</p>
                   <p><strong>Identité:</strong> {{ user.identite }}</p>
+                  <p><strong>CIN:</strong> {{ user.cin }}</p>
                   <p><strong>Adresse:</strong> {{ user.adresse }}, {{ user.ville }}, {{ user.pays }}</p>
                   <p><strong>Pays de Résidence:</strong> {{ user.paysResidence }}</p>
                   <p><strong>Situation Familiale:</strong> {{ user.situationFamiliale }}</p>
@@ -326,6 +327,13 @@
         </div>
     </div>
 
+    <div class="flex space-between" style="justify-content: space-between;">
+      <span></span>
+      <button
+          pButton pRipple class="p-button-success" 
+          label="Sauvegarder">
+        </button>
+    </div>
     <div class="flex space-between mt-4" style="justify-content: space-between;">
         <button
           pButton pRipple class="p-button-primary" 

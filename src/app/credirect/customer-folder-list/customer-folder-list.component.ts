@@ -22,6 +22,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Youssef Benali',
       banque: 'Banque Populaire',
       progression: 50,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
     },
     {
       id: 'DOS-002',
@@ -33,6 +34,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Karim El Filali',
       banque: 'Attijariwafa Bank',
       progression: 100,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
     },
     {
       id: 'DOS-003',
@@ -44,6 +46,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Leila Bouzidi',
       banque: 'BMCE Bank',
       progression: 20,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
     },
     {
       id: 'DOS-004',
@@ -55,6 +58,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Youssef Benali',
       banque: 'Société Générale Maroc',
       progression: 100,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
     },
     {
       id: 'DOS-005',
@@ -66,6 +70,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Karim El Filali',
       banque: 'Crédit du Maroc',
       progression: 60,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
     },
     {
       id: 'DOS-006',
@@ -77,6 +82,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Leila Bouzidi',
       banque: 'CIH Bank',
       progression: 100,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
     },
     {
       id: 'DOS-007',
@@ -88,6 +94,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Youssef Benali',
       banque: 'Banque Populaire',
       progression: 30,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
     },
     {
       id: 'DOS-008',
@@ -99,6 +106,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Karim El Filali',
       banque: 'Attijariwafa Bank',
       progression: 70,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
     },
     {
       id: 'DOS-009',
@@ -110,6 +118,7 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Leila Bouzidi',
       banque: 'BMCE Bank',
       progression: 100,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
     },
     {
       id: 'DOS-010',
@@ -121,9 +130,35 @@ export class CustomerFolderListComponent implements OnInit{
       conseiller: 'Youssef Benali',
       banque: 'Société Générale Maroc',
       progression: 100,
+      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
     },
   ];
 
+  getPanelMenuItems(dossierId, depotId){
+    return [
+      {
+        label: '',
+        icon: 'pi pi-bars',
+        items: [
+          {
+            label: 'Edite',
+            icon: 'pi pi-eye',
+            routerLink: ['/credirect/customer/folder/edit', dossierId, depotId]
+          },
+          {
+            label: 'Plans de financement',
+            icon: 'pi pi-pencil',
+            routerLink: ['/credirect/customer/folder/financing-plans', dossierId, depotId]
+          },
+          {
+            label: 'Chronologie des dossiers',
+            icon: 'pi pi-clock',
+            routerLink: ['/credirect/customer/folder/folder-timeline', dossierId, depotId]
+          }
+        ]
+      }
+    ];
+  }
   // Liste filtrée des dossiers
   filteredDossiers = this.dossiers;
 

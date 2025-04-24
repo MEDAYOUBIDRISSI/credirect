@@ -63,7 +63,7 @@
                             Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
                         <th pSortableColumn="dateCreation">
-                            Date Création <p-sortIcon field="dateCreation"></p-sortIcon>
+                            Date de mise à jour <p-sortIcon field="dateCreation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="conseiller">
                             Conseiller <p-sortIcon field="conseiller"></p-sortIcon>
@@ -71,7 +71,7 @@
                         <th pSortableColumn="banque">
                             Banque de Dépôt <p-sortIcon field="banque"></p-sortIcon>
                         </th>
-                        <th>Progression</th>
+                        <!-- <th>Progression</th> -->
                         <th>Actions</th>
                         </tr>
                     </ng-template>
@@ -82,7 +82,7 @@
                         <td>{{ dossier.id }}</td>
                         <td>{{ dossier.client }}</td>
                         <td>{{ dossier.type }}</td>
-                        <td>{{ dossier.montant | currency: 'MAD':'symbol':'1.2-2' }}</td>
+                        <td>{{ dossier.montant }}</td>
                         <td>
                             <p-tag
                             [severity]="getStatusSeverity(dossier.statut)"
@@ -92,14 +92,14 @@
                         <td>{{ dossier.dateCreation | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ dossier.conseiller }}</td>
                         <td>{{ dossier.banque || '-' }}</td>
-                        <td>
+                        <!-- <td>
                             <p-progressBar
                             [value]="dossier.progression"
                             [showValue]="false"
                             ></p-progressBar>
-                        </td>
-                        <td>
-                            <button
+                        </td> -->
+                        <td class="custom-folder-menu">
+                            <!-- <button
                                 pButton
                                 type="button"
                                 icon="pi pi-eye"
@@ -113,6 +113,15 @@
                                 class="p-button-rounded p-button-success"
                                 [routerLink]="'/credirect/customer/folder/financing-plans'"
                             ></button>
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-clock"
+                                class="p-button-rounded p-button-secondary"
+                                [routerLink]="'/credirect/customer/folder/folder-timeline'"
+                            ></button> -->
+                            <!-- ///////////////////////////////////// -->
+                            <p-panelMenu [model]="dossier.panelMenuItems"></p-panelMenu>
                         </td>
                         </tr>
                     </ng-template>

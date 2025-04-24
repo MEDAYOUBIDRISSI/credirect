@@ -1,0 +1,44 @@
+<!-- PrimeFlex grid layout -->
+<div class="grid">
+    <!-- ────────── 1 & 2 – Combo funnels (two products) ────────── -->
+    <div class="col-12 md:col-6">
+      <p-card header="Crédit consommation – Funnel">
+        <p-chart type="bar" [data]="consoFunnel" [options]="funnelOpts"></p-chart>
+      </p-card>
+    </div>
+  
+    <div class="col-12 md:col-6">
+      <p-card header="Crédit hypothécaire – Funnel">
+        <p-chart type="bar" [data]="hypoFunnel" [options]="funnelOpts"></p-chart>
+      </p-card>
+    </div>
+  
+    <!-- ────────── 3 – Stacked mix by month ────────── -->
+    <div class="col-12">
+      <p-card header="Mix par produit (dépôts mensuels)">
+        <p-chart type="bar" [data]="mixByMonth" [options]="mixOpts"></p-chart>
+      </p-card>
+    </div>
+  
+    <!-- ────────── 4 – Dépôt share (doughnut) ────────── -->
+    <div class="col-12 md:col-4">
+      <p-card header="Part des dépôts – année courante">
+        <p-chart type="doughnut" [data]="depotShare" [options]="doughnutOpts" style="height:300px"></p-chart>
+      </p-card>
+    </div>
+  
+    <!-- ────────── 5 – Efficiency radar ────────── -->
+    <div class="col-12 md:col-4">
+      <p-card header="Efficacité par produit">
+        <p-chart type="radar" [data]="efficiencyRadar" [options]="radarOpts" style="height:350px"></p-chart>
+      </p-card>
+    </div>
+  
+    <!-- ────────── 6 – Global totals trend ────────── -->
+    <div class="col-12 md:col-4">
+      <p-card header="Évolution globale">
+        <p-chart type="line" [data]="totalsTrend" [options]="lineOpts"></p-chart>
+      </p-card>
+    </div>
+  </div>
+  

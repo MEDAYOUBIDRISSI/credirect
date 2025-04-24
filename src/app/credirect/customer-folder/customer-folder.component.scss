@@ -39,6 +39,10 @@
   .user-details p strong {
     color: #34495e;
   }
+
+  .color-orange{
+    color: var(--primary-color);
+  }
   
   /* Responsive Design */
   @media (max-width: 600px) {

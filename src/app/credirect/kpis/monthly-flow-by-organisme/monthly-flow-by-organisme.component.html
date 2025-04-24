@@ -1,0 +1,18 @@
+<div class="card h-100">
+    <div class="flex align-items-center gap-3 mb-3">
+      <label for="organisme" class="font-bold">Organisme :</label>
+      <p-dropdown id="organisme"
+                  [options]="organismeOptions"
+                  [(ngModel)]="selectedOrganisme"
+                  (onChange)="buildChart()"
+                  optionLabel="label"
+                  placeholder="Choisir un organisme"></p-dropdown>
+    </div>
+  
+    <p-card *ngIf="chartData" header="Suivi mensuel – {{selectedOrganisme?.label}}">
+      <p-chart type="bar"
+               [data]="chartData"
+               [options]="chartOpts"
+               style="height:420px"></p-chart>
+    </p-card>
+</div>

@@ -1,0 +1,41 @@
+<div class="card h-100">
+    <div class="flex align-items-center gap-3 mb-4">
+      <label class="font-bold">Type de crédit :</label>
+      <p-dropdown [options]="creditTypeOptions"
+                  [(ngModel)]="selectedCreditType"
+                  (onChange)="buildCharts()"
+                  optionLabel="label"
+                  placeholder="Choisir un type de crédit"></p-dropdown>
+    </div>
+  
+    <div class="grid">
+        <div class="col-12 md:col-6">
+            <!-- Chart 1 -->
+            <p-card *ngIf="amountChartData" header="Montants par catégorie">
+                <p-chart type="bar"
+                        [data]="amountChartData"
+                        [options]="barChartOpts"
+                        style="height:380px"></p-chart>
+            </p-card>
+        </div>
+        <div class="col-12 md:col-6">
+            <!-- Chart 2 -->
+            <p-card *ngIf="dossiersChartData" header="Nombre de dossiers par catégorie">
+                <p-chart type="bar"
+                        [data]="dossiersChartData"
+                        [options]="barChartOpts"
+                        style="height:380px"></p-chart>
+            </p-card>
+        </div>
+        <div class="col-12 md:col-6">
+            <!-- Chart 3 -->
+            <p-card *ngIf="percentageChartData" header="Répartition par taux (%)">
+                <p-chart type="doughnut"
+                        [data]="percentageChartData"
+                        [options]="doughnutOpts"
+                        style="height:360px"></p-chart>
+            </p-card>
+        </div>
+    </div>
+</div>
+  

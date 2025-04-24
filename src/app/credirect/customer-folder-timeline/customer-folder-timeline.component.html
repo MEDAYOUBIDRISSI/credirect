@@ -1,0 +1,67 @@
+<div class="card h-100">
+    <div class="row">
+        <div class="col-12">
+            <h3>État d'avancement du dossier</h3>
+            <p>
+                Cette section présente les différentes étapes du traitement du dossier, permettant de suivre sa progression en temps réel.
+            </p>
+        </div>
+        <div class="col-12">
+            <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+                <ng-template pTemplate="marker" let-event>
+                    <span 
+                        class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1" 
+                        [style]="{ 'background-color': event.color }">
+                            <i [class]="event.icon"></i>
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="content" let-event>
+                    <p-card [header]="event.status" [subheader]="event.date">
+                        <p>
+                            <p-tag severity="success" value="Accord" *ngIf="event.is_accord == 4"/>
+                            <p-tag severity="info" value="Accordé sous condition" *ngIf="event.is_accord == 5"/>
+                            <p-tag severity="warning" value="En attente" *ngIf="event.is_accord == 2"/>
+                            <p-tag severity="danger" value="Refus" *ngIf="event.is_accord == 3"/>
+                        </p>
+                        <p>
+                            {{ event.return }}
+                        </p>
+                        <p-button label="voir plus" [text]="true" />
+                    </p-card>
+                </ng-template>
+            </p-timeline>
+        </div>
+        <div class="col-12">
+            <div class="center-btn">
+                <p-button 
+                    label="Modifier le statut" (click)="changeStatus = true"
+                    icon="pi pi-plus" pTooltip="Modifier le statut" tooltipPosition="top"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <p-dialog 
+        header="Modification statut" 
+        [modal]="true"
+        [(visible)]="changeStatus" 
+        [style]="{ width: '25rem' }">
+            <div class="flex align-items-center gap-3 mb-3">
+                <label for="username" class="font-semibold w-6rem">
+                    Username
+                </label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" />
+            </div>
+            <div class="flex align-items-center gap-3 mb-5">
+                <label for="email" class="font-semibold w-6rem">
+                    Email
+                </label>
+                <input pInputText id="email" class="flex-auto" autocomplete="off" />
+            </div>
+            <div class="flex justify-content-end gap-2">
+                <p-button label="Cancel" severity="secondary" (click)="changeStatus = false" />
+                <p-button label="Save" (click)="changeStatus = false" />
+            </div>
+    </p-dialog>
+
+</div>

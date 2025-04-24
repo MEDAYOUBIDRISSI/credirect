@@ -1,0 +1,22 @@
+
+<div class="grid">
+<!-- ───── Bubble: Montant vs Commission ───── -->
+<div class="col-12 md:col-6">
+    <p-card header="Performance par banque — Montant vs Commission">
+    <p-chart type="bubble"
+                [data]="bubbleData"
+                [options]="bubbleOpts"
+                style="height:400px"></p-chart>
+    </p-card>
+</div>
+
+<!-- ───── Horizontal bars: Nombre de dossiers ───── -->
+<div class="col-12 md:col-6">
+    <p-card header="Nombre de dossiers par banque">
+    <p-chart type="bar"
+                [data]="barData"
+                [options]="barOpts"
+                style="height:400px"></p-chart>
+    </p-card>
+</div>
+</div>

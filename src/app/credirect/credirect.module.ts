@@ -45,6 +45,21 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { EditorModule } from 'primeng/editor';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DossierTrackingComponent } from './dossier-tracking/dossier-tracking.component';
+import { CustomerFolderTimelineComponent } from './customer-folder-timeline/customer-folder-timeline.component';
+import { TimelineModule } from 'primeng/timeline';
+import { CreditImmobilierComponent } from './applications/credit-immobilier/credit-immobilier.component';
+import { MenuModule } from 'primeng/menu';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { MonthlyFlowByProductComponent } from './kpis/monthly-flow-by-product/monthly-flow-by-product.component';
+import { KpiPage1Component } from './kpis/kpi-page-1/kpi-page-1.component';
+import { ChartModule } from 'primeng/chart';
+import { ComByBqOrgComponent } from './kpis/com-by-bq-org/com-by-bq-org.component';
+import { MonthlyFlowByBankComponent } from './kpis/monthly-flow-by-bank/monthly-flow-by-bank.component';
+import { MessagesModule } from 'primeng/messages';
+import { MonthlyFlowByOrganismeComponent } from './kpis/monthly-flow-by-organisme/monthly-flow-by-organisme.component';
+import { CategorieClientComponent } from './kpis/categorie-client/categorie-client.component';
+import { FundingCityComponent } from './kpis/funding-city/funding-city.component';
+import { CategorieClientV2Component } from './kpis/categorie-client-v2/categorie-client-v2.component';
 
 const routes: Routes = [
   {
@@ -65,7 +80,11 @@ const routes: Routes = [
     component: CustomerFolderComponent,
   },
   {
-    path: 'customer/folder/more-info',
+    path: 'customer/folder/edit/:dossier_id',
+    component: CustomerFolderComponent,
+  },
+  {
+    path: 'customer/folder/more-info/:client_id',
     component: CustomerFolderMoreInfoComponent,
   },
   {
@@ -73,8 +92,16 @@ const routes: Routes = [
     component: CustomerFolderListComponent,
   },
   {
-    path: 'customer/folder/financing-plans',
+    path: 'customer/folder/financing-plans/:dossier_id/:depot_id',
     component: CustomerFolderFinancingPlansComponent,
+  },
+  {
+    path: 'customer/folder/folder-timeline/:dossier_id/:depot_id',
+    component: CustomerFolderTimelineComponent,
+  },
+  {
+    path: 'customer/folder/credit-immobilier',
+    component: CreditImmobilierComponent,
   },
   {
     path: 'banking-informations',
@@ -117,6 +144,10 @@ const routes: Routes = [
     path: 'folder-tracking',
     component: DossierTrackingComponent,
   },
+  {
+    path: 'kpi-page-1',
+    component: KpiPage1Component,
+  }
 ]
 
 @NgModule({
@@ -136,7 +167,17 @@ const routes: Routes = [
     CustomerFolderMoreInfoComponent,
     CustomerFolderListComponent,
     CustomerFolderFinancingPlansComponent,
-    DossierTrackingComponent
+    DossierTrackingComponent,
+    CustomerFolderTimelineComponent,
+    CreditImmobilierComponent,
+    MonthlyFlowByProductComponent,
+    KpiPage1Component,
+    ComByBqOrgComponent,
+    MonthlyFlowByBankComponent,
+    MonthlyFlowByOrganismeComponent,
+    CategorieClientComponent,
+    FundingCityComponent,
+    CategorieClientV2Component
   ],
   imports: [
     CommonModule,
@@ -166,6 +207,11 @@ const routes: Routes = [
     AngularEditorModule,
     EditorModule,
     InputSwitchModule,
+    TimelineModule,
+    MenuModule,
+    PanelMenuModule,
+    ChartModule,
+    MessagesModule,
     RouterModule.forChild(routes)
   ],
   providers:[

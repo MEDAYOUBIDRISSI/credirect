@@ -1,0 +1,16 @@
+.custom-folder-menu{
+    ::ng-deep chevronrighticon {
+        display: none !important;
+    }
+    ::ng-deep chevrondownicon {
+        display: none !important;
+    }
+
+    ::ng-deep .p-panelmenu-header-content {
+        border: none !important;
+        color: #6b7280;
+        background: white;
+        border-radius: 6px;
+        transition: none;
+    }
+}

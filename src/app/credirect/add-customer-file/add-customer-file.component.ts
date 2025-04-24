@@ -23,7 +23,7 @@ interface expandedRows {
 })
 export class AddCustomerFileComponent implements OnInit {
   // Properties
-  customerId?: any;
+  customerId: string | null = null;
   LastName?: any;
   FirstName?: any;
   BirthDate?: any;
@@ -68,23 +68,24 @@ export class AddCustomerFileComponent implements OnInit {
   RoleID: any;
   ResidencePermit: any;
   OriginID: any;
-  originDetails: any;
+  OriginDetails: any;
   ClientTitleID: any;
 
   managers: any[] = [{
-    managerLastName: '',
-    managerFirstName: '',
-    managerBirthDate: '',
-    managerNationality: '',
-    id_Identity: 0,
-    cin: '',
-    carteSejour: '',
-    passeport: '',
-    managerAddress: '',
-    managerCity: '',
-    managerCountryID: 0,
-    managerResidenceCountryID: 0,
-    id_ManagerMaritalStatus: 0
+    ManagerTitleID: null,         
+    ManagerLastName: '',           
+    ManagerFirstName: '',          
+    ManagerBirthDate: '',         
+    ManagerNationality: '',       
+    Id_Identity: null,             
+    CIN: '',                       
+    CarteSejour: '',               
+    Passeport: '',                
+    Id_ManagerMaritalStatus: null, 
+    ManagerCity: '',               
+    ManagerCountryID: null,        
+    ManagerResidenceCountryID: null, 
+    ManagerAddress: ''            
   }];
 
   items: any[] = [];
@@ -121,6 +122,11 @@ export class AddCustomerFileComponent implements OnInit {
   legalForms: any[] = [];
   businessActivities: any[] = [];
   clientOrigins: any[] = [];
+  countries: any[] = [];
+  residenceCountries: any[] = [];
+  companyCountries: any[] = [];
+  residencyStatuses: any[] = [];
+  identities: any;
 
   selectedTitle: any;
   selectedRole: any;
@@ -128,15 +134,18 @@ export class AddCustomerFileComponent implements OnInit {
   selectedLegalForm: any;
   selectedBusinessActivity: any;
   selectedClientOrigin: any; 
-
+  selectedCountry: any; 
+  selectedResidenceCountry: any; 
+  selectedCompanyCountry: any; 
+  selectedResidencyStatus: any;
   selectedIdentity: any = null;
   selectedIdentity2: any = null;
 
-  identities: any[] = [
-    { name: 'CIN', key: 'A' },
-    { name: 'Carte Séjour', key: 'B' },
-    { name: 'Passeport', key: 'C' },
-  ];
+  // identities: any[] = [
+  //   { name: 'CIN', key: 'A' },
+  //   { name: 'Carte Séjour', key: 'B' },
+  //   { name: 'Passeport', key: 'C' },
+  // ];
 
   identities2: any[] = [
     { name: 'CIN', key: 'A' },
@@ -175,23 +184,23 @@ export class AddCustomerFileComponent implements OnInit {
 
     this.loadLookups();
 
-    this.route.params.subscribe((params) => {
-      const stepFromUrl = +params['step'];
-      const customerIdFromUrl = params['customerId'];
-      
-      if (!isNaN(stepFromUrl)) {  
-        this.step = stepFromUrl;
-        this.activeIndex = this.step > 1 ? this.step - 2 : 0;
-      }
-      
-      if (customerIdFromUrl) {
-        this.customerId = customerIdFromUrl;
-      }
-      
-      this.cdr.detectChanges();
-    });
+  this.route.params.subscribe((params) => {
+    const stepFromUrl = +params['step'];
+    const customerIdFromUrl = params['customerId'];
+    
+    if (!isNaN(stepFromUrl)) {  
+      this.step = stepFromUrl;
+      this.activeIndex = this.step > 1 ? this.step - 2 : 0;
+    }
+    
+    // Always maintain customerId from URL, even if it's "0"
+    this.customerId = customerIdFromUrl || this.customerId;
+    
+    this.cdr.detectChanges();
+  });
 
-    this.initializeDropdowns();
+
+    // this.initializeDropdowns();
 
     this.customerService.getCustomersLarge().then(customers => {
       this.customers1 = customers;
@@ -210,12 +219,16 @@ export class AddCustomerFileComponent implements OnInit {
     this.isSelected2 = cardNumber === 2;
     
     if (cardNumber === 1) {
+      this.isSelected1 = true;
+      this.isSelected2 = false;
       this.items = [
         { label: 'Informations générales' },
         { label: 'Informations détaillées' },
         { label: "Zone d'implantation" }
       ];
     } else if (cardNumber === 2) {
+      this.isSelected2 = true;
+      this.isSelected1 = false;
       this.items = [
         { label: 'Informations générales' },
         { label: 'Informations détaillées' },
@@ -241,25 +254,32 @@ export class AddCustomerFileComponent implements OnInit {
   }
 
   private updateUrl(): void {
-    this.router.navigate(['/credirect/customer/add/' + this.step + '/' + this.customerId]);
+    const urlParts = ['/credirect/customer/add', this.step.toString()];
+  if (this.customerId !== undefined && this.customerId !== null) {
+    urlParts.push(this.customerId.toString());
+  }
+  
+  this.router.navigate(urlParts).then(() => {
     this.cdr.detectChanges();
+  });
   }
 
   addManager() {
     this.managers.push({
-      managerLastName: '',
-      managerFirstName: '',
-      managerBirthDate: '',
-      managerNationality: '',
-      id_Identity: 0,
-      cin: '',
-      carteSejour: '',
-      passeport: '',
-      managerAddress: '',
-      managerCity: '',
-      managerCountryID: 0,
-      managerResidenceCountryID: 0,
-      id_ManagerMaritalStatus: 0
+      ManagerTitleID: null,         
+      ManagerLastName: '',           
+      ManagerFirstName: '',          
+      ManagerBirthDate: '',         
+      ManagerNationality: '',       
+      Id_Identity: null,             
+      CIN: '',                       
+      CarteSejour: '',               
+      Passeport: '',                
+      Id_ManagerMaritalStatus: null, 
+      ManagerCity: '',               
+      ManagerCountryID: null,        
+      ManagerResidenceCountryID: null, 
+      ManagerAddress: ''  
     });
   }
 
@@ -271,15 +291,6 @@ export class AddCustomerFileComponent implements OnInit {
     this.activeIndex = event;
     this.step = event + 2;
     this.updateUrl();
-  }
-
-  // Data Methods
-  private initializeDropdowns() {
-
-    this.selectedIdentity = this.identities[0];
-    this.selectedIdentity2 = this.identities2[0];
-    this.selectedStatut = this.statuts[0];
-    this.selectedStatut_Occupation = this.statuts_Occupation[0];
   }
 
   // Table Methods
@@ -332,63 +343,137 @@ export class AddCustomerFileComponent implements OnInit {
     this.filter.nativeElement.value = '';
   }
 
-  // Data Submission
-  submitClientData(): Promise<any> {
-    const clientData = {
-      ClientID: this.customerId ? this.customerId : null,
-      is_individual : this.isSelected1,
-      is_organisation : this.is_organisation,
+  updateOccupationStatus(): void {
+    if (this.selectedStatut_Occupation) {
+      this.IsOwner = this.selectedStatut_Occupation.key === 'A';
+      this.IsTenant = this.selectedStatut_Occupation.key === 'B';
+    } else {
+      this.IsOwner = false;
+      this.IsTenant = false;
+    }
+  }
+// Data Submission
+submitClientData(): Promise<any> {
+
+  const clientId = this.customerId && this.customerId !== '0' ? this.customerId : null;
+
+  // Filter out empty or unmodified managers
+  const nonEmptyManagers = this.managers.filter(manager => {
+    return manager.ManagerLastName.trim() !== '' || 
+           manager.ManagerFirstName.trim() !== '' ||
+           manager.CIN.trim() !== '' ||
+           manager.Passeport.trim() !== '' ||
+           manager.CarteSejour.trim() !== '' ||
+           manager.ManagerTitleID !== null ||
+           manager.Id_Identity !== null ||
+           manager.Id_ManagerMaritalStatus !== null;
+  });
+
+  // Format non-empty managers with correct structure
+  const formattedManagers = nonEmptyManagers.map(manager => ({
+    ManagerInformation: {
+      ManagerTitleID: manager.ManagerTitleID?.value || null,
+      ManagerLastName: manager?.ManagerLastName,
+      ManagerFirstName: manager?.ManagerFirstName,
+      ManagerBirthDate: manager?.ManagerBirthDate,
+      ManagerNationality: manager?.ManagerNationality,
+      Id_Identity: manager?.Id_Identity?.key === 'A' ? 1 : 
+                  manager?.Id_Identity?.key === 'B' ? 2 : 
+                  manager?.Id_Identity?.key === 'C' ? 3 : null,
+      CIN: manager?.CIN,
+      CarteSejour: manager?.CarteSejour,
+      Passeport: manager?.Passeport,
+      ManagerAddress: manager?.ManagerAddress,
+      ManagerCity: manager?.ManagerCity,
+      ManagerCountryID: manager.ManagerCountryID?.value || null,
+      ManagerResidenceCountryID: manager.ManagerResidenceCountryID?.value || null,
+      Id_ManagerMaritalStatus: manager.Id_ManagerMaritalStatus?.value || null,
+    }
+  }));
+
+  const clientData = {
+      ClientID: clientId,
+      is_individual: this.isSelected1,
+      is_organisation: this.isSelected2,
       RoleID: this.selectedRole?.value || null,
       LastName: this.LastName,
       FirstName: this.FirstName,
       BirthDate: this.BirthDate,
       ClientTitleID: this.selectedTitle?.value || null,
-      Nationality : this.Nationality,
-      Email : this.Email,
-      CIN : this.CIN,
-      ResidencePermit : this.ResidencePermit,
-      PassportNumber : this.PassportNumber,
-      City : this.City,
-      CountryID : this.CountryID,
-      ResidenceCountryID : this.ResidenceCountryID,
-      MaritalStatusID : this.selectedMaritalStatus?.value || null,
-      MobilePhone : this.MobilePhone,
-      LandlinePhone : this.LandlinePhone,
-      WorkPhone : this.WorkPhone,
+      Nationality: this.Nationality,
+      Email: this.Email,
+      CIN: this.CIN,
+      ResidencePermit: this.ResidencePermit,
+      PassportNumber: this.PassportNumber,
+      City: this.City,
+      CountryID: this.selectedCountry?.value || null,
+      ResidenceCountryID: this.selectedResidenceCountry?.value || null,
+      MaritalStatusID: this.selectedMaritalStatus?.value || null,
+      MobilePhone: this.MobilePhone,
+      LandlinePhone: this.LandlinePhone,
+      WorkPhone: this.WorkPhone,
       Address: this.Address,
-
-      IsOwner : this.IsOwner,
-      sTenant: this.IsTenant,
-      RequestedAmount : this.RequestedAmount,
-      OriginID : this.selectedClientOrigin?.value || null,
-      originDetails : this.originDetails,
-
-      LegalFormID : this.selectedLegalForm?.value || null,
+      IdentityID: this.selectedIdentity?.value || null,
+      IsOwner: this.IsOwner,
+      IsTenant: this.IsTenant,
+      RequestedAmount: this.RequestedAmount,
+      OriginID: this.selectedClientOrigin?.value || null,
+      OriginDetails: this.OriginDetails,
+      CompanyName: this.CompanyName,
+      RegistrationNumber: this.RegistrationNumber,
+      SocialCapital: this.SocialCapital,
+      CreationDate: this.CreationDate,
+      CompanyAddress: this.CompanyAddress,
+      CompanyCity: this.CompanyCity,
+      CompanyCountryID: this.selectedCompanyCountry?.value || null,
+      BusinessActivityID: this.selectedBusinessActivity?.value || null,
+      ResidencyStatusID: this.selectedResidencyStatus?.value || null,
+      LegalFormID: this.selectedLegalForm?.value || null,
+      ClientManagers: this.isSelected2 && nonEmptyManagers.length > 0 ? formattedManagers : []   
     };
-  
-    return new Promise((resolve, reject) => {
+
+    // console.log('Submitting client data:', JSON.stringify(clientData, null, 2));
+
+  return new Promise((resolve, reject) => {
       this.customerService.createOrUpdateClient(clientData).subscribe({
-        next: (response) => {
-          console.log('Client data submitted successfully', response);
-          this.customerId = response;
-          resolve(response);
-        },
-        error: (err) => {
-          console.error('Error submitting client data', err);
-          reject(err);
-        }
+          next: (response) => {
+              console.log('Client data submitted successfully', response);
+              if (!this.customerId || this.customerId === '0') {
+                  this.customerId = response.toString();
+                  // this.updateUrlWithNewId(response.toString());
+              }
+              resolve(response);
+          },
+          error: (err) => {
+              console.error('Error submitting client data', err);
+              reject(err);
+          }
       });
-    });
-  }
+  });
+}
+
+
   
-  async onNextClick() {
-    try {
-      await this.submitClientData();
-      this.goToNextStep();
-    } catch (error) {
-      console.error('Error submitting client data:', error);
+async onNextClick() {
+  this.loading = true;
+  try {
+    const response = await this.submitClientData();
+    
+    // Only update customerId if we got a new one
+    if (!this.customerId && response) {
+      this.customerId = response.toString();
     }
+    
+    // Proceed to next step with current customerId
+    this.step++;
+    this.activeIndex = this.step - 2;
+    this.updateUrl();
+  } catch (error) {
+    console.error('Error submitting client data:', error);
+  } finally {
+    this.loading = false;
   }
+}
 
   loadLookups() {
     this.customerService.getClientRoles().subscribe(roles => {
@@ -434,5 +519,157 @@ export class AddCustomerFileComponent implements OnInit {
       value: origin.originID      
     }));
   });
+
+  this.customerService.getCountries().subscribe(countries => {
+    this.countries = countries.map(country => ({
+      label: country.clientCountryLabel, 
+      value: country.clientCountryID      
+    }));
+  });
+
+  this.customerService.getCountries().subscribe(residenceCountries => {
+    this.residenceCountries = residenceCountries.map(country => ({
+      label: country.clientCountryLabel, 
+      value: country.clientCountryID      
+    }));
+  });
+
+  this.customerService.getCountries().subscribe(companyCountries => {
+    this.companyCountries = companyCountries.map(country => ({
+      label: country.clientCountryLabel, 
+      value: country.clientCountryID      
+    }));
+  });
+
+  this.customerService.getResidencyStatuses().subscribe(statuses => {
+    this.residencyStatuses = statuses.map(status => ({
+      label: status.residencyStatusLabel,
+      value: status.residencyStatusID    
+    }));
+  });
+
+  this.customerService.getIdentities().subscribe(identities => {
+    this.identities = identities.map(identity => ({
+      label: identity.identityLabel,
+      value: identity.identityID    
+    }));
+  });
+  }
+
+  loadClientData() {
+    this.customerService.getClientById(this.customerId).subscribe({
+      next: (client) => {
+        // Set the card selection based on client type
+        this.isSelected1 = client.is_individual;
+        this.isSelected2 = client.is_organisation;
+        
+        // Set the items for steps based on client type
+        this.items = client.is_individual ? [
+          { label: 'Informations générales' },
+          { label: 'Informations détaillées' },
+          { label: "Zone d'implantation" }
+        ] : [
+          { label: 'Informations générales' },
+          { label: 'Informations détaillées' },
+          { label: "Gérant/Manager" }
+        ];
+  
+        // Populate all form fields
+        this.populateFormFields(client);
+      },
+      error: (err) => {
+        console.error('Error loading client data', err);
+      }
+    });
+  }
+
+  populateFormFields(client: any) {
+    // Basic info
+    this.LastName = client.LastName;
+    this.FirstName = client.FirstName;
+    this.BirthDate = client.BirthDate;
+    this.Nationality = client.Nationality;
+    this.Email = client.Email;
+    this.Address = client.Address;
+    this.City = client.City;
+    this.MobilePhone = client.MobilePhone;
+    this.LandlinePhone = client.LandlinePhone;
+    this.WorkPhone = client.WorkPhone;
+    this.RequestedAmount = client.RequestedAmount;
+    this.OriginDetails = client.OriginDetails;
+    
+    // For physical person
+    if (client.is_individual) {
+      this.CIN = client.CIN;
+      this.ResidencePermit = client.ResidencePermit;
+      this.PassportNumber = client.PassportNumber;
+      
+      // Set dropdown selections
+      this.selectedTitle = this.titles.find(t => t.value === client.ClientTitleID);
+      this.selectedRole = this.roles.find(r => r.value === client.RoleID);
+      this.selectedMaritalStatus = this.maritalStatuses.find(s => s.value === client.MaritalStatusID);
+      this.selectedCountry = this.countries.find(c => c.value === client.CountryID);
+      this.selectedResidenceCountry = this.residenceCountries.find(c => c.value === client.ResidenceCountryID);
+      this.selectedClientOrigin = this.clientOrigins.find(o => o.value === client.OriginID);
+      this.selectedResidencyStatus = this.residencyStatuses.find(s => s.value === client.ResidencyStatusID);
+      this.selectedIdentity = this.identities.find(i => i.value === client.IdentityID);
+      
+      // Set radio button selections
+      this.selectedStatut_Occupation = client.IsOwner ? 
+        this.statuts_Occupation.find(s => s.key === 'A') : 
+        this.statuts_Occupation.find(s => s.key === 'B');
+    }
+    
+    // For legal entity
+    if (client.is_organisation) {
+      this.CompanyName = client.CompanyName;
+      this.CreationDate = client.CreationDate;
+      this.RegistrationNumber = client.RegistrationNumber;
+      this.CompanyAddress = client.CompanyAddress;
+      this.CompanyCity = client.CompanyCity;
+      this.SocialCapital = client.SocialCapital;
+      
+      // Set dropdown selections
+      this.selectedLegalForm = this.legalForms.find(f => f.value === client.LegalFormID);
+      this.selectedBusinessActivity = this.businessActivities.find(a => a.value === client.BusinessActivityID);
+      this.selectedCompanyCountry = this.companyCountries.find(c => c.value === client.CompanyCountryID);
+      
+      // Load managers if they exist
+      if (client.ClientManagers && client.ClientManagers.length > 0) {
+        this.managers = client.ClientManagers.map(manager => ({
+          ManagerTitleID: this.titles.find(t => t.value === manager.ManagerInformation?.ManagerTitleID),
+          ManagerLastName: manager.ManagerInformation?.ManagerLastName,
+          ManagerFirstName: manager.ManagerInformation?.ManagerFirstName,
+          ManagerBirthDate: manager.ManagerInformation?.ManagerBirthDate,
+          ManagerNationality: manager.ManagerInformation?.ManagerNationality,
+          Id_Identity: manager.ManagerInformation?.Id_Identity === 1 ? 
+            { name: 'CIN', key: 'A' } : 
+            manager.ManagerInformation?.Id_Identity === 2 ? 
+            { name: 'Carte Séjour', key: 'B' } : 
+            { name: 'Passeport', key: 'C' },
+          CIN: manager.ManagerInformation?.CIN,
+          CarteSejour: manager.ManagerInformation?.CarteSejour,
+          Passeport: manager.ManagerInformation?.Passeport,
+          Id_ManagerMaritalStatus: this.maritalStatuses.find(s => s.value === manager.ManagerInformation?.Id_ManagerMaritalStatus),
+          ManagerCity: manager.ManagerInformation?.ManagerCity,
+          ManagerCountryID: this.countries.find(c => c.value === manager.ManagerInformation?.ManagerCountryID),
+          ManagerResidenceCountryID: this.residenceCountries.find(c => c.value === manager.ManagerInformation?.ManagerResidenceCountryID),
+          ManagerAddress: manager.ManagerInformation?.ManagerAddress
+        }));
+      }
+    }
+  }
+
+  onEditClick() {
+    // Reset to step 0 and reload the form
+    this.step = 0;
+    this.activeIndex = 0;
+    
+    // Reload the client data to ensure we have the latest
+    if (this.customerId && this.customerId !== '0') {
+      this.loadClientData();
+    }
+    
+    this.updateUrl();
   }
 }

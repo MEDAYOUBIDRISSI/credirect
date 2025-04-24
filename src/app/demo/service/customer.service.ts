@@ -59,4 +59,20 @@ export class CustomerService {
     getClientOrigins(): Observable<any[]> {
       return this.http.get<any[]>(`${this.apiUrl}/Credirect/lookups/client-origins`);
     }
+
+    getCountries(): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/Credirect/lookups/countries`);
+    }
+
+    getResidencyStatuses(): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/Credirect/lookups/residency-statuses`);
+    }
+
+    getIdentities(): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/Credirect/lookups/identities`);
+    }
+
+    getClientById(clientId: string): Observable<any> {
+      return this.http.get<any>(`${this.apiUrl}/getById/${clientId}`);
+    }
 }

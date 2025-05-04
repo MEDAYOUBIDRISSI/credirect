@@ -10,6 +10,16 @@ export class CustomerFolderTimelineComponent implements OnInit{
 
   events: any[]=[];
   changeStatus = false
+  showMore = false
+  // Options pour l'objet du crédit
+  statutDepot = [
+    { label: 'Envoyer à la banque', value: 0 },
+    { label: 'En étude bancaire', value: 1 },
+    { label: 'Réponse de la banque', value: 2 },
+    { label: 'En attente de la réponse du client', value: 3 },
+    { label: 'Réponse du client', value: 4 },
+    { label: 'Livré', value: 4 }
+  ];
     constructor(private CustomerService: CustomerService) {
         this.events = [
             { status: 'Dépôt créé', date: '15/10/2020 10:30', icon: 'pi pi-play-', color: '#8ecae6', is_accord: 0, return: "" },

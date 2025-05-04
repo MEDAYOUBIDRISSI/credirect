@@ -320,4 +320,9 @@ export class CustomerService {
     getTierByID(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/getTierByID', data).toPromise();
     }
+
+     //Méthode pour get Tier par CIN
+     getFoldersList(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getFoldersList', data).toPromise();
+    }
 }

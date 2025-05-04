@@ -355,7 +355,7 @@ export class AddCustomerFileComponent implements OnInit {
 // Data Submission
 submitClientData(): Promise<any> {
 
-  const clientId = this.customerId && this.customerId !== '0' ? this.customerId : null;
+  const clientId = this.customerId && this.customerId !== '0' ? this.customerId : -1;
 
   // Filter out empty or unmodified managers
   const nonEmptyManagers = this.managers.filter(manager => {

@@ -170,7 +170,7 @@
                   </div>
               </div>
               
-              <div *ngIf="selectedIdentity?.value === 1 && isSelected1" class="field col-12 md:col-6 lg:col-4">
+              <div *ngIf="selectedIdentity?.value === 1002 && isSelected1" class="field col-12 md:col-6 lg:col-4">
                   <label for="CIN">CIN</label>
                   <input
                       pInputText
@@ -181,7 +181,7 @@
                   />
               </div>
               
-              <div *ngIf="selectedIdentity?.value === 2 && isSelected1" class="field col-12 md:col-6 lg:col-4">
+              <div *ngIf="selectedIdentity?.value === 1003 && isSelected1" class="field col-12 md:col-6 lg:col-4">
                   <label for="ResidencePermit">Carte Séjour</label>
                   <input
                       pInputText
@@ -192,7 +192,7 @@
                   />
               </div>   
               
-              <div *ngIf="selectedIdentity?.value === 3 && isSelected1" class="field col-12 md:col-6 lg:col-4">
+              <div *ngIf="selectedIdentity?.value === 1004 && isSelected1" class="field col-12 md:col-6 lg:col-4">
                   <label for="PassportNumber">Passeport</label>
                   <input
                       pInputText
@@ -645,13 +645,13 @@
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Nom - Prénom :</strong> {{LastName}} {{FirstName}}</h5>
 				</div>
-				<div *ngIf="selectedIdentity?.value === 1" class="col-12 mb-2 lg:col-6 lg:mb-0">
+				<div *ngIf="selectedIdentity?.value === 1002" class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>CIN :</strong> {{CIN}}</h5>
 				</div>
-        <div *ngIf="selectedIdentity?.value === 2" class="col-12 mb-2 lg:col-6 lg:mb-0">
+        <div *ngIf="selectedIdentity?.value === 1003" class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Carte Séjour :</strong> {{ResidencePermit}}</h5>
 				</div>
-        <div *ngIf="selectedIdentity?.value === 3" class="col-12 mb-2 lg:col-6 lg:mb-0">
+        <div *ngIf="selectedIdentity?.value === 1004" class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Passeport :</strong> {{PassportNumber}}</h5>
 				</div>
         <div class="col-12 mb-2 lg:col-6 lg:mb-0">

@@ -23,11 +23,11 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Fiche client', icon: 'pi pi-fw pi-home', routerLink: ['credirect/customer']},
                     { label: 'Création dossier crédit', icon: 'pi pi-fw pi-home', routerLink: ['credirect/customer/folder/add']},
                     { label: 'Liste des dossiers de crédit', icon: 'pi pi-fw pi-home', routerLink: ['credirect/customer/folder/list']},
-                    { label: 'Banque et organismes', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']},
-                    { label: 'Mandataires et apporteurs', icon: 'pi pi-fw pi-home', routerLink: ['credirect/agents_contributors']},
-                    { label: 'Mandats', icon: 'pi pi-fw pi-home', routerLink: ['credirect/mandats']},
+                    { label: 'Liste des depots de crédit', icon: 'pi pi-fw pi-home', routerLink: ['credirect/customer/depot/list']},
+                    // { label: 'Banque et organismes', icon: 'pi pi-fw pi-home', routerLink: ['credirect/bank-file']},
+                    // { label: 'Mandataires et apporteurs', icon: 'pi pi-fw pi-home', routerLink: ['credirect/agents_contributors']},
+                    // { label: 'Mandats', icon: 'pi pi-fw pi-home', routerLink: ['credirect/mandats']},
                     { label: 'KPI', icon: 'pi pi-fw pi-home', routerLink: ['credirect/kpi-page-1']},
-
                 ]
             },
             {

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Table } from 'primeng/table';
+import { CustomerService } from 'src/app/service/customer.service';
 
 @Component({
   selector: 'app-customer-folder-list',
@@ -12,126 +14,126 @@ export class CustomerFolderListComponent implements OnInit{
 
   // Liste des dossiers de crédit
   dossiers = [
-    {
-      id: 'DOS-001',
-      client: 'Ahmed El Amrani',
-      type: 'Crédit Immobilier',
-      montant: 500000,
-      statut: 'En étude bancaire',
-      dateCreation: new Date('2023-10-01'),
-      conseiller: 'Youssef Benali',
-      banque: 'Banque Populaire',
-      progression: 50,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
-    },
-    {
-      id: 'DOS-002',
-      client: 'Fatima Zahra',
-      type: 'Crédit à la Consommation',
-      montant: 100000,
-      statut: 'Accordé',
-      dateCreation: new Date('2023-10-05'),
-      conseiller: 'Karim El Filali',
-      banque: 'Attijariwafa Bank',
-      progression: 100,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
-    },
-    {
-      id: 'DOS-003',
-      client: 'Mohamed Kettani',
-      type: 'Mourabaha',
-      montant: 300000,
-      statut: 'En montage',
-      dateCreation: new Date('2023-10-10'),
-      conseiller: 'Leila Bouzidi',
-      banque: 'BMCE Bank',
-      progression: 20,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
-    },
-    {
-      id: 'DOS-004',
-      client: 'Samira El Fassi',
-      type: 'Crédit Hypothécaire',
-      montant: 750000,
-      statut: 'Refusé',
-      dateCreation: new Date('2023-09-20'),
-      conseiller: 'Youssef Benali',
-      banque: 'Société Générale Maroc',
-      progression: 100,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
-    },
-    {
-      id: 'DOS-005',
-      client: 'Hassan El Mansouri',
-      type: 'Crédit d’Investissement',
-      montant: 1000000,
-      statut: 'En étude bancaire',
-      dateCreation: new Date('2023-10-15'),
-      conseiller: 'Karim El Filali',
-      banque: 'Crédit du Maroc',
-      progression: 60,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
-    },
-    {
-      id: 'DOS-006',
-      client: 'Amina Belhaj',
-      type: 'Crédit Automobile',
-      montant: 150000,
-      statut: 'Accordé',
-      dateCreation: new Date('2023-10-12'),
-      conseiller: 'Leila Bouzidi',
-      banque: 'CIH Bank',
-      progression: 100,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
-    },
-    {
-      id: 'DOS-007',
-      client: 'Omar El Khattabi',
-      type: 'Crédit Révolving',
-      montant: 20000,
-      statut: 'En montage',
-      dateCreation: new Date('2023-10-18'),
-      conseiller: 'Youssef Benali',
-      banque: 'Banque Populaire',
-      progression: 30,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
-    },
-    {
-      id: 'DOS-008',
-      client: 'Zineb El Idrissi',
-      type: 'Crédit à la Promotion Immobilière',
-      montant: 600000,
-      statut: 'En étude bancaire',
-      dateCreation: new Date('2023-10-20'),
-      conseiller: 'Karim El Filali',
-      banque: 'Attijariwafa Bank',
-      progression: 70,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
-    },
-    {
-      id: 'DOS-009',
-      client: 'Youssef Benchekroun',
-      type: 'Crédit-Bail Immobilier',
-      montant: 800000,
-      statut: 'Accordé',
-      dateCreation: new Date('2023-10-22'),
-      conseiller: 'Leila Bouzidi',
-      banque: 'BMCE Bank',
-      progression: 100,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
-    },
-    {
-      id: 'DOS-010',
-      client: 'Nadia El Amraoui',
-      type: 'Crédit-Bail Mobilier',
-      montant: 250000,
-      statut: 'Refusé',
-      dateCreation: new Date('2023-10-25'),
-      conseiller: 'Youssef Benali',
-      banque: 'Société Générale Maroc',
-      progression: 100,
-      panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
-    },
+    // {
+    //   id: 'DOS-001',
+    //   client: 'Ahmed El Amrani',
+    //   type: 'Crédit Immobilier',
+    //   montant: 500000,
+    //   statut: 'En étude bancaire',
+    //   dateCreation: new Date('2023-10-01'),
+    //   conseiller: 'Youssef Benali',
+    //   banque: 'Banque Populaire',
+    //   progression: 50,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
+    // },
+    // {
+    //   id: 'DOS-002',
+    //   client: 'Fatima Zahra',
+    //   type: 'Crédit à la Consommation',
+    //   montant: 100000,
+    //   statut: 'Accordé',
+    //   dateCreation: new Date('2023-10-05'),
+    //   conseiller: 'Karim El Filali',
+    //   banque: 'Attijariwafa Bank',
+    //   progression: 100,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
+    // },
+    // {
+    //   id: 'DOS-003',
+    //   client: 'Mohamed Kettani',
+    //   type: 'Mourabaha',
+    //   montant: 300000,
+    //   statut: 'En montage',
+    //   dateCreation: new Date('2023-10-10'),
+    //   conseiller: 'Leila Bouzidi',
+    //   banque: 'BMCE Bank',
+    //   progression: 20,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
+    // },
+    // {
+    //   id: 'DOS-004',
+    //   client: 'Samira El Fassi',
+    //   type: 'Crédit Hypothécaire',
+    //   montant: 750000,
+    //   statut: 'Refusé',
+    //   dateCreation: new Date('2023-09-20'),
+    //   conseiller: 'Youssef Benali',
+    //   banque: 'Société Générale Maroc',
+    //   progression: 100,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
+    // },
+    // {
+    //   id: 'DOS-005',
+    //   client: 'Hassan El Mansouri',
+    //   type: 'Crédit d’Investissement',
+    //   montant: 1000000,
+    //   statut: 'En étude bancaire',
+    //   dateCreation: new Date('2023-10-15'),
+    //   conseiller: 'Karim El Filali',
+    //   banque: 'Crédit du Maroc',
+    //   progression: 60,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
+    // },
+    // {
+    //   id: 'DOS-006',
+    //   client: 'Amina Belhaj',
+    //   type: 'Crédit Automobile',
+    //   montant: 150000,
+    //   statut: 'Accordé',
+    //   dateCreation: new Date('2023-10-12'),
+    //   conseiller: 'Leila Bouzidi',
+    //   banque: 'CIH Bank',
+    //   progression: 100,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
+    // },
+    // {
+    //   id: 'DOS-007',
+    //   client: 'Omar El Khattabi',
+    //   type: 'Crédit Révolving',
+    //   montant: 20000,
+    //   statut: 'En montage',
+    //   dateCreation: new Date('2023-10-18'),
+    //   conseiller: 'Youssef Benali',
+    //   banque: 'Banque Populaire',
+    //   progression: 30,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
+    // },
+    // {
+    //   id: 'DOS-008',
+    //   client: 'Zineb El Idrissi',
+    //   type: 'Crédit à la Promotion Immobilière',
+    //   montant: 600000,
+    //   statut: 'En étude bancaire',
+    //   dateCreation: new Date('2023-10-20'),
+    //   conseiller: 'Karim El Filali',
+    //   banque: 'Attijariwafa Bank',
+    //   progression: 70,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')    
+    // },
+    // {
+    //   id: 'DOS-009',
+    //   client: 'Youssef Benchekroun',
+    //   type: 'Crédit-Bail Immobilier',
+    //   montant: 800000,
+    //   statut: 'Accordé',
+    //   dateCreation: new Date('2023-10-22'),
+    //   conseiller: 'Leila Bouzidi',
+    //   banque: 'BMCE Bank',
+    //   progression: 100,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
+    // },
+    // {
+    //   id: 'DOS-010',
+    //   client: 'Nadia El Amraoui',
+    //   type: 'Crédit-Bail Mobilier',
+    //   montant: 250000,
+    //   statut: 'Refusé',
+    //   dateCreation: new Date('2023-10-25'),
+    //   conseiller: 'Youssef Benali',
+    //   banque: 'Société Générale Maroc',
+    //   progression: 100,
+    //   panelMenuItems: this.getPanelMenuItems('DOS-001','DEP-001')
+    // },
   ];
 
   getPanelMenuItems(dossierId, depotId){
@@ -169,9 +171,12 @@ export class CustomerFolderListComponent implements OnInit{
   sortColumn: string | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor() {}
+  constructor(private CustomerService: CustomerService,
+                private route: ActivatedRoute) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getFoldersList()
+  }
 
   // Gérer le tri
   onSort(event: any): void {
@@ -221,5 +226,19 @@ export class CustomerFolderListComponent implements OnInit{
   editDossier(dossier: any): void {
     console.log('Modifier le dossier :', dossier);
     // Rediriger vers la page de modification ou ouvrir un formulaire
+  }
+
+  getFoldersList(){
+    let body = {
+      
+    }
+    this.CustomerService.getFoldersList(body).then((res: any) => {
+      
+      if (res.status_code === 200) {
+        console.log("res", res);
+        this.dossiers = res?.data
+        this.filteredDossiers = this.dossiers;
+      }
+    })
   }
 }

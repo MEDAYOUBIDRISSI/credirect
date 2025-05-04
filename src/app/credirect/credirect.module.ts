@@ -60,6 +60,7 @@ import { MonthlyFlowByOrganismeComponent } from './kpis/monthly-flow-by-organism
 import { CategorieClientComponent } from './kpis/categorie-client/categorie-client.component';
 import { FundingCityComponent } from './kpis/funding-city/funding-city.component';
 import { CategorieClientV2Component } from './kpis/categorie-client-v2/categorie-client-v2.component';
+import { CustomerDepotComponent } from './customer-depot/customer-depot.component';
 
 const routes: Routes = [
   {
@@ -94,6 +95,10 @@ const routes: Routes = [
   {
     path: 'customer/folder/list',
     component: CustomerFolderListComponent,
+  },
+  {
+    path: 'customer/depot/list',
+    component: CustomerDepotComponent,
   },
   {
     path: 'customer/folder/financing-plans/:dossier_id/:depot_id',
@@ -181,7 +186,8 @@ const routes: Routes = [
     MonthlyFlowByOrganismeComponent,
     CategorieClientComponent,
     FundingCityComponent,
-    CategorieClientV2Component
+    CategorieClientV2Component,
+    CustomerDepotComponent
   ],
   imports: [
     CommonModule,

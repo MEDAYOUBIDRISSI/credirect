@@ -1,169 +1,189 @@
 <div class="card">
     <div class="row">
-        <div class="col-12">
-            <p>
-                Cette section permet de gérer les informations détaillées d’un tiers, 
-                qu’il s’agisse d’une personne physique ou morale. Chaque fiche inclut des informations 
-                essentielles telles que l'identité, les coordonnées, et l’historique des interactions. 
-                Ce tiers peut être associé à un ou plusieurs dossiers de crédit, 
-                permettant une gestion centralisée et efficace des relations et des opérations 
-                financières.
+        <!-- <div class="col-12">
+            <p class="text-700">
+                Gestion complète des clients avec toutes les informations disponibles.
             </p>
-        </div>
+        </div> -->
+        
         <div class="col-md-12">
-            <div style="display: flex;" class="w-100 d-flex justify-content-end">
-                <p-button 
-                label="Ajouter" 
-                icon="pi pi-plus" [routerLink]="['/credirect/customer/add']" pTooltip="Ajouter fiche client" tooltipPosition="top"/>
+            <div class="flex justify-content-between align-items-center mb-3">
+                <span class="p-input-icon-left w-6">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" [(ngModel)]="searchValue" 
+                           (input)="onSearchInput($event)"
+                           placeholder="Rechercher par téléphone, email ou CIN..." class="w-full" />
+                </span>
+                <p-button icon="pi pi-plus" label="Nouveau Client" 
+                          [routerLink]="['/credirect/customer/add']"></p-button>
             </div>
         </div>
-        <div class="col-12"> 
-            <p-table
-                    #dt1
-                    [value]="customers"
-                    dataKey="id"
-                    [rows]="10"
-                    [rowsPerPageOptions]="[10, 25, 50]"
-                    [loading]="loading"
-                    [paginator]="true"
-                    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-                    >
-                    <ng-template pTemplate="caption">
-                        <div class="flex">
-                            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
-                            <span class="p-input-icon-left ml-auto">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" [(ngModel)]="searchValue" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+
+        <div class="col-12">
+            <p-table #dt [value]="filteredCustomers" dataKey="clientID" [rows]="10" [loading]="loading"
+                    [paginator]="true">
+                
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="firstName">Nom <p-sortIcon field="firstName"></p-sortIcon></th>
+                        <th>Type</th>
+                        <th>Coordonnées</th>
+                        <th>Identité</th>
+                        <th>Situation</th>
+                        <th>Dossier</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr>
+                        <th colspan="7">
+                            <div class="flex justify-content-between">
+                                <button pButton type="button" icon="pi pi-filter-slash" label="Effacer filtres" 
+                                        class="p-button-text" (click)="clearFilters(dt)"></button>
+                                <span class="text-sm">Total clients: {{filteredCustomers?.length || 0}}</span>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-customer>
+                    <tr>
+                        <!-- Name Column -->
+                        <td>
+                            <span class="font-medium">
+                                {{customer.is_organisation ? customer.companyName : (customer.firstName + ' ' + customer.lastName)}}
                             </span>
-                        </div>
-                    </ng-template>
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="min-width:15rem">
-                                <div class="flex align-items-center">
-                                    Utilisateur
-                                    <p-columnFilter type="text" field="name" display="menu" />
+                            <div class="text-sm">
+                                <i class="pi pi-id-card mr-1"></i>{{customer.matricule}}
+                            </div>
+                            <div *ngIf="customer.is_organisation && customer.managers?.length > 0 && customer.managers[0].managerInformation" class="text-sm mt-1">
+                                <i class="pi pi-user mr-1"></i>
+                                {{customer.managers[0].managerInformation.managerFirstName}} {{customer.managers[0].managerInformation.managerLastName}}
+                            </div>
+                        </td>
+                        
+                        <!-- Type Column -->
+                        <td>
+                            <p-tag [value]="customer.is_organisation ? 'Entreprise' : 'Particulier'" 
+                                  [severity]="customer.is_organisation ? 'warning' : 'info'" 
+                                  [icon]="customer.is_organisation ? 'pi pi-building' : 'pi pi-user'"></p-tag>
+                        </td>
+                        
+                        <!-- Contact Column -->
+                        <td>
+                            <div><i class="pi pi-phone mr-1"></i> 
+                                {{customer.is_organisation ? 
+                                  (customer.managers?.[0]?.managerInformation?.mobilePhone || customer.mobilePhone || 'N/A') : 
+                                  (customer.mobilePhone || 'N/A')}}
+                            </div>
+                            <div><i class="pi pi-envelope mr-1"></i> 
+                                {{customer.email || 'N/A'}}
+                            </div>
+                            <div class="text-sm">
+                                <i class="pi pi-map-marker mr-1"></i> 
+                                {{customer.is_organisation ? customer.companyAddress : customer.address}}, 
+                                {{customer.is_organisation ? customer.companyCity : customer.city}}
+                            </div>
+                        </td>
+                        
+                        <!-- Identity Column -->
+                        <td>
+                            <div><i class="pi pi-id-card mr-1"></i> 
+                                CIN: {{customer.is_organisation ? 
+                                      (customer.managers?.[0]?.managerInformation?.cin || customer.cin || 'N/A') : 
+                                      (customer.cin || 'N/A')}}
+                            </div>
+                            <div class="flex align-items-center mt-1">
+                                <img *ngIf="customer.country" [src]="'https://flagcdn.com/16x12/' + getCountryCode(customer.country) + '.png'" 
+                                     width="20" class="mr-2" />
+                                {{customer.is_organisation ? 
+                                  (customer.companyCountry?.clientCountryLabel || 'Inconnu') : 
+                                  (customer.country?.clientCountryLabel || 'Inconnu')}}
+                            </div>
+                        </td>
+                        
+                        <!-- Situation Column -->
+                        <td>
+                            <div *ngIf="!customer.is_organisation">
+                                <p-tag [value]="customer.maritalStatus?.maritalStatusLabel || 'Inconnu'" 
+                                      [severity]="getMaritalStatusSeverity(customer.maritalStatus?.maritalStatusLabel)">
+                                </p-tag>
+                                <div class="text-sm mt-1">
+                                    <i class="pi pi-calendar mr-1"></i>
+                                    {{customer.birthDate | date:'dd/MM/yyyy' || 'N/A'}}
                                 </div>
-                            </th>
-                            <th style="min-width:15rem">
-                                <div class="flex align-items-center">
-                                    Nationalité 
-                                    <p-columnFilter type="text" field="country.name" display="menu" />
+                            </div>
+                            <div *ngIf="customer.is_organisation && customer.managers?.[0]?.managerInformation">
+                                <p-tag [value]="customer.managers[0].managerInformation.managerMaritalStatus?.maritalStatusLabel || 'Inconnu'" 
+                                      [severity]="getMaritalStatusSeverity(customer.managers[0].managerInformation.managerMaritalStatus?.maritalStatusLabel)">
+                                </p-tag>
+                                <div class="text-sm mt-1">
+                                    <i class="pi pi-calendar mr-1"></i>
+                                    {{customer.managers[0].managerInformation.managerBirthDate | date:'dd/MM/yyyy' || 'N/A'}}
                                 </div>
-                            </th>
-                            <!-- <th style="min-width:15rem">
-                                <div class="flex align-items-center">
-                                    Civilité
-                                    <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                                        <ng-template pTemplate="header">
-                                            <div class="px-3 pt-3 pb-0">
-                                                <span class="font-bold">Agent Picker</span>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
-                                                <ng-template let-option pTemplate="item">
-                                                    <div class="inline-block vertical-align-middle">
-                                                        <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" width="24" class="vertical-align-middle" />
-                                                        <span class="ml-1 mt-1">{{ option.name }}</span>
-                                                    </div>
-                                                </ng-template>
-                                            </p-multiSelect>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th> -->
-                            <!-- <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    Nom
-                                    <p-columnFilter type="date" field="date" display="menu" />
-                                </div>
-                            </th> -->
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    N.Cin/Sejour
-                                    <p-columnFilter type="numeric" field="balance" display="menu" />
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    Situation familiale
-                                    <p-columnFilter field="status" matchMode="equals" display="menu">
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
-                                                <ng-template let-option pTemplate="item">
-                                                    <p-tag [value]="getSituationFmilialValue(option.label)" [severity]="getSeverity(option.label)" />
-                                                </ng-template>
-                                            </p-dropdown>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    Saisi pour
-                                    <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                                        <ng-template pTemplate="filter" let-filter="filterCallback">
-                                            <p-slider [(ngModel)]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3" />
-                                            <div class="flex align-items-center px-2">
-                                                <span>{{ activityValues[0] }}</span>
-                                                <span>{{ activityValues[1] }}</span>
-                                            </div>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
-                                <div class="flex align-items-center">
-                                    Il a un dossier.
-                                    <p-columnFilter type="boolean" field="verified" display="menu" />
-                                </div>
-                            </th>
-                            <th style="min-width:10rem">
-                                Actions
-                            </th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-customer>
-                        <tr>
-                            <td>
-                                {{ customer.name }}
-                            </td>
-                            <td>
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                                <span class="ml-1 vertical-align-middle">{{ customer.country.name }}</span>
-                            </td>
-                            <!-- <td>
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
-                                <span class="ml-1 vertical-align-middle">{{ customer.representative.name }}</span>
-                            </td> -->
-                            <!-- <td>
-                                {{ customer.date | date: 'MM/dd/yyyy' }}
-                            </td> -->
-                            <td>
-                               EE{{ customer.balance }}
-                            </td>
-                            <td>
-                                <p-tag [value]="getSituationFmilialValue(customer.status)" [severity]="getSeverity(customer.status)" />
-                            </td>
-                            <td>
-                                <p-progressBar [value]="customer.activity" [showValue]="false" />
-                            </td>
-                            <td class="text-center">
-                                <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': customer.verified, 'text-red-500 pi-times-circle': !customer.verified }"></i>
-                            </td>
-                            <td class="text-center">
-                                <p-button class="mx-1" icon="pi pi-bookmark" [rounded]="true" severity="secondary" pTooltip="Voir" tooltipPosition="top" />
-                                <p-button class="mx-1" icon="pi pi-times" [rounded]="true" severity="danger" pTooltip="Supprimer" tooltipPosition="top"/>
-                            </td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="7">No customers found.</td>
-                        </tr>
-                    </ng-template>
+                            </div>
+                        </td>
+                        
+                        <!-- Dossier Column -->
+                        <td class="text-center">
+                            <p-tag [severity]="customer.hasCreditFiles ? 'success' : 'warning'" 
+                                  icon="pi pi-folder" [value]="customer.hasCreditFiles ? 'Oui' : 'Non'">
+                            </p-tag>
+                        </td>
+                        
+                        <!-- Actions Column -->
+                        <td class="text-center">
+                            <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text mr-1"
+                                    (click)="viewCustomer(customer)"></button>
+                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text mr-1"
+                                    (click)="editCustomer(customer)"></button>
+                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger"
+                                    (click)="showDeleteConfirmation(customer)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <div *ngIf="!loading; else loadingTemplate">
+                                <i class="pi pi-info-circle text-2xl mb-2"></i>
+                                <p>Aucun client trouvé</p>
+                                <p-button label="Ajouter un client" icon="pi pi-plus"
+                                          [routerLink]="['/credirect/customer/add']"></p-button>
+                            </div>
+                            <ng-template #loadingTemplate>
+                                <i class="pi pi-spinner pi-spin text-2xl"></i>
+                                <p>Chargement des clients...</p>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </ng-template>
             </p-table>
-        </div>   
+        </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Dialog -->
+<p-dialog 
+  header="Confirmation de suppression" 
+  [(visible)]="displayDeleteConfirmation" 
+  [style]="{width: '450px'}" 
+  [modal]="true"
+  [draggable]="false" 
+  [resizable]="false"
+  [closable]="!deleteLoading"
+  [baseZIndex]="10000"> 
+  
+  <div class="confirmation-content">
+    <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
+    <span>Êtes-vous sûr de vouloir supprimer <strong>{{customerToDelete?.is_organisation ? customerToDelete?.companyName : (customerToDelete?.firstName + ' ' + customerToDelete?.lastName)}}</strong> ?</span>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Non" icon="pi pi-times" class="p-button-text" 
+            (click)="hideDeleteConfirmation()" [disabled]="deleteLoading"></button>
+    <button pButton type="button" label="Oui" icon="pi pi-check" class="p-button-danger" 
+            (click)="confirmDelete()" [disabled]="deleteLoading">
+      <span *ngIf="deleteLoading" class="pi pi-spin pi-spinner" style="margin-right: 0.5rem"></span>
+    </button>
+  </ng-template>
+</p-dialog>

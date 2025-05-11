@@ -73,6 +73,14 @@ export class CustomerService {
     }
 
     getClientById(clientId: string): Observable<any> {
-      return this.http.get<any>(`${this.apiUrl}/getById/${clientId}`);
+      return this.http.get<any>(`${this.apiUrl}/Credirect/findClientById/${clientId}`);
+    }
+
+    getAllClients(): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/Credirect/getAllClient`);
+    }
+
+    deleteClient(clientId: number): Observable<any> {
+      return this.http.delete(`${this.apiUrl}/Credirect/deleteClient/${clientId}`);
     }
 }

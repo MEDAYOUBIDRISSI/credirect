@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CustomerService } from 'src/app/service/customer.service';
 
 @Component({
   selector: 'app-customer-folder-financing-plans',
@@ -17,12 +19,13 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   ];
 
   // Index de l'étape active
-  activeIndex = 0;
+  activeIndex = 3;
 
   // Données du plan de financement
   planFinancement = {
-    objetCredit: '',
+    objetCredit: 1,
     descriptionProjet: '',
+    commentCredit: '',
     biens: [] as any[], // Liste des biens associés
     montantCredit: null,
     dureeCredit: null,
@@ -40,60 +43,19 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   };
 
   // Options pour l'objet du crédit
-  objetCreditOptions = [
-    { label: 'Acquisition', value: 'Acquisition' },
-    { label: 'Acquisition + Construction', value: 'Acquisition + Construction' },
-    { label: 'Acquisition + Aménagement', value: 'Acquisition + Aménagement' },
-    { label: 'Acquisition de part', value: 'Acquisition de part' },
-    { label: 'Acquisition de part + Travaux de Construction', value: 'Acquisition de part + Travaux de Construction' },
-    { label: 'Acquisition de part + Travaux d’Aménagement', value: 'Acquisition de part + Travaux d’Aménagement' },
-    { label: 'Acquisition de part + Rachat de Crédit', value: 'Acquisition de part + Rachat de Crédit' },
-    { label: 'Travaux de Construction', value: 'Travaux de Construction' },
-    { label: 'Travaux d’Aménagement', value: 'Travaux d’Aménagement' },
-    { label: 'Travaux de Finition', value: 'Travaux de Finition' },
-    { label: 'Rachat de Crédit', value: 'Rachat de Crédit' },
-    { label: 'Rachat + Travaux d’Aménagement', value: 'Rachat + Travaux d’Aménagement' },
-    { label: 'Rachat + Travaux de Construction', value: 'Rachat + Travaux de Construction' },
-    { label: 'Crédit in-fine', value: 'Crédit in-fine' },
-    { label: 'VEFA', value: 'VEFA' },
-    { label: 'Relais', value: 'Relais' },
-  ];
+  objetCreditOptions = [];
 
   // Options pour la nature du bien
-  natureBienOptions = [
-    { label: 'Appartement', value: 'Appartement' },
-    { label: 'Terrain', value: 'Terrain' },
-    { label: 'Villa', value: 'Villa' },
-    { label: 'Maison Individuelle', value: 'Maison Individuelle' },
-    { label: 'Duplex', value: 'Duplex' },
-    { label: 'Studio', value: 'Studio' },
-    { label: 'Plateau Bureau', value: 'Plateau Bureau' },
-    { label: 'Magasin', value: 'Magasin' },
-    { label: 'Dépôt', value: 'Dépôt' },
-    { label: 'Pavillon', value: 'Pavillon' },
-  ];
+  natureBienOptions = [];
 
   // Options pour l'affectation du bien
-  affectationBienOptions = [
-    { label: 'Bien objet du crédit (principal)', value: 'Principal' },
-    { label: 'Bien supplémentaire (secondaire)', value: 'Secondaire' },
-    { label: 'Bien de substitution', value: 'Substitution' },
-  ];
+  affectationBienOptions = [];
 
   // Options pour l'usage du bien
-  usageBienOptions = [
-    { label: 'Résidence principale', value: 'Résidence principale' },
-    { label: 'Résidence secondaire', value: 'Résidence secondaire' },
-    { label: 'Commercial', value: 'Commercial' },
-    { label: 'Professionnel', value: 'Professionnel' },
-  ];
+  usageBienOptions = [];
 
   // Options pour l'état du bien
-  etatBienOptions = [
-    { label: 'Neuf', value: 'Neuf' },
-    { label: 'Récent', value: 'Récent' },
-    { label: 'Ancien', value: 'Ancien' },
-  ];
+  etatBienOptions = [];
 
   // Options pour les garanties
   garantiesOptions = [
@@ -114,8 +76,8 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   ]
   canauxVentesListAfterCheck:any[]=[]
   canauxVentes: any[] = [
-    { id: 1, name: 'Hypothèque en 1er rang au profit de la banque sur le TF ' },
-    { id: 2, name: 'Caution hypothécaire de …… au profit de la banque ' },
+    // { id: 1, name: 'Hypothèque en 1er rang au profit de la banque sur le TF ' },
+    // { id: 2, name: 'Caution hypothécaire de …… au profit de la banque ' },
   ]
 
   ckeConfig: any = {
@@ -174,10 +136,22 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
     { label: 'CIH Bank', value: 'CIH Bank' },
   ];
 
-  constructor() {}
+  dossierID:any=null
+
+  constructor(private CustomerService: CustomerService, private route: ActivatedRoute) 
+  {
+      this.dossierID = this.route.snapshot.paramMap.get('dossier_id')
+  }
 
   ngOnInit(): void {
     this.checkCanaux()
+    this.getAllObjectCredit()
+    this.getAllNatureProperty()
+    this.getAllAssignmentProperty() 
+    this.getAllUseProperty()
+    this.getAlConditionProperty()
+    this.getPlanFinancement();
+    this.getGarantie()
   }
 
   // Ajouter un bien
@@ -253,8 +227,17 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   tauxEndettementGlobal: number = 0;
   quotiteFinancement: number = 0;
 
-  frequenceOptions = ['Mensuelle', 'Trimestrielle', 'Semestrielle', 'Annuelle'];
-  assuranceOptions = ['Mensuelle', 'Prime Unique'];
+  frequenceOptions = [
+  { label: 'Mensuelle', value: 1 },
+  { label: 'Trimestrielle', value: 2 },
+  { label: 'Semestrielle', value: 3 },
+  { label: 'Annuelle', value: 4 }
+];
+
+assuranceOptions = [
+  { label: 'Mensuelle', value: 1 },
+  { label: 'Prime Unique', value: 2 }
+];
 
   calculateMensualiteTTC() {
     let { montantCredit, dureeCredit, tauxCredit, tauxAssurance, assurance } = this.planFinancement;
@@ -301,6 +284,110 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   // Supprimer un dépôt
   removeDepot(index: number): void {
     this.facturation.depots.splice(index, 1);
+  }
+
+  getAllObjectCredit(){
+    let body = {
+    }
+    this.CustomerService.getAllObjectCredit(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.objetCreditOptions = res?.data;
+      }
+    })
+  }
+
+  getAllNatureProperty(){
+    let body = {
+    }
+    this.CustomerService.getAllNatureProperty(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.natureBienOptions = res?.data;
+      }
+    })
+  }
+
+  getAllAssignmentProperty(){
+    let body = {
+    }
+    this.CustomerService.getAllAssignmentProperty(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.affectationBienOptions = res?.data;
+      }
+    })
+  }
+
+  getAllUseProperty(){
+    let body = {
+    }
+    this.CustomerService.getAllUseProperty(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.usageBienOptions = res?.data;
+      }
+    })
+  }
+
+  getAlConditionProperty(){
+    let body = {
+    }
+    this.CustomerService.getAlConditionProperty(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.etatBienOptions = res?.data;
+      }
+    })
+  }
+
+  getPlanFinancement(){
+    let body = {
+      dossierID: this.dossierID
+    }
+    console.log("body", body);
+    this.CustomerService.getPlanFinancement(body).then((res: any) => {
+      console.log("res", res);
+      if (res.status_code === 200 && res?.data?.length > 0) {
+        this.planFinancement = res?.data[0];
+        this.calculateMensualiteTTC();
+      }
+    })
+  }
+
+  savePlanFinancement(){
+    let body = {
+      dossierID: this.dossierID,
+      planFinancement: this.planFinancement
+    }
+    console.log("body", body);
+    this.CustomerService.savePlanFinancement(body).then((res: any) => {     
+      if (res.status_code === 200) {
+        
+      }
+    })
+  }
+
+  getGarantie(){
+    let body = {
+      dossierID: this.dossierID
+    }
+    console.log("body", body);
+    this.CustomerService.getGarantie(body).then((res: any) => {
+      console.log("res", res);
+      if (res.status_code === 200) {
+        this.canauxVentes = res?.data;
+        this.checkCanaux();
+      }
+    })
+  }
+
+  saveGarantie(){
+    let body = {
+      dossierID: this.dossierID,
+      canauxVentes: this.canauxVentes
+    }
+    console.log("body", body);
+    this.CustomerService.saveGarantie(body).then((res: any) => {     
+      if (res.status_code === 200) {
+        
+      }
+    })
   }
 
 }

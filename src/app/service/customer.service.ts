@@ -291,7 +291,13 @@ export class CustomerService {
         return this.http.get<any>('https://www.primefaces.org/data/customers', { params: params }).toPromise();
     }
 
-    // Méthode pour editer un projet offers
+    
+    /**
+     * Retrieves test data from the specified API endpoint.
+     *
+     * @param params - Optional query parameters to include in the request.
+     * @returns A promise that resolves to the response data of type `any`.
+     */
     getTest(params?: any) {
         return this.http.get<any>('https://localhost:7025/api/Credirect/getAllClientTest', { params: params }).toPromise();
     }
@@ -300,29 +306,181 @@ export class CustomerService {
     getTiereByCIN(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/GetTierByCIN', data).toPromise();
     }
-
-    //Méthode pour get Tier par CIN
+    
+    /**
+     * Adds or updates a folder by sending the provided data to the server.
+     *
+     * @param data - The data object containing folder information to be added or updated.
+     * @returns A promise that resolves with the server's response.
+     */
     addOrUpdateFolder(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/AddOrUpdateFolder', data).toPromise();
     }
 
-    //Méthode pour get Tier par CIN
+    
+    /**
+     * Retrieves tiers associated with a specific folder ID by making a POST request to the API.
+     *
+     * @param data - The payload containing the folder ID and any additional required information.
+     * @returns A promise that resolves to the response containing the tiers data.
+     */
     getTiersByFolderID(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/getTiersByFolderID', data).toPromise();
     }
 
-    //Méthode pour get Credit Type
+    /**
+     * Retrieves all credit types from the server.
+     *
+     * @param data - Optional parameter containing the request payload.
+     * @returns A promise that resolves to the response containing credit type data.
+     */
     getAllCreditType(data?: any) {
         return this.http.post<any>(this.urlAPI + 'Utility/getAllCreditType', data).toPromise();
     }
 
-    //Méthode pour get Tier par CIN
+    /**
+     * Retrieves a list of all banks from the server.
+     * 
+     * @param data - Optional parameter containing the request payload to be sent to the server.
+     * @returns A promise that resolves to the response containing the list of banks.
+     */
+    getAllBanks(data?: any) {
+        return this.http.post<any>(this.urlAPI + 'Utility/getAllBanks', data).toPromise();
+    }
+
+    /**
+     * Retrieves all object credit data by making a POST request to the specified API endpoint.
+     * 
+     * @param data - Optional parameter containing the request payload to be sent to the API.
+     * @returns A promise that resolves to the response data of type `any`.
+     */
+    getAllObjectCredit(data?: any) {
+        return this.http.post<any>(this.urlAPI + 'Utility/getAllObjectCredit', data).toPromise();
+    }
+
+    /**
+     * Retrieves all nature property data from the server.
+     *
+     * @param data - Optional parameter containing the request payload to be sent to the server.
+     * @returns A promise that resolves to the response containing the nature property data.
+     */
+    getAllNatureProperty(data?: any) {
+        return this.http.post<any>(this.urlAPI + 'Utility/getAllNatureProperty', data).toPromise();
+    }
+
+    /**
+     * Retrieves all assignment properties by making a POST request to the specified API endpoint.
+     *
+     * @param data - Optional parameter containing the data to be sent in the request body.
+     * @returns A promise that resolves to the response containing the assignment properties.
+     */
+    getAllAssignmentProperty(data?: any) {
+        return this.http.post<any>(this.urlAPI + 'Utility/getAllAssignmentProperty', data).toPromise();
+    }
+
+    /**
+     * Sends a POST request to retrieve all properties in use.
+     * 
+     * @param data - Optional payload to include in the request body.
+     * @returns A promise that resolves to the response containing the requested data.
+     */
+    getAllUseProperty(data?: any) {
+        return this.http.post<any>(this.urlAPI + 'Utility/getAllUseProperty', data).toPromise();
+    }
+
+    /**
+     * Sends a POST request to retrieve condition properties.
+     *
+     * @param data - Optional payload to be sent in the request body.
+     * @returns A promise that resolves to the response containing condition properties.
+     */
+    getAlConditionProperty(data?: any) {
+        return this.http.post<any>(this.urlAPI + 'Utility/getAlConditionProperty', data).toPromise();
+    }
+
+    /**
+     * Retrieves tier information by ID from the server.
+     *
+     * @param data - The payload containing the necessary data to fetch the tier information.
+     * @returns A promise that resolves to the server's response containing the tier details.
+     */
     getTierByID(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/getTierByID', data).toPromise();
     }
 
-     //Méthode pour get Tier par CIN
+    /**
+     * Retrieves the list of folders from the server.
+     *
+     * @param data - The payload to be sent in the POST request.
+     * @returns A promise that resolves to the response containing the folder list.
+     */
      getFoldersList(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/getFoldersList', data).toPromise();
+    }
+    
+    /**
+     * Sends a POST request to save tier information for a professional.
+     *
+     * @param data - The data object containing tier information to be saved.
+     * @returns A promise that resolves with the response from the server.
+     */
+    saveTierInfoProf(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/saveTierInfoProf', data).toPromise();
+    }
+
+    /**
+     * Sends a POST request to retrieve bank information based on the provided data.
+     *
+     * @param data - The payload to be sent in the POST request.
+     * @returns A promise that resolves to the response containing bank information.
+     */
+    getInfoBank(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getInfosBank', data).toPromise();
+    }
+    
+    /**
+     * Sends a POST request to save bank information.
+     *
+     * @param data - The data object containing bank information to be saved.
+     * @returns A promise that resolves with the response from the API.
+     */
+    saveInfoBank(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/saveInfosBank', data).toPromise();
+    }
+
+    /**
+     * Sends a POST request to retrieve engagement data.
+     *
+     * @param data - The payload to be sent in the request body.
+     * @returns A promise that resolves to the response containing engagement data.
+     */
+    getEngagement(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getEngagement', data).toPromise();
+    }
+
+    /**
+     * Sends a POST request to save engagement data.
+     *
+     * @param data - The engagement data to be saved.
+     * @returns A promise that resolves with the response from the API.
+     */
+    saveEngagement(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/saveEngagement', data).toPromise();
+    }
+
+    getPlanFinancement(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getPlanFinancement', data).toPromise();
+    }
+
+    savePlanFinancement(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/savePlanFinancement', data).toPromise();
+    }
+
+    getGarantie(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getGarantie', data).toPromise();
+    }
+
+    saveGarantie(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/saveGarantie', data).toPromise();
     }
 }

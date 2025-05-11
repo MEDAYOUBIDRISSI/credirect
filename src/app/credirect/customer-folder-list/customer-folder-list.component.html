@@ -99,21 +99,21 @@
                             ></p-progressBar>
                         </td> -->
                         <td class="custom-folder-menu">
-                            <!-- <button
+                            <button
                                 pButton
                                 type="button"
                                 icon="pi pi-eye"
-                                class="p-button-rounded p-button-info p-mr-2"
-                                [routerLink]="'/credirect/customer/folder/add'"
+                                class="p-button-rounded p-button-info p-mr-2 mx-1"
+                                [routerLink]="'/credirect/customer/folder/edit/' + dossier.idDossier"
                             ></button>
                             <button
                                 pButton
                                 type="button"
                                 icon="pi pi-pencil"
                                 class="p-button-rounded p-button-success"
-                                [routerLink]="'/credirect/customer/folder/financing-plans'"
+                                [routerLink]="'/credirect/customer/folder/financing-plans/' + dossier.idDossier + '/' + dossier.idDossier"
                             ></button>
-                            <button
+                            <!-- <button
                                 pButton
                                 type="button"
                                 icon="pi pi-clock"
@@ -121,7 +121,7 @@
                                 [routerLink]="'/credirect/customer/folder/folder-timeline'"
                             ></button> -->
                             <!-- ///////////////////////////////////// -->
-                            <p-panelMenu [model]="dossier.panelMenuItems"></p-panelMenu>
+                            <!-- <p-panelMenu [model]="dossier.panelMenuItems"></p-panelMenu> -->
                         </td>
                         </tr>
                     </ng-template>

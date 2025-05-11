@@ -96,7 +96,7 @@
                                             <input
                                                 id="superficieBien{{i}}"
                                                 type="number"
-                                                [(ngModel)]="bien.superficie"
+                                                [(ngModel)]="bien.propertyArea"
                                                 pInputText
                                             />
                                         </div>
@@ -284,7 +284,6 @@
                     <div *ngIf="activeIndex === 2" class="step-content">
                         <div class="p-fluid">
                             <div class="p-field">
-                                <h5 for="garanties">Garanties</h5>
                                 <p-table [value]="canauxVentes" dataKey="id" [tableStyle]="{ 'width': '60vw' }">
                                     <ng-template pTemplate="body" let-canaux let-editing="editing" let-rowIndex="rowIndex">
                                         <tr>
@@ -318,8 +317,7 @@
                     <div *ngIf="activeIndex === 3" class="step-content">
                         <div class="p-fluid">
                             <div class="p-field mt-4">
-                                <h5 for="commentaires">Commentaires</h5>
-                                <angular-editor [config]="ckeConfig" [(ngModel)]="planFinancement.commentaires">
+                                <angular-editor [config]="ckeConfig" [(ngModel)]="planFinancement.commentCredit">
                                 </angular-editor>
                                 <!-- <p-editor [(ngModel)]="planFinancement.commentaires" [style]="{ height: '320px' }" /> -->
                             </div>
@@ -417,7 +415,19 @@
                             (click)="addDepot()"
                           ></button>
                         </div>
-                      </div>
+                    </div>
+
+                    <div class="flex space-between" style="justify-content: space-between;">
+                        <span></span>
+                        <button
+                            pButton pRipple class="p-button-success" (click)="savePlanFinancement()"
+                            label="Sauvegarder" *ngIf = "activeIndex == 0 || activeIndex == 1 || activeIndex == 3">
+                        </button>
+                        <button
+                            pButton pRipple class="p-button-success" (click)="saveGarantie()"
+                            label="Sauvegarder" *ngIf = "activeIndex == 2">
+                        </button>
+                    </div>
                     <!-- Boutons de navigation -->
                     <div class="flex space-between mt-4" style="justify-content: space-between;">
                         <button

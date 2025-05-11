@@ -143,7 +143,7 @@ export class CustomerDepotComponent implements OnInit{
           {
             label: 'Edite',
             icon: 'pi pi-eye',
-            routerLink: ['/credirect/customer/folder/edit', dossierId, depotId]
+            routerLink: ['/credirect/customer/folder/edit', dossierId]
           },
           {
             label: 'Plans de financement',

@@ -77,59 +77,74 @@ export class CustomerFolderMoreInfoComponent implements OnInit{
       { name: 'Locataire', key: 'B' },
   ];
 
-  user = {
-    // civilite: 'Monsieur',
-    // nomPrenom: 'El Amrani Ahmed',
-    // dateNaissance: '10/12/1990',
-    // nationalite: 'Marocaine',
-    // identite: 'CIN',
-    // cin: 'EE570567',
-    // adresse: '45 Rue Mohammed V',
-    // ville: 'Casablanca',
-    // pays: 'Maroc',
-    // paysResidence: 'Maroc',
-    // situationFamiliale: 'Marié',
-    // telephoneMobile: '06 12 34 56 78',
-    // telephoneFixe: '05 22 33 44 55',
-    // telephoneProfessionnel: '05 22 99 88 77',
-    // email: 'ahmed.elamrani@example.com',
-    // statut: 'Résident',
-    // statutOccupation: 'Locataire',
-    // provenanceClient: 'Agence immobilière',
-    // origin: 'Agence XYZ - Casablanca',
-    // montantSollicite: '500,000 MAD'
+  user :any;
+  pension = []
+  infoBank :any = []
+  engagement: any = {
+    NatureCommitmentID: null,
+    AgencyBankID: null,
+    OtherAgency: null,
+    Maturity: null,
+    Outstanding: null,
+    RepayableEarly: null
   };
- 
   // form: FormGroup;
   professions = [
-    { label: 'Salarié', value: 'Salarié' },
-    { label: 'Commerçant personne physique', value: 'Commerçant' },
-    { label: 'Profession libérale', value: 'ProfessionLibérale' },
-    { label: 'Gérant de société', value: 'GérantSociété' },
-    { label: 'Retraité ou pensionnaire', value: 'Retraité' },
-    { label: 'Rentier', value: 'Rentier' },
+    { label: 'Salarié', value: 1 },
+    { label: 'Commerçant personne physique', value: 2 },
+    { label: 'Profession libérale', value: 3 },
+    { label: 'Gérant de société', value: 4 },
+    { label: 'Retraité ou pensionnaire', value: 5 },
+    { label: 'Rentier', value: 6 },
   ];
-  selectedProfession: string = '';
+  Profession: any = null;
+  natureBailOptions = [
+    { label: 'Appartement', value: 1 },
+    { label: 'Maison', value: 2 },
+    { label: 'Magasin', value: 3 },
+    { label: 'Plateau', value: 4 },
+    { label: 'Lot de terrain', value: 5 },
+    { label: 'Dépôt', value: 6 },
+    { label: 'Hangard', value: 7 },
+    { label: 'Agrément', value: 8 },
+  ];
+
+  organismOptions = [
+    { label: 'CIMR', value: 1 },
+    { label: 'CMR', value: 2 },
+    { label: 'RCAR', value: 3 },
+    { label: 'CNSS', value: 4 }
+  ];
+  pensionOptions = [
+    { label: 'Retraite', value: 1 },
+    { label: 'veuvage', value: 2 },
+    { label: 'invalidité ', value: 3 }
+  ];
+
   banks = [
-    { label: 'Banque Populaire', value: 'Banque Populaire' },
-    { label: 'Attijariwafa Bank', value: 'Attijariwafa Bank' },
-    { label: 'BMCE Bank', value: 'BMCE Bank' },
-    { label: 'Société Générale Maroc', value: 'Société Générale Maroc' },
-    { label: 'Crédit du Maroc', value: 'Crédit du Maroc' },
-    { label: 'CIH Bank', value: 'CIH Bank' },
+    // { label: 'Banque Populaire', value: 'Banque Populaire' },
+    // { label: 'Attijariwafa Bank', value: 'Attijariwafa Bank' },
+    // { label: 'BMCE Bank', value: 'BMCE Bank' },
+    // { label: 'Société Générale Maroc', value: 'Société Générale Maroc' },
+    // { label: 'Crédit du Maroc', value: 'Crédit du Maroc' },
+    // { label: 'CIH Bank', value: 'CIH Bank' },
   ];
   accountTypes = [
-    { label: 'PRINCIPAL', value: 'PRINCIPAL' },
-    { label: 'SECONDAIRE', value: 'SECONDAIRE' },
+    { label: 'PRINCIPAL', value: true },
+    { label: 'SECONDAIRE', value: false },
+  ];
+   remboursableTypes = [
+    { label: 'Oui', value: true },
+    { label: 'Non', value: false },
   ];
   engagementTypes = [
-    { label: 'Crédit immobilier', value: 'Crédit immobilier' },
-    { label: 'Crédit à la consommation', value: 'Crédit à la consommation' },
-    { label: 'Crédit automobile', value: 'Crédit automobile' },
-    { label: 'Crédit hypothécaire', value: 'Crédit hypothécaire' },
-    { label: 'Crédit d’investissement', value: 'Crédit d’investissement' },
-    { label: 'Crédit révolving', value: 'Crédit révolving' },
-    { label: 'Autre crédit', value: 'Autre crédit' },
+    // { label: 'Crédit immobilier', value: 'Crédit immobilier' },
+    // { label: 'Crédit à la consommation', value: 'Crédit à la consommation' },
+    // { label: 'Crédit automobile', value: 'Crédit automobile' },
+    // { label: 'Crédit hypothécaire', value: 'Crédit hypothécaire' },
+    // { label: 'Crédit d’investissement', value: 'Crédit d’investissement' },
+    // { label: 'Crédit révolving', value: 'Crédit révolving' },
+    // { label: 'Autre crédit', value: 'Autre crédit' },
   ];
 
   isNextDisabled(): boolean {
@@ -205,7 +220,12 @@ goToNextStep() {
 
   ngOnInit() {
     this.getTierByID();
+    this.getInfoBank();
     this.selectCard(1);
+    this.getAllBanks();
+    this.getAllCreditType();
+    this.getEngagement()
+
     this.situations_familiales = [
       { label: 'Célibataire', value: 1 },
       { label: 'Marié(e)', value: 2 },
@@ -372,10 +392,204 @@ this.business_activities = [
     }
     this.CustomerService.getTierByID(body).then((res: any) => {
       if (res.status_code === 200) {
-        this.user = res.data[0];
-        console.log("user", this.user);
+        this.user = this.fixPascalCaseKeys(res?.data[0]);
+        this.Profession = res?.data[0]?.profession;
+        const pensionsRaw = res?.data[0]?.pensions || [];
+      this.pension = pensionsRaw.map((p: any) => this.fixPensionKeys(p));
       }
     })
+  }
+
+  saveTierInfoProf(){
+     // Inject the list of pensions into the user object
+      this.user.Pension = this.pension;
+    let body = {
+      tierID: this.tierID,
+      Profession: this.Profession,
+      user: this.user
+    }
+    this.CustomerService.saveTierInfoProf(body).then((res: any) => {
+      if (res.status_code === 200) {
+        
+      }
+    })
+  }
+
+  fixPascalCaseKeys(data: any): any {
+  return {
+    ...data,
+    Date_debut_exercice: data?.date_debut_exercice ? new Date(data?.date_debut_exercice) : null,
+    Date_Embauche: data?.date_Embauche ? new Date(data?.date_Embauche) : null,
+    Date_Creation_RC: data?.date_Creation_RC ? new Date(data?.date_Creation_RC) : null,
+    Date_Creation_Company: data?.date_Creation_Company ? new Date(data?.date_Creation_Company) : null,
+    
+    Capital_Social: data?.capital_Social,
+    ResultatYearN: data?.resultatYearN,
+    ChiffreAffaireYearN: data?.chiffreAffaireYearN,
+    ResultatYearN_1: data?.resultatYearN_1,
+    ChiffreAffaireYearN_1: data?.chiffreAffaireYearN_1,
+    PartsParticipationSociete: data?.partsParticipationSociete,
+    Nature_activity: data?.nature_activity,
+    IfOrTp: data?.ifOrTp,
+    Adress_activity: data?.adress_activity,
+    Honoraires: data?.honoraires,
+    Fonction: data?.fonction,
+    Employeur: data?.employeur,
+    Salaire: data?.salaire,
+    NRC: data?.nrc,
+    Revenu: data?.revenu,
+    Denomination: data?.denomination,
+    ActivityCompany: data?.activityCompany,
+    Nature_Bail: data?.nature_Bail,
+    Rent: data?.rent
+  };
+  
+}
+fixPensionKeys(data: any): any {
+  return {
+    id: data?.id,
+    NaturePension: data?.naturePension,
+    OrganismePension: data?.organismePension,
+    TypePension: data?.typePension,
+    Montant: data?.montant
+  };
+}
+
+  // Ajouter un Pension
+  addPension(): void {
+    this.pension.push({
+      id: null,
+      NaturePension: '',
+      OrganismePension: 1,
+      TypePension: 1,
+      Montant: 0
+    });
+  }
+
+  // Supprimer un Pension
+  removePension(index: number): void {
+    this.pension.splice(index, 1);
+  }
+
+  getAllBanks(){
+    let body = {
+    }
+    this.CustomerService.getAllBanks(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.banks = res?.data;
+      }
+    })
+  }
+
+  // Ajouter un InfoBank
+  addInfoBank(): void {
+    this.infoBank.push({
+      id: null,
+      AgencyBankID: null,
+      Balance: 0,
+      CumulativeCreditMovement: 0,
+      IsPrincipal: true
+    });
+  }
+
+  // Supprimer un InfoBank
+  removeInfoBank(index: number): void {
+    this.infoBank.splice(index, 1);
+  }
+
+  getInfoBank(){
+    let body = {
+      tierID: this.tierID
+    }
+        console.log("body", body);
+    this.CustomerService.getInfoBank(body).then((res: any) => {
+            console.log("res", res);
+      if (res.status_code === 200) {
+        this.infoBank = res?.data?.map((item: any) => this.fixInfoBankKeys(item)) || [];
+      }
+    })
+  }
+
+  saveInfoBank(){
+    let body = {
+      tierID: this.tierID,
+      infoBank: this.infoBank
+    }
+    this.CustomerService.saveInfoBank(body).then((res: any) => {     
+      if (res.status_code === 200) {
+        
+      }
+    })
+  }
+  fixInfoBankKeys(data: any): any {
+    return {
+      InfoBankID: data?.infoBankID,
+      AgencyBankID: data?.agencyBankID,
+      AgencyName: data?.agencyName,
+      ClientID: data?.clientID,
+      Balance: data?.balance,
+      CumulativeCreditMovement: data?.cumulativeCreditMovement,
+      IsPrincipal: data?.isPrincipal
+    };
+  }
+  getAllCreditType(){
+    let body = {
+    }
+    this.CustomerService.getAllCreditType(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.engagementTypes = res.data;
+      }
+    })
+  }
+
+  getEngagement(){
+    let body = {
+      tierID: this.tierID
+    }
+    this.CustomerService.getEngagement(body).then((res: any) => {
+      console.log("res", res);
+      if (res.status_code === 200) {
+        // this.engagement = res?.data[0];
+        this.engagement = this.fixEngagementKeys(res?.data?.[0]) || {
+        NatureCommitmentID: null,
+        AgencyBankID: null,
+        OtherAgency: null,
+        Maturity: null,
+        Outstanding: null,
+        RepayableEarly: null
+        };
+        
+      }
+    })
+  }
+
+  saveEngagement(){
+    let body = {
+      tierID: this.tierID,
+      engagement: this.engagement
+    }
+    this.CustomerService.saveEngagement(body).then((res: any) => {
+      if (res.status_code === 200) {
+        
+      }
+    })
+  }
+
+  fixEngagementKeys(data: any): any {
+    return {
+      BankCommitmentChargeID: data?.bankCommitmentChargeID,
+      NatureCommitmentID: data?.natureCommitmentID,
+      AgencyBankID: data?.agencyBankID,
+      OtherAgency: data?.otherAgency,
+      ClientID: data?.clientID,
+      Maturity: data?.maturity,
+      Outstanding: data?.outstanding,
+      RepayableEarly: data?.repayableEarly
+    };
+  }
+
+  onDone() {
+    window.history.back();
   }
  
 }

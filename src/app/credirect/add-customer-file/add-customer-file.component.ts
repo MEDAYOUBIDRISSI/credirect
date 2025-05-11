@@ -7,6 +7,7 @@ import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+
 interface expandedRows {
   [key: string]: boolean;
 }
@@ -70,6 +71,8 @@ export class AddCustomerFileComponent implements OnInit {
   OriginID: any;
   OriginDetails: any;
   ClientTitleID: any;
+  displayDeleteConfirmation: boolean = false;
+  deleteLoading: boolean = false;
 
   managers: any[] = [{
     ManagerTitleID: null,         
@@ -141,24 +144,26 @@ export class AddCustomerFileComponent implements OnInit {
   selectedIdentity: any = null;
   selectedIdentity2: any = null;
 
+  clientData: any = {};
+
   // identities: any[] = [
   //   { name: 'CIN', key: 'A' },
   //   { name: 'Carte Séjour', key: 'B' },
   //   { name: 'Passeport', key: 'C' },
   // ];
 
-  identities2: any[] = [
-    { name: 'CIN', key: 'A' },
-    { name: 'Carte Séjour', key: 'B' },
-    { name: 'Passeport', key: 'C' },
-  ];
+  // identities2: any[] = [
+  //   { name: 'CIN', key: 'A' },
+  //   { name: 'Carte Séjour', key: 'B' },
+  //   { name: 'Passeport', key: 'C' },
+  // ];
 
   selectedStatut: any = null;
-  statuts: any[] = [
-    { name: 'Résident', key: 'A' },
-    { name: 'MRE', key: 'B' },
-    { name: 'ENR', key: 'C' },
-  ];
+  // statuts: any[] = [
+  //   { name: 'Résident', key: 'A' },
+  //   { name: 'MRE', key: 'B' },
+  //   { name: 'ENR', key: 'C' },
+  // ];
 
   selectedStatut_Occupation: any = null;
   statuts_Occupation: any[] = [
@@ -183,21 +188,19 @@ export class AddCustomerFileComponent implements OnInit {
   ngOnInit() {
 
     this.loadLookups();
+    this.setupRouteListener();
 
-  this.route.params.subscribe((params) => {
-    const stepFromUrl = +params['step'];
-    const customerIdFromUrl = params['customerId'];
-    
-    if (!isNaN(stepFromUrl)) {  
-      this.step = stepFromUrl;
-      this.activeIndex = this.step > 1 ? this.step - 2 : 0;
-    }
-    
-    // Always maintain customerId from URL, even if it's "0"
-    this.customerId = customerIdFromUrl || this.customerId;
-    
-    this.cdr.detectChanges();
-  });
+    this.route.params.subscribe((params) => {
+      const step = +params['step'] || 0;
+      this.step = step;
+      this.activeIndex = Math.max(0, step - 2); // Initialize correctly
+      console.log(`Init - Step: ${this.step}, ActiveIndex: ${this.activeIndex} - ${this.isSelected1}`);
+      
+      if (params['customerId']) {
+        this.customerId = params['customerId'];
+        this.loadClientData();
+      }
+    });
 
 
     // this.initializeDropdowns();
@@ -475,6 +478,15 @@ async onNextClick() {
   }
 }
 
+async simple_onNextClick() {
+    
+    // Proceed to next step with current customerId
+    this.step++;
+    this.activeIndex = this.step - 2;
+    this.updateUrl();
+
+}
+
   loadLookups() {
     this.customerService.getClientRoles().subscribe(roles => {
       this.roles = roles.map(role => ({
@@ -556,31 +568,58 @@ async onNextClick() {
   });
   }
 
-  loadClientData() {
-    this.customerService.getClientById(this.customerId).subscribe({
-      next: (client) => {
-        // Set the card selection based on client type
-        this.isSelected1 = client.is_individual;
-        this.isSelected2 = client.is_organisation;
-        
-        // Set the items for steps based on client type
-        this.items = client.is_individual ? [
-          { label: 'Informations générales' },
-          { label: 'Informations détaillées' },
-          { label: "Zone d'implantation" }
-        ] : [
-          { label: 'Informations générales' },
-          { label: 'Informations détaillées' },
-          { label: "Gérant/Manager" }
-        ];
-  
-        // Populate all form fields
-        this.populateFormFields(client);
-      },
-      error: (err) => {
-        console.error('Error loading client data', err);
+  async loadClientData() {
+    this.loading = true;
+    try {
+      const response: any = await this.customerService.getClientById(this.customerId!).toPromise();
+      
+      console.log('API Response:', response); // Debug log
+      
+      if (!response?.data) {
+        console.error('No client data received');
+        this.loading = false;
+        return;
       }
-    });
+  
+      const client = response.data;
+
+      if (client.is_individual !== null || client.is_organisation !== null) {
+        // Use explicit flags if provided
+        this.isSelected1 = client.is_individual === true;
+        this.isSelected2 = client.is_organisation === true;
+      } else {
+        // Fallback: Determine type based on other fields
+        this.isSelected1 = !!client.LastName && !client.CompanyName;
+        this.isSelected2 = !!client.CompanyName;
+
+      }
+      
+      if (!this.isSelected1 && !this.isSelected2) {
+        console.warn('No type could be determined - defaulting to Individual');
+        this.isSelected1 = true;
+      }
+      
+      // IMPORTANT: Set the items array based on client type
+      this.items = this.isSelected1 ? [
+        { label: 'Informations générales' },
+        { label: 'Informations détaillées' },
+        { label: "Zone d'implantation" }
+      ] : [
+        { label: 'Informations générales' },
+        { label: 'Informations détaillées' },
+        { label: "Gérant/Manager" }
+      ];
+  
+      // Populate form fields
+      this.populateFormFields(client);
+      
+      // Force UI update
+      this.cdr.detectChanges();
+      
+    } catch (error) {
+      console.error('Error loading client:', error);
+      this.loading = false;
+    }
   }
 
   populateFormFields(client: any) {
@@ -635,41 +674,129 @@ async onNextClick() {
       this.selectedCompanyCountry = this.companyCountries.find(c => c.value === client.CompanyCountryID);
       
       // Load managers if they exist
-      if (client.ClientManagers && client.ClientManagers.length > 0) {
-        this.managers = client.ClientManagers.map(manager => ({
-          ManagerTitleID: this.titles.find(t => t.value === manager.ManagerInformation?.ManagerTitleID),
-          ManagerLastName: manager.ManagerInformation?.ManagerLastName,
-          ManagerFirstName: manager.ManagerInformation?.ManagerFirstName,
-          ManagerBirthDate: manager.ManagerInformation?.ManagerBirthDate,
-          ManagerNationality: manager.ManagerInformation?.ManagerNationality,
-          Id_Identity: manager.ManagerInformation?.Id_Identity === 1 ? 
+      if (client.Managers && client.Managers.length > 0) {
+        this.managers = client.Managers.map(manager => ({
+          ManagerTitleID: this.titles.find(t => t.value === manager.ManagerTitleID),
+          ManagerLastName: manager.LastName,
+          ManagerFirstName: manager.FirstName,
+          ManagerBirthDate: manager.BirthDate,
+          ManagerNationality: manager.Nationality,
+          Id_Identity: manager.IdentityType === 1 ? 
             { name: 'CIN', key: 'A' } : 
-            manager.ManagerInformation?.Id_Identity === 2 ? 
+            manager.IdentityType === 2 ? 
             { name: 'Carte Séjour', key: 'B' } : 
             { name: 'Passeport', key: 'C' },
-          CIN: manager.ManagerInformation?.CIN,
-          CarteSejour: manager.ManagerInformation?.CarteSejour,
-          Passeport: manager.ManagerInformation?.Passeport,
-          Id_ManagerMaritalStatus: this.maritalStatuses.find(s => s.value === manager.ManagerInformation?.Id_ManagerMaritalStatus),
-          ManagerCity: manager.ManagerInformation?.ManagerCity,
-          ManagerCountryID: this.countries.find(c => c.value === manager.ManagerInformation?.ManagerCountryID),
-          ManagerResidenceCountryID: this.residenceCountries.find(c => c.value === manager.ManagerInformation?.ManagerResidenceCountryID),
-          ManagerAddress: manager.ManagerInformation?.ManagerAddress
+          CIN: manager.CIN,
+          CarteSejour: manager.CarteSejour,
+          Passeport: manager.Passeport,
+          Id_ManagerMaritalStatus: this.maritalStatuses.find(s => s.value === manager.MaritalStatusID),
+          ManagerCity: manager.City,
+          ManagerCountryID: this.countries.find(c => c.value === manager.CountryID),
+          ManagerResidenceCountryID: this.residenceCountries.find(c => c.value === manager.ResidenceCountryID),
+          ManagerAddress: manager.Address
         }));
       }
     }
   }
 
   onEditClick() {
-    // Reset to step 0 and reload the form
     this.step = 0;
     this.activeIndex = 0;
     
     // Reload the client data to ensure we have the latest
     if (this.customerId && this.customerId !== '0') {
-      this.loadClientData();
+      this.loadClientData().then(() => {
+        // After loading data, move to step 1 (role selection)
+        this.step = 1;
+        this.activeIndex = 0;
+        this.updateUrl();
+      });
+    } else {
+      this.updateUrl();
     }
+  }
+  private setupRouteListener(): void {
+    this.route.params.subscribe((params) => {
+      const stepFromUrl = +params['step']; // Gets 2 from /add/2/2
+      const customerIdFromUrl = params['customerId']; // Gets 2 from /add/2/2
+  
+      // Update step and activeIndex together
+      if (!isNaN(stepFromUrl)) {
+        this.step = stepFromUrl;
+        this.activeIndex = Math.max(0, this.step - 2); // Now step 2 → index 0
+        console.log(`Route changed - Step: ${this.step}, ActiveIndex: ${this.activeIndex}`);
+      }
+  
+      if (customerIdFromUrl !== this.customerId) {
+        this.customerId = customerIdFromUrl;
+        if (this.customerId && this.customerId !== '0') {
+          this.loadClientData();
+        }
+      }
+    });
+  }
+
+  resetForm() {
+    this.isSelected1 = false;
+    this.isSelected2 = false;
+    this.items = [];
+    this.activeIndex = 0;
+    // Reset all form fields...
+  }
+
+  onDeleteClick() {
+    if (!this.customerId) return;
+  
+    this.loading = true;
     
-    this.updateUrl();
+    this.customerService.deleteClient(+this.customerId).subscribe({
+      next: () => {
+        // Show success message
+        console.log('Client deleted successfully');
+        
+        // Navigate back to the client list or another appropriate page
+        this.router.navigate(['/credirect/customer']);
+      },
+      error: (err) => {
+        console.error('Error deleting client', err);
+        this.loading = false;
+        // Show error message to user
+      }
+    });
+  }
+
+  showDeleteConfirmation() {
+    this.displayDeleteConfirmation = true;
+  }
+  
+  hideDeleteConfirmation() {
+    this.displayDeleteConfirmation = false;
+  }
+  
+  confirmDelete() {
+    if (!this.customerId || this.customerId === '0') return;
+  
+    this.deleteLoading = true;
+    
+    this.customerService.deleteClient(+this.customerId).subscribe({
+      next: () => {
+        this.deleteLoading = false;
+        this.displayDeleteConfirmation = false;
+        // Show success message (you might want to use a toast/message service)
+        // console.log('Client deleted successfully');
+        // alert('Client deleted successfully');
+
+        console.log('Client deleted successfully');
+        
+        // Navigate back to the client list
+        this.router.navigate(['/credirect/customer']);
+      },
+      error: (err) => {
+        this.deleteLoading = false;
+        console.error('Error deleting client', err);
+        // Show error message to user
+        alert('Une erreur est survenue lors de la suppression du client.');
+      }
+    });
   }
 }

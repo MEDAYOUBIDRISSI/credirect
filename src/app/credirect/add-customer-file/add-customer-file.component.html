@@ -1,4 +1,5 @@
-
+<div *ngIf="!loading && customerId && customerId !== '0'">
+</div>
 <div *ngIf="step != 5 && step != 6" class="card">
     <div *ngIf="step == 0" class="d-flex justify-content-center align-items-center">
         <div class="d-flex justify-content-center gap-4" style="display: flex;">
@@ -60,7 +61,7 @@
         <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)" />
         <div class="container">
         <div class="row">
-            <div class="col-12" *ngIf="activeIndex == 0 && step == 2">
+            <div class="col-12" *ngIf="activeIndex == 0">
                 <div class="grid p-fluid mt-3">
 
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
@@ -164,7 +165,7 @@
                               [value]="identity" 
                               [(ngModel)]="selectedIdentity" />
                           <label [for]="'identity_' + identity.value" class="ml-2">
-                              {{ identity.label }}
+                              {{ identity?.label }}
                           </label>
                       </div>
                   </div>
@@ -205,7 +206,7 @@
 
                 </div>
             </div>
-            <div class="col-12" *ngIf="activeIndex == 1 && step == 3">
+            <div class="col-12" *ngIf="activeIndex == 1">
                 <div class="grid p-fluid mt-3">
 
                     <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
@@ -341,7 +342,7 @@
     
                     </div>
             </div>
-            <div class="col-12" *ngIf="activeIndex == 2 && step == 4">
+            <div class="col-12" *ngIf="activeIndex == 2">
                 <div *ngIf="isSelected2" class="grid p-fluid mt-3">
 
                   <div *ngFor="let manager of managers; let i = index" class="manager-item card">
@@ -505,7 +506,7 @@
                                       [value]="status" 
                                       [(ngModel)]="selectedResidencyStatus" />
                                   <label [for]="'status_' + status.value" class="ml-2">
-                                      {{ status.label }}
+                                      {{ status?.label }}
                                   </label>
                               </div>
                           </div>
@@ -576,12 +577,20 @@
           (click)="goToPreviousStep()">
         </button>
         
-        <button *ngIf="step != 4 && step != 5"
+        <button *ngIf="step != 4 && step != 5 && step != 0 && step != 1"
           pButton pRipple type="button"
           class="p-button-primary" 
           label="Suivant" 
           [disabled]="isNextDisabled()" 
           (click)="onNextClick()">
+        </button>
+
+        <button *ngIf="step == 0 || step == 1"
+          pButton pRipple type="button"
+          class="p-button-primary" 
+          label="Suivant" 
+          [disabled]="isNextDisabled()" 
+          (click)="simple_onNextClick()">
         </button>
 
         <button *ngIf="step == 4"
@@ -603,7 +612,7 @@
             <p *ngIf="isSelected1" class="card-text">
                 <span style="font-size: 18px; color: #333;">{{LastName}} {{FirstName}}</span> <br />
                 <span style="font-size: 16px; color: #666;">{{CIN}}</span> <br />
-                <span style="font-size: 16px; font-style: italic; color: #444;">{{selectedRole.label}}</span> <br />
+                <span style="font-size: 16px; font-style: italic; color: #444;">{{selectedRole?.label}}</span> <br />
                 <span style="font-size: 16px; color: #444;">{{City}}</span> <br />
                 <span style="font-size: 16px; color: #444;">{{MobilePhone}}</span> <br />
                 <a class="fs-6 text-decoration-none" style="color: #007bff;">{{Email}}</a>
@@ -612,7 +621,7 @@
             <p *ngIf="isSelected2" class="card-text">
                 <span style="font-size: 18px; color: #333;">{{CompanyName}}</span> <br />
                 <span style="font-size: 16px; color: #666;">{{RegistrationNumber}}</span> <br />
-                <span style="font-size: 16px; font-style: italic; color: #444;">{{selectedRole.label}}</span> <br />
+                <span style="font-size: 16px; font-style: italic; color: #444;">{{selectedRole?.label}}</span> <br />
                 <span style="font-size: 16px; color: #444;">{{CompanyCity}}</span> <br />
                 <span style="font-size: 16px; color: #444;">{{WorkPhone}}</span> <br />
                 <a class="fs-6 text-decoration-none" style="color: #007bff;">{{Email}}</a>
@@ -625,7 +634,7 @@
                 <button pButton pRipple type="button" label="Details" class="p-button-primary" (click)="goToNextStep()" [style]="{'width': '200px'}"></button>
             </div>
             <div class="mt-3">
-                <button pButton pRipple type="button" label="Supprimer la fiche" class="p-button-primary" [style]="{'width': '200px'}"></button>
+                <button pButton pRipple type="button" label="Supprimer la fiche" class="p-button-primary" [style]="{'width': '200px'}" (click)="showDeleteConfirmation()"></button>
             </div>
             <div class="mt-3">
                 <button pButton pRipple type="button" label="Création dossier" class="p-button-primary" [style]="{'width': '200px'}"></button>
@@ -655,13 +664,13 @@
 					<h5><strong>Passeport :</strong> {{PassportNumber}}</h5>
 				</div>
         <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Rôle du tiers :</strong> {{selectedRole.label}}</h5>
+					<h5><strong>Rôle du tiers :</strong> {{selectedRole?.label}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Date de Naissance :</strong> {{BirthDate}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Civilité :</strong> {{selectedTitle.label}} </h5>
+					<h5><strong>Civilité :</strong> {{selectedTitle?.label}} </h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Nationalité :</strong> {{Nationality}}</h5>
@@ -678,10 +687,10 @@
 					<h5><strong>Dénomination :</strong> {{CompanyName}}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Forme juridique :</strong> {{selectedLegalForm.label}}</h5>
+					<h5><strong>Forme juridique :</strong> {{selectedLegalForm?.label}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Rôle du tiers :</strong> {{selectedRole.label}} </h5>
+					<h5><strong>Rôle du tiers :</strong> {{selectedRole?.label}} </h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Date de Création :</strong> {{CreationDate}}</h5>
@@ -690,7 +699,7 @@
 					<h5><strong>N° RC :</strong> {{RegistrationNumber}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Activité :</strong> {{selectedBusinessActivity.label}}</h5>
+					<h5><strong>Activité :</strong> {{selectedBusinessActivity?.label}}</h5>
 				</div>
 			</div>
         </div>
@@ -698,16 +707,16 @@
             <h3 style="color: #f1a253;"><strong>Zone d'implantation</strong></h3>
             <div class="grid formgrid">
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Statut :</strong> {{selectedStatut.label}}</h5>
+					<h5><strong>Statut :</strong> {{selectedStatut?.name}}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Statut d'occupation :</strong> {{selectedStatut_Occupation.label}}</h5>
+					<h5><strong>Statut d'occupation :</strong> {{selectedStatut_Occupation?.name}}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Montant sollicité :</strong> {{RequestedAmount}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Provenance du client :</strong> {{selectedClientOrigin.label}}</h5>
+					<h5><strong>Provenance du client :</strong> {{selectedClientOrigin?.label}}</h5>
 				</div>
                 <div class="col-12">
 					<h5><strong>Détail de provenance :</strong> {{OriginDetails}}</h5>
@@ -721,7 +730,7 @@
 					<h5><strong>Ville :</strong> {{CompanyCity}}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Pays :</strong> {{selectedCompanyCountry.label}}</h5>
+					<h5><strong>Pays :</strong> {{selectedCompanyCountry?.label}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Capital social :</strong> {{SocialCapital}}</h5>
@@ -743,13 +752,13 @@
 					<h5><strong>Ville :</strong> {{City}}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Pays :</strong> {{selectedCountry.label}}</h5>
+					<h5><strong>Pays :</strong> {{selectedCountry?.label}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Pays de Résidence :</strong> {{selectedResidenceCountry.label}}</h5>
+					<h5><strong>Pays de Résidence :</strong> {{selectedResidenceCountry?.label}}</h5>
 				</div>
 				<div class="col-12 mb-2 lg:col-6 lg:mb-0">
-					<h5><strong>Situation familiale :</strong> {{selectedMaritalStatus.label}}</h5>
+					<h5><strong>Situation familiale :</strong> {{selectedMaritalStatus?.label}}</h5>
 				</div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
 					<h5><strong>Téléphone mobile :</strong> {{MobilePhone}}</h5>
@@ -785,22 +794,22 @@
                   <h5><strong>Date de Naissance :</strong> {{ manager.ManagerBirthDate }}</h5>
                 </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                  <h5><strong>Civilité :</strong> {{ manager.ManagerTitleID.label }}</h5>
+                  <h5><strong>Civilité :</strong> {{ manager.ManagerTitleID?.label }}</h5>
                 </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                   <h5><strong>Nationalité :</strong> {{ manager.ManagerNationality }}</h5>
                 </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                  <h5><strong>Situation familiale :</strong> {{ manager.Id_ManagerMaritalStatus.label }}</h5>
+                  <h5><strong>Situation familiale :</strong> {{ manager.Id_ManagerMaritalStatus?.label }}</h5>
                 </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                   <h5><strong>Ville :</strong> {{ manager.ManagerCity }}</h5>
                 </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                  <h5><strong>Pays :</strong> {{ manager.ManagerCountryID.label }}</h5>
+                  <h5><strong>Pays :</strong> {{ manager.ManagerCountryID?.label }}</h5>
                 </div>
                 <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                  <h5><strong>Pays de Résidence :</strong> {{ manager.ManagerResidenceCountryID.label }}</h5>
+                  <h5><strong>Pays de Résidence :</strong> {{ manager.ManagerResidenceCountryID?.label }}</h5>
                 </div>
                 <div class="col-12">
                   <h5><strong>Adresse :</strong> {{ manager.ManagerAddress }}</h5>
@@ -820,4 +829,42 @@
     (click)="goToPreviousStep()">
   </button>
 </div>
+
+<p-dialog 
+  header="Confirmation de suppression" 
+  [(visible)]="displayDeleteConfirmation" 
+  [style]="{width: '450px'}" 
+  [modal]="true"
+  [draggable]="false" 
+  [resizable]="false"
+  [closable]="!deleteLoading">
+  
+  <div class="confirmation-content">
+    <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
+    <span>Êtes-vous sûr de vouloir supprimer ce client ? Cette action est irréversible.</span>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <button 
+      pButton 
+      type="button" 
+      label="Non" 
+      icon="pi pi-times" 
+      class="p-button-text" 
+      (click)="hideDeleteConfirmation()"
+      [disabled]="deleteLoading">
+    </button>
+    <button 
+      pButton 
+      type="button" 
+      label="Oui" 
+      icon="pi pi-check" 
+      class="p-button-danger" 
+      (click)="confirmDelete()"
+      [disabled]="deleteLoading">
+      <span *ngIf="deleteLoading" class="pi pi-spin pi-spinner" style="margin-right: 0.5rem"></span>
+      <!-- <span>Oui</span> -->
+    </button>
+  </ng-template>
+</p-dialog>
 

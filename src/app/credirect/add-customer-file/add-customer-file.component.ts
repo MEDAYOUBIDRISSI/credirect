@@ -159,11 +159,11 @@ export class AddCustomerFileComponent implements OnInit {
   ];
 
   selectedStatut: any = null;
-  // statuts: any[] = [
-  //   { name: 'Résident', key: 'A' },
-  //   { name: 'MRE', key: 'B' },
-  //   { name: 'ENR', key: 'C' },
-  // ];
+  statuts: any[] = [
+    { name: 'Résident', key: 'A' },
+    { name: 'MRE', key: 'B' },
+    { name: 'ENR', key: 'C' },
+  ];
 
   selectedStatut_Occupation: any = null;
   statuts_Occupation: any[] = [
@@ -180,9 +180,7 @@ export class AddCustomerFileComponent implements OnInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {
-    if (this.route.snapshot.paramMap.get('customerId')) {
-      this.customerId = this.route.snapshot.paramMap.get('customerId');
-    }
+    this.customerId = this.route.snapshot.paramMap.get('customerId') || null;
   }
 
   ngOnInit() {
@@ -357,42 +355,70 @@ export class AddCustomerFileComponent implements OnInit {
   }
 // Data Submission
 submitClientData(): Promise<any> {
-  const clientId = this.customerId && this.customerId !== '0' ? +this.customerId : -1;
-
   // Filter out empty managers (adjust based on required fields)
   const nonEmptyManagers = this.managers.filter(manager => 
     manager.ManagerLastName?.trim() || 
     manager.ManagerFirstName?.trim()
   );
 
-  // Format managers correctly for the API
-  const formattedManagers = nonEmptyManagers.map(manager => ({
-    ManagerID: manager?.ManagerID || 0, // Required for updates
+  // // Format managers correctly for the API
+  // const formattedManagers = nonEmptyManagers.map(manager => {
+  //   // Determine identity type
+  //   let identityType = null;
+  //   if (manager.Id_Identity) {
+  //     identityType = manager.Id_Identity.key === 'A' ? 1 : 
+  //                  manager.Id_Identity.key === 'B' ? 2 : 
+  //                  manager.Id_Identity.key === 'C' ? 3 : null;
+  //   }
+
+  //   return {
+  //     ManagerID: manager?.ManagerID || 0, // Required for updates
+  //     ManagerInformation: {
+  //       ManagerTitleID: manager?.ManagerTitleID?.value || null,
+  //       LastName: manager.ManagerLastName, 
+  //       FirstName: manager.ManagerFirstName,
+  //       ManagerBirthDate: manager?.ManagerBirthDate,
+  //       ManagerNationality: manager?.ManagerNationality,
+  //       Id_Identity: identityType,
+  //       CIN: manager?.CIN,
+  //       CarteSejour: manager?.CarteSejour,
+  //       Passeport: manager?.Passeport,
+  //       ManagerAddress: manager?.ManagerAddress,
+  //       ManagerCity: manager?.ManagerCity,
+  //       ManagerCountryID: manager?.ManagerCountryID?.value || null,
+  //       ManagerResidenceCountryID: manager?.ManagerResidenceCountryID?.value || null,
+  //       Id_ManagerMaritalStatus: manager?.MaritalStatusID?.value || null,
+  //     }
+  //   };
+  // });
+
+  const formattedManagers = this.managers.map(manager => ({
+    ManagerID: manager.ManagerID || 0,
     ManagerInformation: {
-      ManagerTitleID: manager?.ManagerTitleID?.value || null,
-      ManagerLastName: manager?.ManagerLastName,
-      ManagerFirstName: manager?.ManagerFirstName,
-      ManagerBirthDate: manager?.ManagerBirthDate,
-      ManagerNationality: manager?.ManagerNationality,
-      Id_Identity: manager?.Id_Identity?.key === 'A' ? 1 : 
-                 manager?.Id_Identity?.key === 'B' ? 2 : 
-                 manager?.Id_Identity?.key === 'C' ? 3 : null,
-      CIN: manager?.CIN,
-      CarteSejour: manager?.CarteSejour,
-      Passeport: manager?.Passeport,
-      ManagerAddress: manager?.ManagerAddress,
-      ManagerCity: manager?.ManagerCity,
-      ManagerCountryID: manager?.ManagerCountryID?.value || null,
-      ManagerResidenceCountryID: manager?.ManagerResidenceCountryID?.value || null,
-      Id_ManagerMaritalStatus: manager?.Id_ManagerMaritalStatus?.value || null,
+      ManagerTitleID: manager.ManagerTitleID?.value || null,
+      LastName: manager.ManagerLastName,
+      FirstName: manager.ManagerFirstName,
+      BirthDate: manager.ManagerBirthDate ? new Date(manager.ManagerBirthDate).toISOString() : null,
+      Nationality: manager.ManagerNationality,
+      IdentityID: manager.Id_Identity?.key === 'A' ? 1 : 
+                manager.Id_Identity?.key === 'B' ? 2 : 
+                manager.Id_Identity?.key === 'C' ? 3 : null,
+      CIN: manager.CIN || null,
+      CarteSejour: manager.CarteSejour || null,
+      Passeport: manager.Passeport || null,
+      Address: manager.ManagerAddress || null,  // Changed from ManagerAddress
+      City: manager.ManagerCity || null,        // Changed from ManagerCity
+      CountryID: manager.ManagerCountryID?.value || null,
+      ResidenceCountryID: manager.ManagerResidenceCountryID?.value || null,
+      MaritalStatusID: manager.Id_ManagerMaritalStatus?.value || null
     }
   }));
 
   const clientData = {
-    ClientID: clientId,
+    ClientID: this.customerId && this.customerId !== "0" ? +this.customerId : undefined,
     is_individual: this.isSelected1,
     is_organisation: this.isSelected2,
-    RoleID: this.selectedRole?.value || null,
+    RoleID: this.RoleID,
     LastName: this.LastName,
     FirstName: this.FirstName,
     BirthDate: this.BirthDate,
@@ -433,7 +459,13 @@ submitClientData(): Promise<any> {
 
   return new Promise((resolve, reject) => {
     this.customerService.createOrUpdateClient(clientData).subscribe({
-      next: (response) => resolve(response),
+      next: (response) => {
+        console.log('Client data submitted successfully', response);
+        if (!this.customerId || this.customerId === '0') {
+          this.customerId = response.toString();
+        }
+        resolve(response);
+      },
       error: (err) => {
         console.error('Error submitting client data:', err);
         reject(err);
@@ -464,7 +496,8 @@ async onNextClick() {
 
 async simple_onNextClick() {
     
-    // Proceed to next step with current customerId
+    // Proceed to next step with current customerId 
+    this.RoleID = this.selectedRole?.value || null;
     this.step++;
     this.activeIndex = this.step - 2;
     this.updateUrl();
@@ -553,6 +586,10 @@ async simple_onNextClick() {
   }
 
   async loadClientData() {
+    if (!this.customerId || this.customerId === '0') {
+      console.error('Invalid customerId:', this.customerId);
+      return;
+    }
     this.loading = true;
     try {
       const response: any = await this.customerService.getClientById(this.customerId!).toPromise();
@@ -607,81 +644,83 @@ async simple_onNextClick() {
   }
 
   populateFormFields(client: any) {
-    // Basic info
-    this.LastName = client.LastName;
-    this.FirstName = client.FirstName;
-    this.BirthDate = client.BirthDate;
-    this.Nationality = client.Nationality;
-    this.Email = client.Email;
-    this.Address = client.Address;
-    this.City = client.City;
-    this.MobilePhone = client.MobilePhone;
-    this.LandlinePhone = client.LandlinePhone;
-    this.WorkPhone = client.WorkPhone;
-    this.RequestedAmount = client.RequestedAmount;
-    this.OriginDetails = client.OriginDetails;
-    
+        // Basic info
+    this.LastName = client.lastName;  
+    this.FirstName = client.firstName;  
+    this.BirthDate =  this.formatDateForInput(client.birthDate);
+    this.Nationality = client.nationality;  
+    this.Email = client.email;  
+    this.Address = client.address;  
+    this.City = client.city;  
+    this.MobilePhone = client.mobilePhone;  
+    this.LandlinePhone = client.landlinePhone;  
+    this.WorkPhone = client.workPhone;  
+    this.RequestedAmount = client.requestedAmount; 
+    this.OriginDetails = client.originDetails; 
+
     // For physical person
     if (client.is_individual) {
-      this.CIN = client.CIN;
-      this.ResidencePermit = client.ResidencePermit;
-      this.PassportNumber = client.PassportNumber;
+      this.CIN = client.cin;  
+      this.ResidencePermit = client.residencePermit;  
+      this.PassportNumber = client.passportNumber;  
       
       // Set dropdown selections
-      this.selectedTitle = this.titles.find(t => t.value === client.ClientTitleID);
-      this.selectedRole = this.roles.find(r => r.value === client.RoleID);
-      this.selectedMaritalStatus = this.maritalStatuses.find(s => s.value === client.MaritalStatusID);
-      this.selectedCountry = this.countries.find(c => c.value === client.CountryID);
-      this.selectedResidenceCountry = this.residenceCountries.find(c => c.value === client.ResidenceCountryID);
-      this.selectedClientOrigin = this.clientOrigins.find(o => o.value === client.OriginID);
-      this.selectedResidencyStatus = this.residencyStatuses.find(s => s.value === client.ResidencyStatusID);
-      this.selectedIdentity = this.identities.find(i => i.value === client.IdentityID);
+      this.selectedTitle = this.titles.find(t => t.value === client.clientTitleID);  
+      this.selectedRole = this.roles.find(r => r.value === client.roleID);  
+      this.selectedMaritalStatus = this.maritalStatuses.find(s => s.value === client.maritalStatusID);  
+      this.selectedCountry = this.countries.find(c => c.value === client.countryID);  
+      this.selectedResidenceCountry = this.residenceCountries.find(c => c.value === client.residenceCountryID);  
+      this.selectedClientOrigin = this.clientOrigins.find(o => o.value === client.originID);  
+      this.selectedResidencyStatus = this.residencyStatuses.find(s => s.value === client.residencyStatusID);
+      this.selectedIdentity = this.identities.find(i => i.value === client.identityID);  
       
       // Set radio button selections
-      this.selectedStatut_Occupation = client.IsOwner ? 
-        this.statuts_Occupation.find(s => s.key === 'A') : 
-        this.statuts_Occupation.find(s => s.key === 'B');
+      this.IsOwner = client.isOwner;  
+      this.IsTenant = client.isTenant;
     }
-    
+
     // For legal entity
     if (client.is_organisation) {
-      this.CompanyName = client.CompanyName;
-      this.CreationDate = client.CreationDate;
-      this.RegistrationNumber = client.RegistrationNumber;
-      this.CompanyAddress = client.CompanyAddress;
-      this.CompanyCity = client.CompanyCity;
-      this.SocialCapital = client.SocialCapital;
+      this.CompanyName = client.companyName;  
+      this.CreationDate = client.creationDate ? this.formatDateForInput(client.creationDate) : null;
+      this.RegistrationNumber = client.registrationNumber;  
+      this.CompanyAddress = client.companyAddress;  
+      this.CompanyCity = client.companyCity;  
+      this.SocialCapital = client.socialCapital;  
       
       // Set dropdown selections
-      this.selectedLegalForm = this.legalForms.find(f => f.value === client.LegalFormID);
-      this.selectedBusinessActivity = this.businessActivities.find(a => a.value === client.BusinessActivityID);
-      this.selectedCompanyCountry = this.companyCountries.find(c => c.value === client.CompanyCountryID);
+      this.selectedLegalForm = this.legalForms.find(f => f.value === client.legalFormID);  
+      this.selectedBusinessActivity = this.businessActivities.find(a => a.value === client.businessActivityID);  
+      this.selectedCompanyCountry = this.companyCountries.find(c => c.value === client.companyCountryID);  
       
       // Load managers if they exist
-      if (client.Managers && client.Managers.length > 0) {
-        this.managers = client.Managers.map(manager => ({
-          ManagerTitleID: this.titles.find(t => t.value === manager.ManagerTitleID),
-          ManagerLastName: manager.LastName,
-          ManagerFirstName: manager.FirstName,
-          ManagerBirthDate: manager.BirthDate,
-          ManagerNationality: manager.Nationality,
-          Id_Identity: manager.IdentityType === 1 ? 
+      if (client.managers && client.managers.length > 0) {  
+        this.managers = client.managers.map(manager => ({
+          ManagerTitleID: this.titles.find(t => t.value === manager.managerTitleID),  
+          ManagerLastName: manager.lastName,  
+          ManagerFirstName: manager.firstName,  
+          ManagerBirthDate: this.formatDateForInput(manager.birthDate), 
+          ManagerNationality: manager.nationality,  
+          Id_Identity: manager.identityType === 1 ?  
             { name: 'CIN', key: 'A' } : 
-            manager.IdentityType === 2 ? 
+            manager.identityType === 2 ? 
             { name: 'Carte Séjour', key: 'B' } : 
             { name: 'Passeport', key: 'C' },
-          CIN: manager.CIN,
-          CarteSejour: manager.CarteSejour,
-          Passeport: manager.Passeport,
-          Id_ManagerMaritalStatus: this.maritalStatuses.find(s => s.value === manager.MaritalStatusID),
-          ManagerCity: manager.City,
-          ManagerCountryID: this.countries.find(c => c.value === manager.CountryID),
-          ManagerResidenceCountryID: this.residenceCountries.find(c => c.value === manager.ResidenceCountryID),
-          ManagerAddress: manager.Address
+          CIN: manager.cin,  
+          CarteSejour: manager.carteSejour,  
+          Passeport: manager.passeport,  
+          Id_ManagerMaritalStatus: this.maritalStatuses.find(s => s.value === manager.maritalStatusID),  
+          ManagerCity: manager.city,  
+          ManagerCountryID: this.countries.find(c => c.value === manager.countryID),  
+          ManagerResidenceCountryID: this.residenceCountries.find(c => c.value === manager.residenceCountryID),  
+          ManagerAddress: manager.address  
         }));
       }
+    }}
+
+    private formatDateForInput(isoDate: string): string {
+      return isoDate.split('T')[0];
     }
-  }
 
   onEditClick() {
     this.step = 0;

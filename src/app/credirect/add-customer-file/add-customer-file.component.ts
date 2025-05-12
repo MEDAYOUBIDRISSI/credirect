@@ -246,6 +246,21 @@ export class AddCustomerFileComponent implements OnInit {
     }
   }
 
+  goToList() {
+    const urlParts = ['/credirect/customer'];
+    this.router.navigate(urlParts).then(() => {
+      this.cdr.detectChanges();
+    });
+  }
+
+  goToFolders() {
+    const urlPart = ['/credirect/customer/folder/add'];
+    this.router.navigate(urlPart).then(() => {
+      this.cdr.detectChanges();
+    });
+  }
+
+
   goToNextStep() {
     if (this.step < 6) {
       this.step++;

@@ -152,11 +152,11 @@ export class AddCustomerFileComponent implements OnInit {
   //   { name: 'Passeport', key: 'C' },
   // ];
 
-  // identities2: any[] = [
-  //   { name: 'CIN', key: 'A' },
-  //   { name: 'Carte Séjour', key: 'B' },
-  //   { name: 'Passeport', key: 'C' },
-  // ];
+  identities2: any[] = [
+    { name: 'CIN', key: 'A' },
+    { name: 'Carte Séjour', key: 'B' },
+    { name: 'Passeport', key: 'C' },
+  ];
 
   selectedStatut: any = null;
   // statuts: any[] = [
@@ -270,19 +270,19 @@ export class AddCustomerFileComponent implements OnInit {
   addManager() {
     this.managers.push({
       ManagerTitleID: null,         
-      ManagerLastName: '',           
-      ManagerFirstName: '',          
-      ManagerBirthDate: '',         
-      ManagerNationality: '',       
+      ManagerLastName: null,           
+      ManagerFirstName: null,          
+      ManagerBirthDate: null,         
+      ManagerNationality: null,       
       Id_Identity: null,             
-      CIN: '',                       
-      CarteSejour: '',               
-      Passeport: '',                
+      CIN: null,                       
+      CarteSejour: null,               
+      Passeport: null,                
       Id_ManagerMaritalStatus: null, 
-      ManagerCity: '',               
+      ManagerCity: null,               
       ManagerCountryID: null,        
       ManagerResidenceCountryID: null, 
-      ManagerAddress: ''  
+      ManagerAddress: null 
     });
   }
 
@@ -357,106 +357,90 @@ export class AddCustomerFileComponent implements OnInit {
   }
 // Data Submission
 submitClientData(): Promise<any> {
+  const clientId = this.customerId && this.customerId !== '0' ? +this.customerId : -1;
 
-  const clientId = this.customerId && this.customerId !== '0' ? this.customerId : -1;
+  // Filter out empty managers (adjust based on required fields)
+  const nonEmptyManagers = this.managers.filter(manager => 
+    manager.ManagerLastName?.trim() || 
+    manager.ManagerFirstName?.trim()
+  );
 
-  // Filter out empty or unmodified managers
-  const nonEmptyManagers = this.managers.filter(manager => {
-    return manager.ManagerLastName.trim() !== '' || 
-           manager.ManagerFirstName.trim() !== '' ||
-           manager.CIN.trim() !== '' ||
-           manager.Passeport.trim() !== '' ||
-           manager.CarteSejour.trim() !== '' ||
-           manager.ManagerTitleID !== null ||
-           manager.Id_Identity !== null ||
-           manager.Id_ManagerMaritalStatus !== null;
-  });
-
-  // Format non-empty managers with correct structure
+  // Format managers correctly for the API
   const formattedManagers = nonEmptyManagers.map(manager => ({
+    ManagerID: manager?.ManagerID || 0, // Required for updates
     ManagerInformation: {
-      ManagerTitleID: manager.ManagerTitleID?.value || null,
+      ManagerTitleID: manager?.ManagerTitleID?.value || null,
       ManagerLastName: manager?.ManagerLastName,
       ManagerFirstName: manager?.ManagerFirstName,
       ManagerBirthDate: manager?.ManagerBirthDate,
       ManagerNationality: manager?.ManagerNationality,
       Id_Identity: manager?.Id_Identity?.key === 'A' ? 1 : 
-                  manager?.Id_Identity?.key === 'B' ? 2 : 
-                  manager?.Id_Identity?.key === 'C' ? 3 : null,
+                 manager?.Id_Identity?.key === 'B' ? 2 : 
+                 manager?.Id_Identity?.key === 'C' ? 3 : null,
       CIN: manager?.CIN,
       CarteSejour: manager?.CarteSejour,
       Passeport: manager?.Passeport,
       ManagerAddress: manager?.ManagerAddress,
       ManagerCity: manager?.ManagerCity,
-      ManagerCountryID: manager.ManagerCountryID?.value || null,
-      ManagerResidenceCountryID: manager.ManagerResidenceCountryID?.value || null,
-      Id_ManagerMaritalStatus: manager.Id_ManagerMaritalStatus?.value || null,
+      ManagerCountryID: manager?.ManagerCountryID?.value || null,
+      ManagerResidenceCountryID: manager?.ManagerResidenceCountryID?.value || null,
+      Id_ManagerMaritalStatus: manager?.Id_ManagerMaritalStatus?.value || null,
     }
   }));
 
   const clientData = {
-      ClientID: clientId,
-      is_individual: this.isSelected1,
-      is_organisation: this.isSelected2,
-      RoleID: this.selectedRole?.value || null,
-      LastName: this.LastName,
-      FirstName: this.FirstName,
-      BirthDate: this.BirthDate,
-      ClientTitleID: this.selectedTitle?.value || null,
-      Nationality: this.Nationality,
-      Email: this.Email,
-      CIN: this.CIN,
-      ResidencePermit: this.ResidencePermit,
-      PassportNumber: this.PassportNumber,
-      City: this.City,
-      CountryID: this.selectedCountry?.value || null,
-      ResidenceCountryID: this.selectedResidenceCountry?.value || null,
-      MaritalStatusID: this.selectedMaritalStatus?.value || null,
-      MobilePhone: this.MobilePhone,
-      LandlinePhone: this.LandlinePhone,
-      WorkPhone: this.WorkPhone,
-      Address: this.Address,
-      IdentityID: this.selectedIdentity?.value || null,
-      IsOwner: this.IsOwner,
-      IsTenant: this.IsTenant,
-      RequestedAmount: this.RequestedAmount,
-      OriginID: this.selectedClientOrigin?.value || null,
-      OriginDetails: this.OriginDetails,
-      CompanyName: this.CompanyName,
-      RegistrationNumber: this.RegistrationNumber,
-      SocialCapital: this.SocialCapital,
-      CreationDate: this.CreationDate,
-      CompanyAddress: this.CompanyAddress,
-      CompanyCity: this.CompanyCity,
-      CompanyCountryID: this.selectedCompanyCountry?.value || null,
-      BusinessActivityID: this.selectedBusinessActivity?.value || null,
-      ResidencyStatusID: this.selectedResidencyStatus?.value || null,
-      LegalFormID: this.selectedLegalForm?.value || null,
-      ClientManagers: this.isSelected2 && nonEmptyManagers.length > 0 ? formattedManagers : []   
-    };
+    ClientID: clientId,
+    is_individual: this.isSelected1,
+    is_organisation: this.isSelected2,
+    RoleID: this.selectedRole?.value || null,
+    LastName: this.LastName,
+    FirstName: this.FirstName,
+    BirthDate: this.BirthDate,
+    ClientTitleID: this.selectedTitle?.value || null,
+    Nationality: this.Nationality,
+    Email: this.Email,
+    IdentityID: this.selectedIdentity?.value || null,
+    CIN: this.CIN,
+    ResidencePermit: this.ResidencePermit,
+    PassportNumber: this.PassportNumber,
+    City: this.City,
+    CountryID: this.selectedCountry?.value || null,
+    ResidenceCountryID: this.selectedResidenceCountry?.value || null,
+    MaritalStatusID: this.selectedMaritalStatus?.value || null,
+    MobilePhone: this.MobilePhone,
+    LandlinePhone: this.LandlinePhone,
+    WorkPhone: this.WorkPhone,
+    Address: this.Address,
+    ResidencyStatusID: this.selectedResidencyStatus?.value || null,
+    IsOwner: this.IsOwner,
+    IsTenant: this.IsTenant,
+    RequestedAmount: this.RequestedAmount,
+    OriginID: this.selectedClientOrigin?.value || null,
+    OriginDetails: this.OriginDetails,
+    CompanyName: this.CompanyName,
+    RegistrationNumber: this.RegistrationNumber,
+    SocialCapital: this.SocialCapital,
+    CreationDate: this.CreationDate,
+    CompanyAddress: this.CompanyAddress,
+    CompanyCity: this.CompanyCity,
+    CompanyCountryID: this.selectedCompanyCountry?.value || null,
+    BusinessActivityID: this.selectedBusinessActivity?.value || null,
+    LegalFormID: this.selectedLegalForm?.value || null,
+    ClientManagers: this.isSelected2 && nonEmptyManagers.length > 0 ? formattedManagers : []   
+  };
 
-    // console.log('Submitting client data:', JSON.stringify(clientData, null, 2));
+  console.log('Client Data:', clientData); // Debug log
 
   return new Promise((resolve, reject) => {
-      this.customerService.createOrUpdateClient(clientData).subscribe({
-          next: (response) => {
-              console.log('Client data submitted successfully', response);
-              if (!this.customerId || this.customerId === '0') {
-                  this.customerId = response.toString();
-                  // this.updateUrlWithNewId(response.toString());
-              }
-              resolve(response);
-          },
-          error: (err) => {
-              console.error('Error submitting client data', err);
-              reject(err);
-          }
-      });
+    this.customerService.createOrUpdateClient(clientData).subscribe({
+      next: (response) => resolve(response),
+      error: (err) => {
+        console.error('Error submitting client data:', err);
+        reject(err);
+      },
+    });
   });
 }
-
-
-  
 async onNextClick() {
   this.loading = true;
   try {

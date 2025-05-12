@@ -483,4 +483,24 @@ export class CustomerService {
     saveGarantie(data: any) {
         return this.http.post<any>(this.urlAPI + 'Credirect/saveGarantie', data).toPromise();
     }
+
+    getDepot(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getDepot', data).toPromise();
+    }
+
+    saveDepot(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/saveDepot', data).toPromise();
+    }
+
+    getCreditTimeline(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getCreditTimeline', data).toPromise();
+    }
+
+    saveCreditStatus(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/saveCreditStatus', data).toPromise();
+    }
+
+    getDossiersByDepots(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getDossiersByDepots', data).toPromise();
+    }
 }

@@ -79,8 +79,8 @@
                             </div>
                             <div class="text-sm">
                                 <i class="pi pi-map-marker mr-1"></i> 
-                                {{customer.is_organisation ? customer.companyAddress : customer.address}}, 
-                                {{customer.is_organisation ? customer.companyCity : customer.city}}
+                                {{customer.is_organisation ? customer.companyAddress : customer.address || 'N/A'}}, 
+                                {{customer.is_organisation ? customer.companyCity : customer.city || 'N/A'}}
                             </div>
                         </td>
                         
@@ -108,7 +108,7 @@
                                 </p-tag>
                                 <div class="text-sm mt-1">
                                     <i class="pi pi-calendar mr-1"></i>
-                                    {{customer.birthDate | date:'dd/MM/yyyy' || 'N/A'}}
+                                    {{(customer?.birthDate | date:'dd/MM/yyyy') || 'N/A'}}
                                 </div>
                             </div>
                             <div *ngIf="customer.is_organisation && customer.managers?.[0]?.managerInformation">
@@ -117,7 +117,7 @@
                                 </p-tag>
                                 <div class="text-sm mt-1">
                                     <i class="pi pi-calendar mr-1"></i>
-                                    {{customer.managers[0].managerInformation.managerBirthDate | date:'dd/MM/yyyy' || 'N/A'}}
+                                    {{(customer.managers[0].managerInformation.managerBirthDate | date:'dd/MM/yyyy') || 'N/A'}}
                                 </div>
                             </div>
                         </td>

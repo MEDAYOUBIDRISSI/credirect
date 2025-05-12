@@ -19,7 +19,7 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   ];
 
   // Index de l'étape active
-  activeIndex = 3;
+  activeIndex = 0;
 
   // Données du plan de financement
   planFinancement = {
@@ -39,7 +39,8 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
     tauxAssurance: null,
     revenus: null,
     chargesEnCours: null,
-    prixVente: null
+    prixVente: null,
+    honorairesFactures: null
   };
 
   // Options pour l'objet du crédit
@@ -127,14 +128,7 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
   };
 
   // Liste des banques
-  banks = [
-    { label: 'Banque Populaire', value: 'Banque Populaire' },
-    { label: 'Attijariwafa Bank', value: 'Attijariwafa Bank' },
-    { label: 'BMCE Bank', value: 'BMCE Bank' },
-    { label: 'Société Générale Maroc', value: 'Société Générale Maroc' },
-    { label: 'Crédit du Maroc', value: 'Crédit du Maroc' },
-    { label: 'CIH Bank', value: 'CIH Bank' },
-  ];
+  banks = [];
 
   dossierID:any=null
 
@@ -151,7 +145,9 @@ export class CustomerFolderFinancingPlansComponent  implements OnInit{
     this.getAllUseProperty()
     this.getAlConditionProperty()
     this.getPlanFinancement();
-    this.getGarantie()
+    this.getGarantie();
+    this.getAllBanks();
+    this.getDepot();
   }
 
   // Ajouter un bien
@@ -273,8 +269,8 @@ assuranceOptions = [
   }
 
   addDepot(): void {
-    this.facturation.depots.push({
-      banque: '',
+    this.depots.push({
+      banque: null,
       interlocuteur: '',
       agence: '',
       dateEnvoi: null,
@@ -283,7 +279,7 @@ assuranceOptions = [
 
   // Supprimer un dépôt
   removeDepot(index: number): void {
-    this.facturation.depots.splice(index, 1);
+    this.depots.splice(index, 1);
   }
 
   getAllObjectCredit(){
@@ -340,9 +336,7 @@ assuranceOptions = [
     let body = {
       dossierID: this.dossierID
     }
-    console.log("body", body);
     this.CustomerService.getPlanFinancement(body).then((res: any) => {
-      console.log("res", res);
       if (res.status_code === 200 && res?.data?.length > 0) {
         this.planFinancement = res?.data[0];
         this.calculateMensualiteTTC();
@@ -355,7 +349,7 @@ assuranceOptions = [
       dossierID: this.dossierID,
       planFinancement: this.planFinancement
     }
-    console.log("body", body);
+
     this.CustomerService.savePlanFinancement(body).then((res: any) => {     
       if (res.status_code === 200) {
         
@@ -367,9 +361,7 @@ assuranceOptions = [
     let body = {
       dossierID: this.dossierID
     }
-    console.log("body", body);
     this.CustomerService.getGarantie(body).then((res: any) => {
-      console.log("res", res);
       if (res.status_code === 200) {
         this.canauxVentes = res?.data;
         this.checkCanaux();
@@ -382,10 +374,52 @@ assuranceOptions = [
       dossierID: this.dossierID,
       canauxVentes: this.canauxVentes
     }
-    console.log("body", body);
     this.CustomerService.saveGarantie(body).then((res: any) => {     
       if (res.status_code === 200) {
         
+      }
+    })
+  }
+
+  depots = []
+  getDepot(){
+    let body = {
+      dossierID: this.dossierID
+    }
+    console.log("body", body);
+    this.CustomerService.getDepot(body).then((res: any) => {
+      console.log("res", res);
+      if (res.status_code === 200) {
+        this.depots = res.data.map((item: any) => {
+          return {
+            ...item,
+            dateEnvoi: item.dateEnvoi ? new Date(item.dateEnvoi) : null
+          };
+        });
+      }
+    })
+  }
+
+  saveDepot(){
+    let body = {
+      dossierID: this.dossierID,
+      depots: this.depots,
+      honorairesFactures: this.planFinancement?.honorairesFactures
+    }
+    console.log("body", body);
+    this.CustomerService.saveDepot(body).then((res: any) => {     
+      if (res.status_code === 200) {
+        
+      }
+    })
+  }
+
+  getAllBanks(){
+    let body = {
+    }
+    this.CustomerService.getAllBanks(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.banks = res?.data;
       }
     })
   }

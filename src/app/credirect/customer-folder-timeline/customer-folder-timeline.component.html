@@ -26,7 +26,7 @@
                         <p>
                             {{ event.return }}
                         </p>
-                        <p-button label="voir plus" [text]="true" (click)="showMore = true"/>
+                        <!-- <p-button label="voir plus" [text]="true" (click)="showMore = true"/> -->
                     </p-card>
                 </ng-template>
             </p-timeline>
@@ -46,17 +46,37 @@
         [modal]="true"
         [(visible)]="changeStatus" 
         [style]="{ width: '50rem' }">
-            <div class="flex align-items-center gap-3 mb-3">
+            <div class=" gap-3 mb-3 styleUnderInputs">
                 <label for="username" class="font-semibold w-6rem">
                     Status
                 </label>
                 <p-dropdown
-                id="objetCredit"
-                [options]="statutDepot"
-                placeholder="Sélectionnez l'objet du crédit"
+                    [options]="statutDepot"
+                    placeholder="Sélectionnez"
+                    [(ngModel)]="status"
                 ></p-dropdown>
             </div>
-            <div class="flex align-items-center gap-3 mb-5">
+            <div class=" gap-3 mb-3 styleUnderInputs" *ngIf="status == 5">
+                <label for="username" class="font-semibold w-6rem" style="width: 100% !important;">
+                    Reponse de la banque
+                </label>
+                <p-dropdown
+                    [options]="accordDepot"
+                    placeholder="Sélectionnez"
+                    [(ngModel)]="is_accord"
+                ></p-dropdown>
+            </div>
+            <div class=" gap-3 mb-3 styleUnderInputs" *ngIf="status == 10">
+                <label for="username" class="font-semibold w-6rem" style="width: 100% !important;">
+                    Reponse Client
+                </label>
+                <p-dropdown
+                    [options]="accordClient"
+                    placeholder="Sélectionnez"
+                    [(ngModel)]="is_accord_client"
+                ></p-dropdown>
+            </div>
+            <div class=" gap-3 mb-5 styleUnderInputs">
                 <label for="email" class="font-semibold w-6rem">
                     Details
                 </label>
@@ -66,11 +86,12 @@
                     pInputTextarea 
                     placeholder="Entrez les détails de la modification du statut" 
                     autoResize="autoResize"
+                    [(ngModel)]="message"
                     [style]="{ width: '100%' }"></textarea>
             </div>
             <div class="flex justify-content-end gap-2">
                 <p-button label="Cancel" severity="secondary" (click)="changeStatus = false" />
-                <p-button label="Save" (click)="changeStatus = false" />
+                <p-button label="Save" (click)="saveCreditStatus()" />
             </div>
     </p-dialog>
 

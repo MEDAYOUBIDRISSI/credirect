@@ -316,40 +316,37 @@
 
                     <div *ngIf="activeIndex === 3" class="step-content">
                         <div class="p-fluid">
-                            <div class="p-field mt-4">
+                            <div class="p-field mt-4 mb-4">
                                 <angular-editor [config]="ckeConfig" [(ngModel)]="planFinancement.commentCredit">
                                 </angular-editor>
                                 <!-- <p-editor [(ngModel)]="planFinancement.commentaires" [style]="{ height: '320px' }" /> -->
-                            </div>
+                            </div> 
                         </div>
                     </div>
-                    <div *ngIf="activeIndex === 4" class="step-content">
-                        <h3>Facturation et Dépôt</h3>
-                        <p>Complétez les informations de facturation et choisissez les banques de dépôt.</p>
+                    <div *ngIf="activeIndex === 4" class="step-content pt-2">
+                        <!-- <p>Complétez les informations de facturation et choisissez les banques de dépôt.</p> -->
                       
                         <!-- Volet 1 : Complément d’information sur la facturation et honoraires client -->
-                        <div class="p-fluid">
-                          <div class="p-field">
-                            <label for="honorairesFactures">Honoraires Facturés (MAD)</label>
-                            <input
-                              id="honorairesFactures"
-                              type="number"
-                              [(ngModel)]="facturation.honorairesFactures"
-                              pInputText
-                            />
-                          </div>
+                        <div class="grid p-field">
+                            <div class="field col-12 md:col-6 lg:col-6 styleUnderInputs">
+                                <label for="honorairesFactures">Honoraires Facturés (MAD)</label>
+                                <input
+                                    id="honorairesFactures"
+                                    type="number"
+                                    [(ngModel)]="planFinancement.honorairesFactures"
+                                    pInputText
+                                />
+                            </div>
                         </div>
                       
                         <!-- Volet 2 : Choix de banque de dépôt et suivi -->
-                        <div class="p-mt-4">
-                          <h4>Choix de Banque de Dépôt</h4>
+                        <div class="mt-4">
                           <p>Ajoutez une ou plusieurs banques de dépôt.</p>
-                      
                           <!-- Liste des dépôts -->
-                          <div *ngFor="let depot of facturation.depots; let i = index" class="p-mb-4 p-p-3 p-shadow-2">
-                            <div class="p-grid">
+                          <div *ngFor="let depot of depots; let i = index" class="p-mb-4 p-p-3 p-shadow-2">
+                            <div class="grid p-field">
                               <!-- Banque (Dropdown) -->
-                            <div class="p-col-12 p-md-4">
+                            <div class="field col-12 md:col-6 lg:col-6 styleUnderInputs">
                                 <label for="banque{{i}}">Banque</label>
                                 <p-dropdown
                                 id="banque{{i}}"
@@ -360,7 +357,7 @@
                             </div>
                       
                               <!-- Interlocuteur -->
-                              <div class="p-col-12 p-md-4">
+                              <div class="field col-12 md:col-6 lg:col-6 styleUnderInputs">
                                 <label for="interlocuteur{{i}}">Interlocuteur</label>
                                 <input
                                   id="interlocuteur{{i}}"
@@ -371,7 +368,7 @@
                               </div>
                       
                               <!-- Agence -->
-                              <div class="p-col-12 p-md-4">
+                              <div class="field col-12 md:col-6 lg:col-6 styleUnderInputs">
                                 <label for="agence{{i}}">Agence</label>
                                 <input
                                   id="agence{{i}}"
@@ -382,7 +379,7 @@
                               </div>
                       
                               <!-- Date d’envoi -->
-                              <div class="p-col-12 p-md-4">
+                              <div class="field col-12 md:col-6 lg:col-6 styleUnderInputs">
                                 <label for="dateEnvoi{{i}}">Date d’envoi</label>
                                 <p-calendar
                                   id="dateEnvoi{{i}}"
@@ -393,7 +390,7 @@
                               </div>
                       
                               <!-- Bouton Supprimer -->
-                              <div class="p-col-12 p-md-4 p-d-flex p-align-center">
+                              <div class="field col-12 md:col-6 lg:col-6 styleUnderInputs">
                                 <button
                                   pButton
                                   type="button"
@@ -426,6 +423,10 @@
                         <button
                             pButton pRipple class="p-button-success" (click)="saveGarantie()"
                             label="Sauvegarder" *ngIf = "activeIndex == 2">
+                        </button>
+                        <button
+                            pButton pRipple class="p-button-success" (click)="saveDepot()"
+                            label="Sauvegarder" *ngIf = "activeIndex == 4">
                         </button>
                     </div>
                     <!-- Boutons de navigation -->

@@ -59,15 +59,15 @@
                         <th pSortableColumn="montant">
                             Montant (MAD) <p-sortIcon field="montant"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="statut">
+                        <!-- <th pSortableColumn="statut">
                             Statut <p-sortIcon field="statut"></p-sortIcon>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="dateCreation">
                             Date de mise à jour <p-sortIcon field="dateCreation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="conseiller">
+                        <!-- <th pSortableColumn="conseiller">
                             Conseiller <p-sortIcon field="conseiller"></p-sortIcon>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="banque">
                             Banque de Dépôt <p-sortIcon field="banque"></p-sortIcon>
                         </th>
@@ -83,14 +83,14 @@
                         <td>{{ dossier.client }}</td>
                         <td>{{ dossier.type }}</td>
                         <td>{{ dossier.montant }}</td>
-                        <td>
+                        <!-- <td>
                             <p-tag
                             [severity]="getStatusSeverity(dossier.statut)"
                             [value]="dossier.statut"
                             ></p-tag>
-                        </td>
+                        </td> -->
                         <td>{{ dossier.dateCreation | date: 'dd/MM/yyyy' }}</td>
-                        <td>{{ dossier.conseiller }}</td>
+                        <!-- <td>{{ dossier.conseiller }}</td> -->
                         <td>{{ dossier.banque || '-' }}</td>
                         <!-- <td>
                             <p-progressBar

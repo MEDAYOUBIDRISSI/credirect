@@ -124,7 +124,7 @@ export class ListCustomerFileComponent implements OnInit {
 
   viewCustomer(customer: any) {
     if (customer?.clientID) {
-      this.router.navigate(['/credirect/customer/add', 2, customer.clientID]);
+      this.router.navigate(['/credirect/customer/add', 6, customer.clientID]);
     }
   }
 

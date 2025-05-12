@@ -637,7 +637,7 @@
                 <button pButton pRipple type="button" label="Supprimer la fiche" class="p-button-primary" [style]="{'width': '200px'}" (click)="showDeleteConfirmation()"></button>
             </div>
             <div class="mt-3">
-                <button pButton pRipple type="button" label="Création dossier" class="p-button-primary" [style]="{'width': '200px'}"></button>
+                <button pButton pRipple type="button" label="Création dossier" class="p-button-primary" [style]="{'width': '200px'}" (click)="goToFolders()"></button>
             </div>
         </div>
     </div>
@@ -826,7 +826,7 @@
     pButton pRipple type="button"
     class="p-button-primary" 
     label="Done"  
-    (click)="goToPreviousStep()">
+    (click)="goToList()">
   </button>
 </div>
 

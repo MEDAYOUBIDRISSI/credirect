@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CustomerService } from 'src/app/service/customer.service';
 
@@ -29,9 +29,10 @@ export class CustomerFolderComponent implements OnInit{
   items: any[]=[];
   isSelected1 = false;
   isSelected2 = false;
-  step = 0;
+  step = 1;
   selectedRole!: Role;
   folderID = null;
+  clientID = null;
   user = {
     civilite: 'Monsieur',
     nomPrenom: 'El Amrani Ahmed',
@@ -56,9 +57,12 @@ export class CustomerFolderComponent implements OnInit{
   messages = [{ severity: 'error', detail: "Ce tiers n'existe pas dans le système" }];
   folderCreatedErrorMessage = [{ severity: 'error', detail: "Champs required" }];
   folderCreatedSuccessMessage = [{ severity: 'success', detail: "Mise à jour effectuée avec succès" }];
-  constructor(private CustomerService: CustomerService,
+  constructor(private CustomerService: CustomerService,private router: Router,
               private route: ActivatedRoute) {
-    this.folderID = this.route.snapshot.paramMap.get('dossier_id')
+    this.folderID = this.route.snapshot.paramMap.get('dossier_id');
+    this.clientID = this.route.snapshot.paramMap.get('client_id');
+    console.log("this.folderID", this.folderID);
+    console.log("this.clientID", this.clientID);
    }
 
   ngOnInit() {
@@ -83,6 +87,9 @@ export class CustomerFolderComponent implements OnInit{
     if(this.folderID != null){
       this.getTiresByFolderID()
       this.step = 2;
+    }
+    if(this.clientID != null){
+      this.getTiresByIDFromFicheClient()
     }
   }
 
@@ -209,14 +216,18 @@ export class CustomerFolderComponent implements OnInit{
     }
     if(this.selectedCreditType && this.tiers?.length > 0){
       console.log("body", body);
-      this.step++;
+      // this.step++;
       this.CustomerService.addOrUpdateFolder(body).then((res: any) => {
         console.log("res", res);
-        if (res.status_code === 200) {
+        if (res != null) {
           this.folderCreatedSuccess = true;
           setTimeout(() => {
             this.folderCreatedSuccess = false;
           }, 4000);
+          if(this.folderID == null && this.clientID == null){
+            this.router.navigate(['/credirect/customer/folder/edit', res]);
+          }
+          
         }
       })
     }
@@ -240,6 +251,18 @@ export class CustomerFolderComponent implements OnInit{
     })
   }
 
+  getTiresByIDFromFicheClient(){
+    let body = {
+      clientID: this.clientID
+    }
+    this.CustomerService.getTiresByIDFromFicheClient(body).then((res: any) => {
+      if (res.status_code === 200) {
+        this.tierExistByCinProfile = res?.data;
+        this.addTierToList();
+      }
+    })
+  }
+
   getAllCreditType(){
     let body = {
     }
@@ -250,5 +273,9 @@ export class CustomerFolderComponent implements OnInit{
         console.log("creditTypes", this.creditTypes);
       }
     })
+  }
+
+  removeTier(index: number): void {
+    this.tiers?.splice(index, 1);
   }
 }

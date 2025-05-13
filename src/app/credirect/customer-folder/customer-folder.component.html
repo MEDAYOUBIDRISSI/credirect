@@ -64,7 +64,8 @@
                                          <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                                          <th pSortableColumn="role">Role<p-sortIcon field="role"></p-sortIcon></th>
                                          <th pSortableColumn="tel">Tel</th>
-                                         <th pSortableColumn="is_complete">Status<p-sortIcon field="is_complete"></p-sortIcon></th>
+                                         <th pSortableColumn="email">Email</th>
+                                         <!-- <th pSortableColumn="is_complete">Status<p-sortIcon field="is_complete"></p-sortIcon></th> -->
                                          <th style="text-align: center;">
                                              <p-button [label]="tiers.length == 0 ? 'Ajouter tier' : 'Ajouter autre'" severity="info" (click)="showDialog()"/>
                                          </th>
@@ -72,15 +73,17 @@
                                  </ng-template>
                                  <ng-template pTemplate="body" let-tierItem let-rowIndex="rowIndex">
                                      <tr>
-                                         <td style="width: 40%; min-width: 7rem;">{{ tierItem?.lastName + " " + tierItem?.firstName }}</td>
-                                         <td style="width: 40%; min-width: 7rem;">{{tierItem?.role}}</td>
+                                         <td style="width: 30%; min-width: 7rem;"><b  *ngIf="tierItem?.is_organisation != true">{{ tierItem?.lastName + " " + tierItem?.firstName }}</b><b  *ngIf="tierItem?.is_organisation">{{ tierItem?.denomination }}</b></td>
+                                         <td style="width: 20%; min-width: 7rem;">{{tierItem?.role}}</td>
                                          <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem?.tel}}" tooltipPosition="top"></i></td>
-                                         <td style="width: 10%; min-width: 4rem;text-align: center;">
+                                         <td style="width: 30%; min-width: 7rem;">{{tierItem?.email}}</td>
+                                         <!-- <td style="width: 10%; min-width: 4rem;text-align: center;">
                                             <p-tag *ngIf="tierItem?.is_complete" value="Complet" severity="success" />
                                             <p-tag *ngIf="!tierItem?.is_complete" value="Incomplet" severity="danger" />
-                                         </td>
-                                         <td style="width: 25%;text-align: center;">
+                                         </td> -->
+                                         <td style="width: 10%;text-align: center;">
                                              <button pButton pRipple type="button" icon="pi pi-eye"  class="p-button p-component p-button-text" (click)="showTiere(rowIndex)"></button>
+                                             <button pButton pRipple type="button" icon="pi pi-trash" class="p-button p-component p-button-text mx-1" (click)="removeTier(rowIndex)"></button>
                                          </td>
                                      </tr>
                                      <tr *ngIf="selectedCreditType?.code == 'CIM' 
@@ -130,7 +133,8 @@
                                          <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                                          <th pSortableColumn="role">Role<p-sortIcon field="role"></p-sortIcon></th>
                                          <th pSortableColumn="tel">Tel</th>
-                                         <th pSortableColumn="is_complete">status<p-sortIcon field="is_complete"></p-sortIcon></th>
+                                         <!-- <th pSortableColumn="is_complete">status<p-sortIcon field="is_complete"></p-sortIcon></th> -->
+                                         <th pSortableColumn="email">Email<p-sortIcon field="email"></p-sortIcon></th>
                                          <th style="text-align: center;">
                                              
                                          </th>
@@ -138,12 +142,15 @@
                                  </ng-template>
                                  <ng-template pTemplate="body" let-tierItem let-rowIndex="rowIndex">
                                      <tr>
-                                         <td style="width: 30%; min-width: 7rem;">{{ tierItem?.lastName + " " + tierItem?.firstName }}</td>
-                                         <td style="width: 30%; min-width: 7rem;">{{tierItem.role}}</td>
+                                         <td style="width: 30%; min-width: 7rem;"><b  *ngIf="tierItem?.is_organisation != true">{{ tierItem?.lastName + " " + tierItem?.firstName }}</b><b  *ngIf="tierItem?.is_organisation">{{ tierItem?.denomination }}</b></td>
+                                         <td style="width: 10%; min-width: 7rem;">{{tierItem?.role}}</td>
                                          <td style="width: 10%; min-width: 4rem;"> <i class="pi pi-phone" style="font-size: 1rem" pTooltip="{{tierItem.tel}}" tooltipPosition="top"></i></td>
-                                         <td style="width: 10%; min-width: 4rem;text-align: center;">
+                                         <!-- <td style="width: 10%; min-width: 4rem;text-align: center;">
                                             <p-tag *ngIf="tierItem.is_complete" value="Complet" severity="success" />
                                             <p-tag *ngIf="!tierItem.is_complete" value="Incomplet" severity="danger" />
+                                         </td> -->
+                                         <td style="width: 30%; min-width: 4rem;">
+                                            {{ tierItem?.email }}
                                          </td>
                                          <td style="width: 20%;text-align: center;">
                                             <p-button class="mx-1" icon="pi pi-eye" [rounded]="true" severity="Secondary" pTooltip="Complete" tooltipPosition="top" (click)="showTiere(rowIndex)"/>
@@ -196,22 +203,19 @@
 <p-dialog
     [(visible)]="visibleAddTiers"
     [modal]="true"
-    [style]="{ width: '25rem' }">
+    [style]="{ width: '50rem' }">
         <ng-template pTemplate="header">
             <div class="inline-flex items-center justify-center gap-2">
                 <h4>Ajouter nouveau tiere</h4>
             </div>
         </ng-template>
-        <span class="p-text-secondary block mb-2">rechercher par CIN s'il existe</span>
+        <span class="p-text-secondary block mb-2">Rechercher par CIN, carte de séjour, passeport ou RC</span>
         <div class="flex items-center gap-4">
-            <label for="username" class="font-semibold w-24 mt-2">
-                CIN
-            </label>
             <input pInputText id="cin" [(ngModel)]="cinSearch" class="flex-auto" autocomplete="off" />
             <button pButton pRipple severity="info" icon="pi pi-search"  class="p-button-info" (click)="searchIfExist()"></button>
         </div>
         <div class="row mt-3" *ngIf="tierExistByCin">
-            <span>Est-ce que <b class="color-orange">{{ tierExistByCinProfile?.lastName + " " + tierExistByCinProfile?.firstName }}</b> est celui que vous recherchez ?</span>
+            <span>Est-ce que <b class="color-orange" *ngIf="tierExistByCinProfile?.is_organisation != true">{{ tierExistByCinProfile?.lastName + " " + tierExistByCinProfile?.firstName }}</b><b class="color-orange" *ngIf="tierExistByCinProfile?.is_organisation">{{ tierExistByCinProfile?.denomination }}</b> est celui que vous recherchez ?</span>
             <br>
             <button pButton pRipple class="p-button-success p-button-raised mt-2" type="button" label="ajouter le" (click)="addTierToList()"></button>
         </div>

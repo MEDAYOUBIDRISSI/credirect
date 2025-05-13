@@ -85,6 +85,10 @@ const routes: Routes = [
     component: CustomerFolderComponent,
   },
   {
+    path: 'customer/folder/add/:client_id',
+    component: CustomerFolderComponent,
+  },
+  {
     path: 'customer/folder/edit/:dossier_id',
     component: CustomerFolderComponent,
   },

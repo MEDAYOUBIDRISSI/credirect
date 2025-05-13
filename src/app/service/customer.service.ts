@@ -328,6 +328,10 @@ export class CustomerService {
         return this.http.post<any>(this.urlAPI + 'Credirect/getTiersByFolderID', data).toPromise();
     }
 
+    getTiresByIDFromFicheClient(data: any) {
+        return this.http.post<any>(this.urlAPI + 'Credirect/getTiresByIDFromFicheClient', data).toPromise();
+    }
+
     /**
      * Retrieves all credit types from the server.
      *

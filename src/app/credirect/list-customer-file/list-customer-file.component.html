@@ -92,8 +92,8 @@
                                       (customer.cin || 'N/A')}}
                             </div>
                             <div class="flex align-items-center mt-1">
-                                <img *ngIf="customer.country" [src]="'https://flagcdn.com/16x12/' + getCountryCode(customer.country) + '.png'" 
-                                     width="20" class="mr-2" />
+                                <!-- <img *ngIf="customer.country" [src]="'https://flagcdn.com/16x12/' + getCountryCode(customer.country) + '.png'" 
+                                     width="20" class="mr-2" /> -->
                                 {{customer.is_organisation ? 
                                   (customer.companyCountry?.clientCountryLabel || 'Inconnu') : 
                                   (customer.country?.clientCountryLabel || 'Inconnu')}}
@@ -170,13 +170,14 @@
   [modal]="true"
   [draggable]="false" 
   [resizable]="false"
-  [closable]="!deleteLoading"
-  [baseZIndex]="10000"> 
+  [closable]="!deleteLoading">
   
-  <div class="confirmation-content">
-    <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
-    <span>Êtes-vous sûr de vouloir supprimer <strong>{{customerToDelete?.is_organisation ? customerToDelete?.companyName : (customerToDelete?.firstName + ' ' + customerToDelete?.lastName)}}</strong> ?</span>
-  </div>
+  <ng-template pTemplate="content">
+    <div class="confirmation-content">
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
+      <span>Êtes-vous sûr de vouloir supprimer <strong>{{customerToDelete?.is_organisation ? customerToDelete?.companyName : (customerToDelete?.firstName + ' ' + customerToDelete?.lastName)}}</strong> ?</span>
+    </div>
+  </ng-template>
   
   <ng-template pTemplate="footer">
     <button pButton type="button" label="Non" icon="pi pi-times" class="p-button-text" 

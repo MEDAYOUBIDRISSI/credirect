@@ -129,7 +129,7 @@ export class AddCustomerFileComponent implements OnInit {
   residenceCountries: any[] = [];
   companyCountries: any[] = [];
   residencyStatuses: any[] = [];
-  identities: any;
+  identities: any[] = [];
 
   selectedTitle: any;
   selectedRole: any;
@@ -143,8 +143,10 @@ export class AddCustomerFileComponent implements OnInit {
   selectedResidencyStatus: any;
   selectedIdentity: any = null;
   selectedIdentity2: any = null;
+  identityTypes: { [key: string]: number } = {};
 
   clientData: any = {};
+  editRoles: any = false;
 
   // identities: any[] = [
   //   { name: 'CIN', key: 'A' },
@@ -187,6 +189,7 @@ export class AddCustomerFileComponent implements OnInit {
 
     this.loadLookups();
     this.setupRouteListener();
+    this.checkRole_Step(this.customerId);
 
     this.route.params.subscribe((params) => {
       const step = +params['step'] || 0;
@@ -215,6 +218,10 @@ export class AddCustomerFileComponent implements OnInit {
            (this.step == 1 && !this.selectedRole);
   }
 
+  isPreviousDisabled(): boolean {
+    return this.editRoles && this.step == 2;
+  }
+
   selectCard(cardNumber: number) {
     this.isSelected1 = cardNumber === 1;
     this.isSelected2 = cardNumber === 2;
@@ -236,6 +243,14 @@ export class AddCustomerFileComponent implements OnInit {
         { label: "Gérant/Manager" }
       ];
     }
+  }
+
+  checkRole_Step(customerID: any){
+    if(customerID == 0){
+      this.editRoles = false;
+    }else{
+      this.editRoles = true;
+    }  
   }
 
   goToPreviousStep() {
@@ -421,8 +436,8 @@ submitClientData(): Promise<any> {
       CIN: manager.CIN || null,
       CarteSejour: manager.CarteSejour || null,
       Passeport: manager.Passeport || null,
-      Address: manager.ManagerAddress || null,  // Changed from ManagerAddress
-      City: manager.ManagerCity || null,        // Changed from ManagerCity
+      Address: manager.ManagerAddress || null,  
+      City: manager.ManagerCity || null,       
       CountryID: manager.ManagerCountryID?.value || null,
       ResidenceCountryID: manager.ManagerResidenceCountryID?.value || null,
       MaritalStatusID: manager.Id_ManagerMaritalStatus?.value || null
@@ -433,7 +448,8 @@ submitClientData(): Promise<any> {
     ClientID: this.customerId && this.customerId !== "0" ? +this.customerId : undefined,
     is_individual: this.isSelected1,
     is_organisation: this.isSelected2,
-    RoleID: this.RoleID,
+    RoleID: this.selectedRole?.value || null,
+    roleID: this.selectedRole?.value || null,
     LastName: this.LastName,
     FirstName: this.FirstName,
     BirthDate: this.BirthDate,
@@ -519,13 +535,14 @@ async simple_onNextClick() {
 
 }
 
-  loadLookups() {
-    this.customerService.getClientRoles().subscribe(roles => {
-      this.roles = roles.map(role => ({
-        label: role.roleLabel,
-        value: role.roleID
-      }));
-    });
+async loadLookups() {
+  await this.customerService.getClientRoles().toPromise().then(roles => {
+    this.roles = roles.map(role => ({
+      label: role.roleLabel,
+      value: role.roleID
+    }));
+  });
+
 
     this.customerService.getClientTitles().subscribe({
       next: (titles) => {
@@ -597,6 +614,18 @@ async simple_onNextClick() {
       label: identity.identityLabel,
       value: identity.identityID    
     }));
+    
+    // Initialize identityTypes dynamically
+    identities.forEach(identity => {
+      if (identity.identityLabel.toLowerCase().includes('cin')) {
+        this.identityTypes['CIN'] = identity.identityID;
+      } else if (identity.identityLabel.toLowerCase().includes('séjour') || 
+                 identity.identityLabel.toLowerCase().includes('sejour')) {
+        this.identityTypes['CARTE_SEJOUR'] = identity.identityID;
+      } else if (identity.identityLabel.toLowerCase().includes('passeport')) {
+        this.identityTypes['PASSPORT'] = identity.identityID;
+      }
+    });
   });
   }
 
@@ -681,13 +710,16 @@ async simple_onNextClick() {
       
       // Set dropdown selections
       this.selectedTitle = this.titles.find(t => t.value === client.clientTitleID);  
-      this.selectedRole = this.roles.find(r => r.value === client.roleID);  
+      this.selectedRole = this.roles.find(r => r.value === (client.RoleID || client.roleID));
       this.selectedMaritalStatus = this.maritalStatuses.find(s => s.value === client.maritalStatusID);  
       this.selectedCountry = this.countries.find(c => c.value === client.countryID);  
       this.selectedResidenceCountry = this.residenceCountries.find(c => c.value === client.residenceCountryID);  
       this.selectedClientOrigin = this.clientOrigins.find(o => o.value === client.originID);  
       this.selectedResidencyStatus = this.residencyStatuses.find(s => s.value === client.residencyStatusID);
-      this.selectedIdentity = this.identities.find(i => i.value === client.identityID);  
+      if (client.IdentityID) {
+        this.selectedIdentity = this.identities.find(i => i.value === client.identityID);
+        this.cdr.detectChanges();
+      } 
       
       // Set radio button selections
       this.IsOwner = client.isOwner;  
@@ -734,7 +766,7 @@ async simple_onNextClick() {
     }}
 
     private formatDateForInput(isoDate: string): string {
-      return isoDate.split('T')[0];
+      return isoDate?.split('T')[0];
     }
 
   onEditClick() {
@@ -753,6 +785,16 @@ async simple_onNextClick() {
       this.updateUrl();
     }
   }
+
+  onEditClick_Update() {
+    this.router.navigate(['/redirect']).then(() => {
+      this.router.navigate(['/credirect/customer/add', 2, this.customerId]).then(() => {
+        window.location.reload(); // Full page refresh
+      });
+    });
+  }
+
+
   private setupRouteListener(): void {
     this.route.params.subscribe((params) => {
       const stepFromUrl = +params['step']; // Gets 2 from /add/2/2
@@ -820,21 +862,28 @@ async simple_onNextClick() {
       next: () => {
         this.deleteLoading = false;
         this.displayDeleteConfirmation = false;
-        // Show success message (you might want to use a toast/message service)
-        // console.log('Client deleted successfully');
-        // alert('Client deleted successfully');
 
         console.log('Client deleted successfully');
         
-        // Navigate back to the client list
         this.router.navigate(['/credirect/customer']);
       },
       error: (err) => {
         this.deleteLoading = false;
         console.error('Error deleting client', err);
-        // Show error message to user
         alert('Une erreur est survenue lors de la suppression du client.');
       }
     });
+  }
+
+  determineSelectedIdentity() {
+    if (this.CIN && this.CIN.trim() !== '') {
+      this.selectedIdentity = this.identities.find(i => i.value === this.identityTypes['CIN']);
+    } else if (this.ResidencePermit && this.ResidencePermit.trim() !== '') {
+      this.selectedIdentity = this.identities.find(i => i.value === this.identityTypes['CARTE_SEJOUR']);
+    } else if (this.PassportNumber && this.PassportNumber.trim() !== '') {
+      this.selectedIdentity = this.identities.find(i => i.value === this.identityTypes['PASSPORT']);
+    } else {
+      this.selectedIdentity = null; // No default selection
+    }
   }
 }

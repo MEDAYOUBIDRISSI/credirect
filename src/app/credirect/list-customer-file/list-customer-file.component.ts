@@ -5,6 +5,8 @@ import { Table } from 'primeng/table';
 import { CustomerService } from 'src/app/demo/service/customer.service';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-list-customer-file',
@@ -39,7 +41,8 @@ export class ListCustomerFileComponent implements OnInit {
     private customerService: CustomerService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -137,6 +140,7 @@ export class ListCustomerFileComponent implements OnInit {
   showDeleteConfirmation(customer: any) {
     this.customerToDelete = customer;
     this.displayDeleteConfirmation = true;
+    this.cd.detectChanges();
   }
   
   hideDeleteConfirmation() {

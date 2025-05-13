@@ -49,9 +49,9 @@
         <h3 class="text-lg font-bold mb-4">Veuillez sélectionner votre rôle dans la liste ci-dessous :</h3>
         <div style="display: flex; justify-content: center;" >
           <p-listbox 
-            [options]="roles"
-            [(ngModel)]="selectedRole" 
-            optionLabel="label"
+          [options]="roles"
+          [(ngModel)]="selectedRole"
+          optionLabel="label"
             class="w-48">
           </p-listbox>
         </div>
@@ -63,6 +63,15 @@
         <div class="row">
             <div class="col-12" *ngIf="activeIndex == 0">
                 <div class="grid p-fluid mt-3">
+
+                  <div *ngIf="editRoles" class="field col-12 md:col-6 lg:col-4">
+                    <label for="selectedRole">Rôle</label>
+                    <p-dropdown 
+                      [options]="roles"
+                      [(ngModel)]="selectedRole"
+                      optionLabel="label">
+                    </p-dropdown>
+                  </div>
 
                 <div *ngIf="isSelected2" class="field col-12 md:col-6 lg:col-4">
                     <label for="CompanyName ">Dénomination </label>
@@ -155,54 +164,57 @@
                     />
                 </div>
 
-                <div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
-                  <label for="num_fiche">Identité</label>
-                  <div class="flex flex-wrap gap-3">
-                      <div *ngFor="let identity of identities" class="flex align-items-center">
-                          <p-radioButton 
-                              [inputId]="'identity_' + identity.value" 
-                              name="identity" 
-                              [value]="identity" 
-                              [(ngModel)]="selectedIdentity" />
-                          <label [for]="'identity_' + identity.value" class="ml-2">
-                              {{ identity?.label }}
-                          </label>
-                      </div>
-                  </div>
-              </div>
-              
-              <div *ngIf="selectedIdentity?.value === 1002 && isSelected1" class="field col-12 md:col-6 lg:col-4">
-                  <label for="CIN">CIN</label>
-                  <input
-                      pInputText
-                      id="CIN"
-                      type="text"
-                      [(ngModel)]="CIN"
-                      placeholder="Votre CIN"
-                  />
-              </div>
-              
-              <div *ngIf="selectedIdentity?.value === 1003 && isSelected1" class="field col-12 md:col-6 lg:col-4">
-                  <label for="ResidencePermit">Carte Séjour</label>
-                  <input
-                      pInputText
-                      id="ResidencePermit"
-                      type="text"
-                      [(ngModel)]="ResidencePermit"
-                      placeholder="Votre Carte Séjour"
-                  />
-              </div>   
-              
-              <div *ngIf="selectedIdentity?.value === 1004 && isSelected1" class="field col-12 md:col-6 lg:col-4">
-                  <label for="PassportNumber">Passeport</label>
-                  <input
-                      pInputText
-                      id="PassportNumber"
-                      type="text"
-                      [(ngModel)]="PassportNumber"
-                      placeholder="Votre Passeport"
-                  />
-              </div>
+<!-- Identity selection -->
+<div *ngIf="isSelected1" class="field col-12 md:col-6 lg:col-4">
+  <label for="num_fiche">Identité</label>
+  <div class="flex flex-wrap gap-3">
+    <div *ngFor="let identity of identities" class="flex align-items-center">
+      <p-radioButton 
+        [inputId]="'identity_' + identity.value" 
+        name="identity" 
+        [value]="identity"
+        [(ngModel)]="selectedIdentity"
+        [checked]="selectedIdentity?.value === identity.value"></p-radioButton>
+      <label [for]="'identity_' + identity.value" class="ml-2">
+        {{ identity?.label }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic identity fields based on selected type -->
+<div *ngIf="selectedIdentity?.value === identityTypes['CIN'] && isSelected1" class="field col-12 md:col-6 lg:col-4">
+  <label for="CIN">CIN</label>
+  <input
+    pInputText
+    id="CIN"
+    type="text"
+    [(ngModel)]="CIN"
+    placeholder="Votre CIN"
+  />
+</div>
+
+<div *ngIf="selectedIdentity?.value === identityTypes['CARTE_SEJOUR'] && isSelected1" class="field col-12 md:col-6 lg:col-4">
+  <label for="ResidencePermit">Carte Séjour</label>
+  <input
+    pInputText
+    id="ResidencePermit"
+    type="text"
+    [(ngModel)]="ResidencePermit"
+    placeholder="Votre Carte Séjour"
+  />
+</div>   
+
+<div *ngIf="selectedIdentity?.value === identityTypes['PASSPORT'] && isSelected1" class="field col-12 md:col-6 lg:col-4">
+  <label for="PassportNumber">Passeport</label>
+  <input
+    pInputText
+    id="PassportNumber"
+    type="text"
+    [(ngModel)]="PassportNumber"
+    placeholder="Votre Passeport"
+  />
+</div>
 
                 </div>
             </div>
@@ -574,6 +586,7 @@
         pButton pRipple type="button"
         class="p-button-primary" 
           label="Précédent" 
+          [disabled]="isPreviousDisabled()" 
           (click)="goToPreviousStep()">
         </button>
         
@@ -628,7 +641,7 @@
             </p>
 
             <div class="mt-3">
-                <button pButton pRipple type="button" label="Modifier la fiche" class="p-button-primary" [style]="{'width': '200px'}" (click)="onEditClick()"></button>
+                <button pButton pRipple type="button" label="Modifier la fiche" class="p-button-primary" [style]="{'width': '200px'}" (click)="onEditClick_Update()"></button>
             </div>
             <div class="mt-3">
                 <button pButton pRipple type="button" label="Details" class="p-button-primary" (click)="goToNextStep()" [style]="{'width': '200px'}"></button>

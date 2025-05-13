@@ -222,6 +222,7 @@ const routes: Routes = [
     PanelMenuModule,
     ChartModule,
     MessagesModule,
+    DialogModule,
     RouterModule.forChild(routes)
   ],
   providers:[
